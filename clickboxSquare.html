@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="en" onmousedown="MouseDown()" onmouseup="MouseUp()" onmouseleave="MouseExit()">
+  <head>
+  
+    <script>	  
+	  let size = 5;
+	  let LMDown = false;
+	  let RMDown = false;
+	  let xn1 = "images/BlueTile.png"   //
+	  let x0 = "images/YellowTile.png"  ///
+	  let x1 = "images/NormalTile.png"  ////
+	  let x2 = "images/OrangeTile.png"  ////
+	  let nw = "images/NorthWall.png"   ///// image paths for the different button types
+	  let sw = "images/SouthWall.png"  ////
+	  let ww = "images/WestWall.png"   ///
+	  let ew = "images/EastWall.png"  //
+	  let CycleButtons = [];
+	  function CreateButton (IdNum, x, y) {
+	    let grid = document.getElementById("grid-container");
+	    let button = document.createElement('BUTTON');
+		let img = document.createElement('img');
+	    button.id = IdNum;
+	    button.classList.add("btn");
+		button.factor = 1;
+		button.offsetx = x;
+		button.offsety = y;
+		button.walls = "";
+		button.cycles = "";
+		button.affectedButtons = [];    // stores which buttons this button will affect when pressed
+		button.counterparts = [];       // stores which cycle buttons this button connects with
+		button.tabindex = -1;
+  	    button.innerHTML = "0";
+		button.style.color = '#0000';
+  	    button.onmousedown = function(){BtnClick(IdNum)};
+		button.oncontextmenu = function(e) {""; e.preventDefault();}
+		button.onmouseenter = function(){BtnMouseEnter(IdNum)}; 
+		button.onmouseleave = function(){BtnMouseLeave(IdNum)};
+		img.id = IdNum + "img";
+		img.src = x1;
+		img.classList.add("img");
+		grid.appendChild(button);
+        button.style.position = "absolute";
+		button.style.transform = "translate(" + x + "px,"+ y + "px)";
+		grid.appendChild(img);
+        img.style.position = "absolute";
+		img.style.transform = "translate(" + x + "px,"+ y + "px)";
+	  }
+
+      function MouseDown(){
+        if (event.button == 0) {
+		  LMDown = true;
+		}
+		if (event.button == 2) {
+		  RMDown= true;
+		}
+	  }
+	  
+      function MouseUp(){
+        if (event.button == 0) {
+		  LMDown = false;
+		}
+		if (event.button == 2) {
+		  RMDown= false;
+		}
+	  }
+	  
+      function MouseExit(){
+		LMDown = false;
+		RMDown= false;
+	  }
+	
+      function DestroyGrid (){
+		if (document.body.contains(document.getElementById("grid-container")) == true){
+	      document.getElementById("grid-container").remove();
+        }
+		CycleButtons = [];
+      }		    	
+
+      function VictoryCheck () {
+	    let victory = true;
+	    for (i = 1; i <= size*size; i++) {
+		  if (document.getElementById(i).innerHTML != 0) {
+		    victory = false;
+		  }
+		}
+		if (victory == true) {
+		  document.getElementById("new-level").innerHTML = "Victory!";
+		}
+	  }
+	  
+	  function ChangeButtonFactor (IdNum, Factor) {
+	    if (Factor == -1) {
+		  document.getElementById(IdNum).factor = -1;
+		  document.getElementById(IdNum + "img").src = xn1;
+		} else if (Factor == 0) {
+		  document.getElementById(IdNum).factor = 0;
+		  document.getElementById(IdNum + "img").src = x0;		
+		} else if (Factor == 2) {
+		  document.getElementById(IdNum).factor = 2;
+		  document.getElementById(IdNum + "img").src = x2;	
+		} else {
+		  document.getElementById(IdNum).factor = 1;
+		  document.getElementById(IdNum + "img").src = x1;		
+		}
+	  }
+	  
+	  function AddButtonWall (IdNum, String) {
+	    if (String.includes("n") == true) {
+		  if (document.body.contains(document.getElementById(IdNum + "nw")) == false) {
+		    let nWall = document.createElement('img');
+			nWall.id = IdNum + "nw"
+		    nWall.classList.add("wall");
+			document.getElementById("grid-container").appendChild(nWall);
+			nWall.style.position = "absolute"
+			nWall.style.transform = "translate(" + document.getElementById(IdNum).offsetx + "px,"+ document.getElementById(IdNum).offsety + "px)";
+		  }
+		  document.getElementById(IdNum).walls = document.getElementById(IdNum).walls + "n";
+		  document.getElementById(IdNum + "nw").src = nw;
+		}
+	    if (String.includes("s") == true) {
+		  if (document.body.contains(document.getElementById(IdNum + "sw")) == false) {
+		    let sWall = document.createElement('img');
+			sWall.id = IdNum + "sw"
+		    sWall.classList.add("wall");
+			document.getElementById("grid-container").appendChild(sWall);
+			sWall.style.position = "absolute"
+			sWall.style.transform = "translate(" + document.getElementById(IdNum).offsetx + "px,"+ document.getElementById(IdNum).offsety + "px)";
+		  }
+		  document.getElementById(IdNum).walls = document.getElementById(IdNum).walls + "s";
+		  document.getElementById(IdNum + "sw").src = sw;	
+		}
+	    if (String.includes("w") == true) {
+		  if (document.body.contains(document.getElementById(IdNum + "ww")) == false) {
+		    let wWall = document.createElement('img');
+			wWall.id = IdNum + "ww"
+		    wWall.classList.add("wall");
+			document.getElementById("grid-container").appendChild(wWall);
+			wWall.style.position = "absolute"
+			wWall.style.transform = "translate(" + document.getElementById(IdNum).offsetx + "px,"+ document.getElementById(IdNum).offsety + "px)";
+		  }
+		  document.getElementById(IdNum).walls = document.getElementById(IdNum).walls + "w";
+		  document.getElementById(IdNum + "ww").src = ww;
+		}
+	    if (String.includes("e") == true) {
+		  if (document.body.contains(document.getElementById(IdNum + "ew")) == false) {
+		    let eWall = document.createElement('img');
+			eWall.id = IdNum + "ew"
+		    eWall.classList.add("wall");
+			document.getElementById("grid-container").appendChild(eWall);
+			eWall.style.position = "absolute"
+			eWall.style.transform = "translate(" + document.getElementById(IdNum).offsetx + "px,"+ document.getElementById(IdNum).offsety + "px)";
+		  }
+		  document.getElementById(IdNum).walls = document.getElementById(IdNum).walls + "e";
+		  document.getElementById(IdNum + "ew").src = ew;
+		}
+	  }
+
+      function AddButtonCycle (IdNum,String) {
+	    if (String.includes("n") == true) {
+		  if (document.body.contains(document.getElementById(IdNum + "nc")) == false) {
+            CreateButton(IdNum + "nc", document.getElementById(IdNum).offsetx, document.getElementById(IdNum).offsety - 50);
+		    let nCycle = document.getElementById(IdNum + "nc");
+		    nCycle.classList.add("cycle");
+			document.getElementById(IdNum + "nc" + "img").classList.add ("img-cycle");
+			nCycle.counterpart = IdNum + size*size - size;                          // used to store which regular button a cycle button connects with      
+			document.getElementById(IdNum + size*size - size).counterparts.push(IdNum + "nc"); // used to store which cycle buttons a regular button connects with
+			CycleButtons.push(nCycle);
+		    document.getElementById(IdNum).cycles = document.getElementById(IdNum).cycles + "n";
+		  }
+		}	   
+	    if (String.includes("s") == true) {
+		  if (document.body.contains(document.getElementById(IdNum + "sc")) == false) {
+            CreateButton(IdNum + "sc", document.getElementById(IdNum).offsetx, document.getElementById(IdNum).offsety - 50*(-1));
+		    let sCycle = document.getElementById(IdNum + "sc");
+		    sCycle.classList.add("cycle");
+			document.getElementById(IdNum + "sc" + "img").classList.add ("img-cycle");
+			sCycle.counterpart = IdNum - size*size + size;
+			document.getElementById(IdNum - size*size + size).counterparts.push(IdNum + "sc");
+			CycleButtons.push(sCycle);
+		    document.getElementById(IdNum).cycles = document.getElementById(IdNum).cycles + "s";
+		  }
+		}	
+	    if (String.includes("w") == true) {
+		  if (document.body.contains(document.getElementById(IdNum + "wc")) == false) {
+            CreateButton(IdNum + "wc", document.getElementById(IdNum).offsetx - 50, document.getElementById(IdNum).offsety);
+		    let wCycle = document.getElementById(IdNum + "wc");
+		    wCycle.classList.add("cycle");
+			document.getElementById(IdNum + "wc" + "img").classList.add ("img-cycle");
+			wCycle.counterpart = IdNum + size - 1;
+			document.getElementById(IdNum + size - 1).counterparts.push(IdNum + "wc");
+			CycleButtons.push(wCycle);
+		    document.getElementById(IdNum).cycles = document.getElementById(IdNum).cycles + "w";
+		  }
+		}	
+	    if (String.includes("e") == true) {
+		  if (document.body.contains(document.getElementById(IdNum + "ec")) == false) {
+            CreateButton(IdNum + "ec", document.getElementById(IdNum).offsetx - 50*(-1), document.getElementById(IdNum).offsety);
+		    let eCycle = document.getElementById(IdNum + "ec");
+		    eCycle.classList.add("cycle");
+			document.getElementById(IdNum + "ec" + "img").classList.add ("img-cycle");
+			eCycle.counterpart = IdNum - size + 1;
+			document.getElementById(IdNum - size + 1).counterparts.push(IdNum + "ec");
+			CycleButtons.push(eCycle);
+		    document.getElementById(IdNum).cycles = document.getElementById(IdNum).cycles + "e";
+		  }
+		}		
+	    if (document.getElementById(IdNum).cycles.includes("n") == true &&
+		    document.getElementById(IdNum).cycles.includes("w") == true) {
+		  if (document.body.contains(document.getElementById(IdNum + "nwc")) == false) {
+            CreateButton(IdNum + "nwc", document.getElementById(IdNum).offsetx - 50, document.getElementById(IdNum).offsety - 50);
+		    let nwCycle = document.getElementById(IdNum + "nwc");
+		    nwCycle.classList.add("cycle");
+			document.getElementById(IdNum + "nwc" + "img").classList.add ("img-cycle");
+			nwCycle.counterpart = size*size;
+			document.getElementById(size*size).counterparts.push(IdNum + "nwc");
+			CycleButtons.push(nwCycle);
+		  }
+		}
+	    if (document.getElementById(IdNum).cycles.includes("n") == true &&
+		    document.getElementById(IdNum).cycles.includes("e") == true) {
+		  if (document.body.contains(document.getElementById(IdNum + "nec")) == false) {
+            CreateButton(IdNum + "nec", document.getElementById(IdNum).offsetx - 50*(-1), document.getElementById(IdNum).offsety - 50);
+		    let neCycle = document.getElementById(IdNum + "nec");
+		    neCycle.classList.add("cycle");
+			document.getElementById(IdNum + "nec" + "img").classList.add ("img-cycle");
+			neCycle.counterpart = size*size - size + 1;
+			document.getElementById(size*size - size + 1).counterparts.push(IdNum + "nec");
+			CycleButtons.push(neCycle);
+		  }
+		}
+	    if (document.getElementById(IdNum).cycles.includes("s") == true &&
+		    document.getElementById(IdNum).cycles.includes("w") == true) {
+		  if (document.body.contains(document.getElementById(IdNum + "swc")) == false) {
+            CreateButton(IdNum + "swc", document.getElementById(IdNum).offsetx - 50, document.getElementById(IdNum).offsety - 50*(-1));
+		    let swCycle = document.getElementById(IdNum + "swc");
+		    swCycle.classList.add("cycle");
+			document.getElementById(IdNum + "swc" + "img").classList.add ("img-cycle");
+			swCycle.counterpart = size;
+			document.getElementById(size).counterparts.push(IdNum + "swc");
+			CycleButtons.push(swCycle);
+		  }
+		}
+	    if (document.getElementById(IdNum).cycles.includes("s") == true &&
+		    document.getElementById(IdNum).cycles.includes("e") == true) {
+		  if (document.body.contains(document.getElementById(IdNum + "sec")) == false) {
+            CreateButton(IdNum + "sec", document.getElementById(IdNum).offsetx - 50*(-1), document.getElementById(IdNum).offsety - 50*(-1));
+		    let seCycle = document.getElementById(IdNum + "sec");
+		    seCycle.classList.add("cycle");
+			document.getElementById(IdNum + "sec" + "img").classList.add ("img-cycle");
+			seCycle.counterpart = 1;
+			document.getElementById(1).counterparts.push(IdNum + "sec");
+			CycleButtons.push(seCycle);
+		  }
+		}
+	  }	  
+	  
+	  function CycleEdges (String) {
+	    if (String.includes("n") == true) {
+		  for (let i = 1; i <= size; i++) {	  
+            AddButtonCycle (i, "n");                                               // north
+		  }
+		}
+	    if (String.includes("s") == true) {
+          for (let i = size*size - size + 1; i <= size*size; i++) {
+		    AddButtonCycle (i, "s");                                               // south
+          }  
+		}
+	    if (String.includes("w") == true) {
+          for (let i = 1; i <= size*size; i = i + size) {
+		    AddButtonCycle (i, "w");                                               // west
+          } 
+		}
+	    if (String.includes("e") == true) {
+          for (let i = size; i <= size*size; i = i + size) {
+		    AddButtonCycle (i, "e");                                               // east
+          }	  
+		}
+	  }
+	
+      function ModifyButton(IdNum,Amount){
+	    let btn = document.getElementById(IdNum);
+        btn.innerHTML = parseInt(btn.innerHTML) + Amount;
+	    if (btn.innerHTML == 0){
+		  btn.style.color = '#0000';
+		}
+		if (parseInt(btn.innerHTML) > 0) {
+		  btn.style.color = '#404040';
+		}
+        if (parseInt(btn.innerHTML) < 0){
+		  btn.style.color = '#A80000';
+		} 
+		for (let i = 0; i < btn.counterparts.length; i++) {
+		  let cbtn = document.getElementById(btn.counterparts[i]);
+		  cbtn.innerHTML = btn.innerHTML;
+		  cbtn.style.color = btn.style.color;
+		  cbtn.classList = btn.classList;
+		  cbtn.classList.add("cycle");
+		  cbtn.classList.remove("btn-group");
+		}	
+      }
+
+      function InitializeButtonGroups()  {
+	    for (let j = 1; j <= size*size; j++) {
+	      let midBtn = document.getElementById(j);
+          let n = 55;
+          let e = 55;
+          let s = 55;
+          let w = 55;
+		  if (midBtn.walls.includes("n")) { // the presence of a wall will limit the area on that side
+		    n = 5;
+		  }
+		  if (midBtn.walls.includes("e")) {
+		    e = 5;
+		  }
+		  if (midBtn.walls.includes("s")) {
+		    s = 5;
+		  }
+		  if (midBtn.walls.includes("w")) {
+		    w = 5;
+		  }
+	      for (let i = 1; i <= size*size; i++) {
+		    let btn = document.getElementById(i);
+		    if (btn.offsetx < midBtn.offsetx + e &&
+		        btn.offsetx > midBtn.offsetx - w &&
+			    btn.offsety < midBtn.offsety + s &&
+			    btn.offsety > midBtn.offsety - n) {
+              midBtn.affectedButtons.push(i);
+		    }
+		  }
+		  for (let c = 0; c < CycleButtons.length; c++) {
+			let cbtn = CycleButtons[c];
+		    if (cbtn.offsetx < midBtn.offsetx + e &&
+		        cbtn.offsetx > midBtn.offsetx - w &&
+			    cbtn.offsety < midBtn.offsety + s &&
+			    cbtn.offsety > midBtn.offsety - n) {
+              midBtn.affectedButtons.push(cbtn.counterpart);
+		    }		
+	      }
+		}
+	  }
+	
+	  function ModifyButtonGroup (IdNum, Amount)  {
+	    let btn = document.getElementById(IdNum);
+        for (let i = 0; i < btn.affectedButtons.length; i++) {
+		  if (btn.affectedButtons[i] == IdNum) {
+		    ModifyButton (btn.affectedButtons[i], Amount*btn.factor);
+		  } else {
+		    ModifyButton (btn.affectedButtons[i], Amount);
+		  }
+		}
+	  }
+
+      function BtnClick(clickID) {
+	    if (event.button == 0){
+          BtnLeftClick(clickID);
+		} else if (event.button == 2){
+		  BtnRightClick(clickID);
+		}
+      }
+
+      function BtnLeftClick(clickID)  {
+        let btn = document.getElementById(clickID);
+		if (btn.classList.contains("btn-clicked") == false &&
+		    btn.classList.contains("btn-marked") == false) {
+		  btn.classList.add("btn-clicked");
+		  ModifyButtonGroup(clickID, -1);
+		}
+	    else if (btn.classList.contains("btn-clicked")) {
+		  btn.classList.remove("btn-clicked");
+		  ModifyButtonGroup(clickID, 1);
+		}	  
+		VictoryCheck();
+	  }
+	  
+	  function BtnRightClick(clickID) {
+        let btn = document.getElementById(clickID);
+		if (btn.classList.contains("btn-marked") == false &&
+		    btn.classList.contains("btn-clicked") == false) {
+		  btn.classList.add("btn-marked");
+		  for (let i = 0; i < btn.counterparts.length; i++) {
+		    document.getElementById(btn.counterparts[i]).classList.add("btn-marked");
+		  }
+		}
+	    else if (btn.classList.contains("btn-clicked") == true) {
+		  ModifyButtonGroup(clickID, 1);
+		  btn.classList.add("btn-marked");
+		  btn.classList.remove("btn-clicked");
+		  for (let i = 0; i < btn.counterparts.length; i++) {
+		    document.getElementById(btn.counterparts[i]).classList.add("btn-marked");
+			document.getElementById(btn.counterparts[i]).classList.remove("btn-clicked");
+		  }
+		} 
+		else if (btn.classList.contains("btn-marked")) {
+		  btn.classList.remove("btn-marked");
+		  for (let i = 0; i < btn.counterparts.length; i++) {
+		    document.getElementById(btn.counterparts[i]).classList.remove("btn-marked");
+		  }
+		}	
+      }
+
+      function BtnMouseEnter(clickID)  {
+	    let btn = document.getElementById(clickID);
+	    if (LMDown == true) {
+		  BtnLeftClick(clickID);
+		} else if (RMDown == true) {
+		  BtnRightClick(clickID);
+		}
+		for (i = 0; i < btn.affectedButtons.length; i++) {
+		  document.getElementById(btn.affectedButtons[i]).classList.add("btn-group");
+		}
+	  }
+
+      function BtnMouseLeave(clickID)  {
+	    let btn = document.getElementById(clickID);
+		for (i = 0; i < btn.affectedButtons.length; i++) {
+		  document.getElementById(btn.affectedButtons[i]).classList.remove("btn-group");
+		}	  
+	  }
+
+      function RandomButton() {
+		  let rand = Math.trunc(Math.random()*3);
+		  if (rand == 0) {
+		    return 0;
+		  } else if (rand == 1) {
+		    return 2;
+		  } else if (rand == 2) {
+		    return -1;
+		  } else {
+		    return 1
+		  }
+	  }
+
+      function GenerateRandomClicks(Clicks) {
+	    let clicks = Clicks;
+        while (clicks > 0){
+	      rand = Math.trunc(Math.random()*size*size) + 1;
+	      if (document.getElementById(rand).classList.contains("btn-clicked") == false &&
+		      document.getElementById(rand).classList.contains("btn-marked") == false) {
+            ModifyButtonGroup (rand, 1);
+            document.getElementById(rand).classList.add("btn-clicked");	  
+		    clicks--;
+          }		  
+        }
+	    for (let i = 1; i <= size*size; i++){
+	      document.getElementById(i).classList.remove("btn-clicked", "btn-marked");
+        }
+		for (let i = 0; i < CycleButtons.length; i++) {
+		  CycleButtons[i].classList.remove("btn-clicked", "btn-marked");
+		}
+	  }
+
+      function GenerateEasyLevel(Clicks) {
+	    InitializeButtonGroups();
+        GenerateRandomClicks(Clicks);
+	  }
+	  
+	  function GenerateMediumLevel (Clicks) {
+	    let clicks = 0;
+		let i = 0;
+		let rand = 0;
+		let rand2 = 0;
+	    InitializeButtonGroups();
+		if (size%3 == 2){
+		  rand2 = Math.trunc(Math.random()*2);
+		  while (i < size/3 - 1){
+		    rand = parseInt(Math.trunc(Math.random()*size) + 1);
+			if (rand2 == 0){
+			  if (document.getElementById(rand).classList.contains("btn-clicked") == false &&
+			      document.getElementById(rand).classList.contains("btn-marked") == false) {
+			    for (let j = 0; j < size; j++){
+				  if(j%3 != 2){
+				    document.getElementById(j*size + rand).classList.add("btn-marked");
+				  }
+				  if (j%3 == 0) {
+				    ModifyButtonGroup (j*size + rand, 1);
+					document.getElementById(j*size + rand).classList.add("btn-clicked");
+					clicks++				    
+				  }
+				}
+			    i++;
+			  }
+			}
+			else{
+			  if (document.getElementById(rand*size).classList.contains("btn-clicked") == false &&
+			      document.getElementById(rand*size).classList.contains("btn-marked") == false) {
+			    for (let j = 0; j < size; j++){
+				  if(j%3 != 2){
+				    document.getElementById(rand*size - j).classList.add("btn-marked");
+				  }
+				  if(j%3 == 0) {
+				    ModifyButtonGroup (rand*size - j, 1);
+					document.getElementById(rand*size - j).classList.add("btn-clicked");
+					clicks++
+				  }
+				}
+			    i++;
+			  }						
+			}
+		  }
+		}
+        GenerateRandomClicks (Clicks - clicks);
+	  }
+	  
+	  function GenerateHardLevel (Clicks) {
+	    let clicks = 0;
+		let i = 0;
+		let rand = 0;
+		let rand2 = 0;
+	    InitializeButtonGroups();
+		if (size%3 == 2){
+		  rand2 = Math.trunc(Math.random()*2);
+		  while (i < size/2 - 1){
+		    rand = parseInt(Math.trunc(Math.random()*size) + 1);
+			if (rand2 == 0){
+			  if (document.getElementById(rand).classList.contains("btn-clicked") == false &&
+			      document.getElementById(rand).classList.contains("btn-marked") == false) {
+			    for (let j = 0; j < size; j++){
+				  if(j%3 != 2 &&
+				     j%3 != 0){
+				    document.getElementById(j*size + rand).classList.add("btn-marked");
+				  }
+				  if (j%3 == 0) {
+				    ModifyButtonGroup (j*size + rand, 1);
+					document.getElementById(j*size + rand).classList.add("btn-clicked");
+					rand2 = 1;
+					clicks++				    
+				  }
+				}
+			    i++;
+			  }
+			}
+			else{
+			  if (document.getElementById(rand*size).classList.contains("btn-clicked") == false &&
+			      document.getElementById(rand*size).classList.contains("btn-marked") == false) {
+			    for (let j = 0; j < size; j++){
+				  if(j%3 != 2 &&
+				     j%3 != 0){
+				    document.getElementById(rand*size - j).classList.add("btn-marked");
+				  }
+				  if(j%3 == 0) {
+				    ModifyButtonGroup (rand*size - j, 1);
+					document.getElementById(rand*size - j).classList.add("btn-clicked");
+					rand2 = 0;
+					clicks++
+				  }
+				}
+			    i++;
+			  }						
+			}
+		  }
+		}
+        GenerateRandomClicks (Clicks - clicks);
+	  }
+
+      function GenerateLevelNum (Level) {
+	    if (Level == 1) {                              //////////////////////////////////////////////////////////// Level 1
+		  GenerateEasyLevel (size*size/5);             //////////////////////////////////////////////////////////// Level 1
+		} else if (Level == 2) {                       //////////////////////////////////////////////////////////// Level 2
+		  GenerateMediumLevel (size*size/3);           //////////////////////////////////////////////////////////// Level 2
+		} else if (Level == 3) {                       //////////////////////////////////////////////////////////// Level 3
+		  GenerateHardLevel (size*size/2);             //////////////////////////////////////////////////////////// Level 3
+		} else if (Level == 4) {                       //////////////////////////////////////////////////////////// Level 4
+		    let type = RandomButton();
+            for (let i = 1; i <= size; i++) {                                         // top
+		      ChangeButtonFactor (i, type);
+		    }
+            for (let i = 1; i <= size*size; i = i + size) {                           // left
+		      ChangeButtonFactor (i, type);
+            }   
+            for (let i = size*size - size + 1; i <= size*size; i++) {                 // bottom
+		      ChangeButtonFactor (i, type);
+		    }
+            for (let i = size; i <= size*size; i = i + size) {                        // right
+		      ChangeButtonFactor (i, type);
+			}
+		    GenerateEasyLevel (size*size/2);		////////////////////////////////////////////////////////////// Level 4	
+		} else if (Level == 5) {   		            ////////////////////////////////////////////////////////////// Level 5
+		  let type = RandomButton();
+		  for (let x = 1; x < parseInt(size/2); x = x + 3) {
+            for (let y = 1 + size*(x+1); y <= size*(x+2); y++) {                           // top
+		      ChangeButtonFactor (y, type);
+		    }
+	  	  }
+		  for (let x = 1; x < parseInt(size/2); x = x + 3) {
+            for (let y = 2 + x; y <= size*size; y = y + size) {                            // left
+		      ChangeButtonFactor (y, type);
+            }
+		  }
+		  for (let x = 1; x < parseInt(size/2); x = x + 3) {
+            for (let y = size*size - size*(x+2) + 1; y <= size*size - size*(x+1); y++) {   // bottom
+		      ChangeButtonFactor (y, type);
+		    }
+		  }
+		  for (let x = 1; x < parseInt(size/2); x = x + 3) {
+            for (let y = size - (x+1); y <= size*size; y = y + size) {                      // right
+		      ChangeButtonFactor (y, type);
+		    }
+		  }		
+		  GenerateHardLevel (size*size/2);		  
+	    } else if (Level == 6)   {              /////////////////////////////////////////////////////////////////// Level 5
+		  let type = RandomButton();            /////////////////////////////////////////////////////////////////// Level 6
+		  for (let i = 1; i <= size*size; i++) {
+		    ChangeButtonFactor (i, type);		  
+		  }
+		  GenerateEasyLevel(size*size/2);       //////////////////////////////////////////////////////////////////// Level 6
+		} else if (Level == 7) {                 /////////////////////////////////////////////////////////////////// Level 7
+		  let type = RandomButton();
+		  for (let x = 0; x < size; x = x + 2) {
+            for (let y = 1 + size*(x); y <= size*(x+1); y++) {
+		      ChangeButtonFactor (y, type);
+		    }
+	  	  }	
+          GenerateEasyLevel (size*size/2);		/////////////////////////////////////////////////////////////////// Level 7
+		} else if (Level == 8) {                /////////////////////////////////////////////////////////////////// Level 8
+		  let type = RandomButton();
+		  let bool = 1;
+		  for (let x = 1; x <= size; x++) {
+		    for (let y = 0; y < size; y++) {
+		      if (size%2 == 1){
+		        if ((x+y*size)%2 == 1) {
+		          ChangeButtonFactor (x + y*size, type);			  
+			    }
+			  } else {
+			    if (y%2 == 0) {
+		          if (x%2 == 1) {
+		            ChangeButtonFactor (x + y*size, type);			  
+			      }			
+				} else {
+		          if (x%2 == 0) {
+		            ChangeButtonFactor (x + y*size, type);			  
+			      }					  
+				}
+			  }			
+			}
+			y = 0;
+		  }          
+		  GenerateEasyLevel(size*size/2);	 ///////////////////////////////////////////////////////////////////// Level 8	  
+		} else if (Level == 9) {             ///////////////////////////////////////////////////////////////////// Level 9
+		  for (let i = 1; i <= size*size; i++) {
+		    let type = RandomButton();
+			let rand = Math.trunc(Math.random()*5);
+			if (rand == 4) {
+			  type = 1;
+			}
+		    ChangeButtonFactor (i, type);		  
+		  }          		
+		  GenerateEasyLevel(size*size/2);	 ///////////////////////////////////////////////////////////////////// Level 9
+		} else if (Level == 10) {             ///////////////////////////////////////////////////////////////////// Level 10   		
+		  for (let x = 1; x < parseInt(size/2); x = x + 3) {
+            for (let y = 1 + size*(x+1); y <= size*(x+2); y++) {                           // top
+			  AddButtonWall(y, "s");
+		    }
+	  	  }		
+		  for (let x = 1; x < parseInt(size/2); x = x + 3) {
+            for (let y = 2 + x; y <= size*size; y = y + size) {                            // left
+			  AddButtonWall(y, "e");
+            }
+		  }	
+		  for (let x = 1; x < parseInt(size/2); x = x + 3) {
+            for (let y = size*size - size*(x+2) + 1; y <= size*size - size*(x+1); y++) {   // bottom
+			  AddButtonWall(y, "n");
+		    }
+		  }	
+		  for (let x = 1; x < parseInt(size/2); x = x + 3) {
+            for (let y = size - (x+1); y <= size*size; y = y + size) {                      // right
+			  AddButtonWall(y, "w");
+		    }
+		  }			  
+		  GenerateHardLevel(size*size/2);	 ///////////////////////////////////////////////////////////////////// Level 10	
+		} else if (Level == 11) {             ///////////////////////////////////////////////////////////////////// Level 11 		
+		  let i = Math.trunc(Math.random()*4);
+		  for (let x = 1; x <= size*size; x++) {
+            i++
+			if (i == 1){
+			  AddButtonWall (x, "n")
+			} else if (i == 2) {
+			  AddButtonWall (x, "e")
+			} else if (i == 3) {
+			  AddButtonWall (x, "s")
+			} else {
+			  AddButtonWall (x, "w")
+              i = 0;			  
+			}
+	  	  }			  
+		  GenerateEasyLevel(size*size/2);	 ///////////////////////////////////////////////////////////////////// Level 11
+		} else if (Level == 12) {             ///////////////////////////////////////////////////////////////////// Level 12
+		  for (let i = 1; i <= size*size; i++) {
+		    let type = RandomButton();
+			let rand = Math.trunc(Math.random()*5);
+			if (rand == 4) {
+			  type = 1;
+			}
+		    ChangeButtonFactor (i, type);		  
+		  }
+		  for (let i = 1; i <= size*size; i++) {
+            let rand = Math.trunc(Math.random()*5);
+			if (rand == 1){
+			  AddButtonWall (i, "n")
+			} else if (rand == 2) {
+			  AddButtonWall (i, "e")
+			} else if (rand == 3) {
+			  AddButtonWall (i, "s")
+			} else if (rand == 4) {
+			  AddButtonWall (i, "w")			  
+			}
+	  	  }			  
+		  GenerateEasyLevel(size*size/2);	 ///////////////////////////////////////////////////////////////////// Level 12
+		} else if (Level == 13) {             //////////////////////////////////////////////////////////////////// Level 13
+          CycleEdges ("nsew");
+		  for (let i = Math.trunc(size/2); i < size*size; i = i + size) {
+		    AddButtonWall (i, "e");
+			AddButtonWall (i + 1, "w");
+		  }
+		  for (let i = Math.trunc(size/2) * size - size + 1; i < Math.trunc(size/2)*size + 1; i++) {
+		    AddButtonWall (i, "s");
+			AddButtonWall (i + size, "n");
+		  }
+		  GenerateEasyLevel(size*size/2);	 ///////////////////////////////////////////////////////////////////// Level 13
+		} else if (Level == 14) {             //////////////////////////////////////////////////////////////////// Level 14
+          let rand = Math.trunc(Math.random()*2);		  
+		    if (rand == 1){
+              CycleEdges ("ns");			
+			} else {
+              CycleEdges ("ew");			
+			}
+		  GenerateEasyLevel(size*size/2);	 ///////////////////////////////////////////////////////////////////// Level 14
+		} else if (Level == 15) {             //////////////////////////////////////////////////////////////////// Level 15
+          let rand = Math.trunc(Math.random()*4);
+		    if (rand == 1){
+              CycleEdges ("nw");			
+			} else if (rand == 2) {
+              CycleEdges ("ne");			
+			} else if (rand == 3) {
+              CycleEdges ("sw");			
+			} else {
+              CycleEdges ("se");
+			}
+		  GenerateEasyLevel(size*size/2);	 ///////////////////////////////////////////////////////////////////// Level 15
+		} else if (Level == 16) {             //////////////////////////////////////////////////////////////////// Level 16
+          CycleEdges ("nsew");
+		  GenerateEasyLevel(size*size/2);	 ///////////////////////////////////////////////////////////////////// Level 16
+		} else if (Level == 17) {             //////////////////////////////////////////////////////////////////// Level 17
+		  let type = RandomButton();
+		  for (let x = 1; x < parseInt(size/2); x = x + 3) {
+            for (let y = 1 + size*(x+1); y <= size*(x+2); y++) {                           // top
+		      ChangeButtonFactor (y, type);
+		    }
+	  	  }
+		  for (let x = 1; x < parseInt(size/2); x = x + 3) {
+            for (let y = 2 + x; y <= size*size; y = y + size) {                            // left
+		      ChangeButtonFactor (y, type);
+            }
+		  }
+		  for (let x = 1; x < parseInt(size/2); x = x + 3) {
+            for (let y = size*size - size*(x+2) + 1; y <= size*size - size*(x+1); y++) {   // bottom
+		      ChangeButtonFactor (y, type);
+		    }
+		  }
+		  for (let x = 1; x < parseInt(size/2); x = x + 3) {
+            for (let y = size - (x+1); y <= size*size; y = y + size) {                      // right
+		      ChangeButtonFactor (y, type);
+		    }
+		  }	
+          CycleEdges ("nsew");
+		  GenerateEasyLevel(size*size/2);	 ///////////////////////////////////////////////////////////////////// Level 17
+		} else if (Level == 18) {             //////////////////////////////////////////////////////////////////// Level 18
+		  let type = RandomButton();
+		  for (let i = 1; i <= size*size; i++) {
+		    ChangeButtonFactor (i, type);		  
+		  }
+          CycleEdges ("nsew");
+		  GenerateEasyLevel(size*size/2);	 ///////////////////////////////////////////////////////////////////// Level 18
+		}	  
+	  }
+	  
+	  function NewLevel(){
+	    let i = 0;
+        DestroyGrid();
+		let grid = document.createElement ('div');
+		grid.id = "grid-container";
+		document.getElementById("demo").appendChild(grid);
+		document.getElementById("new-level").innerHTML = "New Level";
+		if (parseInt(document.getElementById("level-size").value) < 3){
+		  document.getElementById("level-size").value = 3;
+		}
+		if (parseInt(document.getElementById("level-size").value) > 30){
+		  document.getElementById("level-size").value = 30;
+		}
+	  	size = parseInt(document.getElementById("level-size").value);
+	    for (let y = 0; y < size; y++) {	
+          for (let x = 0; x < size; x++){
+            i++;	  
+		    CreateButton (i, -25*size + 50*x, y*50);
+	      }  
+	      x = 0;
+        }		
+		GenerateLevelNum (document.getElementById("level-number").value);
+		for (i = 0; i < CycleButtons.length; i++) {
+		  let cbtn = CycleButtons[i];
+		  ChangeButtonFactor(cbtn.id, document.getElementById(cbtn.counterpart).factor);
+		  AddButtonWall (cbtn.id, document.getElementById(cbtn.counterpart).walls);
+		  if (document.body.contains(document.getElementById(cbtn.id + "nw"))) {
+		    document.getElementById(cbtn.id + "nw").classList.add("wall-cycle");
+		  }
+		  if (document.body.contains(document.getElementById(cbtn.id + "ew"))) {
+		    document.getElementById(cbtn.id + "ew").classList.add("wall-cycle");
+		  }
+		  if (document.body.contains(document.getElementById(cbtn.id + "sw"))) {
+		    document.getElementById(cbtn.id + "sw").classList.add("wall-cycle");
+		  }
+		  if (document.body.contains(document.getElementById(cbtn.id + "ww"))) {
+		    document.getElementById(cbtn.id + "ww").classList.add("wall-cycle");
+		  }
+		}
+		document.getElementById("dummy").style.height = size*50 + "px";
+      }
+	  
+	  function ResetClick () {
+	    for (let IdNum = 0; IdNum < size*size; IdNum++) {
+		  if (document.getElementById(IdNum + 1).classList.contains("btn-clicked")){
+	  	  ModifyButtonGroup (IdNum + 1, 1);
+	  	  }	  
+	    document.getElementById(IdNum + 1).classList.remove("btn-clicked", "btn-marked");
+	    }
+		for (let i = 0; i < CycleButtons.length; i++) {
+		  CycleButtons[i].classList.remove("btn-clicked", "btn-marked");
+		}
+	  }
+  
+	</script>
+	
+    <link rel="stylesheet" href="css/clickboxSquareStyles.css">
+  </head>
+  <body>
+    <main>
+	  	  
+	  <nav class="menu">
+        <div>
+           <span><strong>Button Game</strong></span>
+		   <span class="menu-button"><a href="clickboxTriangle.html">Triangle Game</a></span>
+        </div>
+      </nav>	  
+	  
+	  
+	<div id="demo" class="demo">
+	  <div>
+	    <input type="number" class="level-number" id="level-number" value="1" min="1" max="18">
+	    <button class="new-level" id="new-level" onclick="NewLevel()" >New Level</button>
+	    <input type="number" class="level-size" id="level-size" value="5" min="3" max="30">
+	  </div>
+      <div><button class="reset" onclick="ResetClick()">Reset</button></div>
+	</div>
+	<div id="dummy"></div>
+	
+	  
+    </main>
+	
+	
+	<script>
+
+	NewLevel();
+	  
+	</script>  	
+	
+	
+  </body>
+</html>
