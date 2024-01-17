@@ -6,14 +6,11 @@
 	  let size = 5;
 	  let LMDown = false;
 	  let RMDown = false;
-	  let xn1 = "images/BlueTile.png"   //
-	  let x0 = "images/YellowTile.png"  ///
-	  let x1 = "images/NormalTile.png"  ////
-	  let x2 = "images/OrangeTile.png"  ////
-	  let nw = "images/NorthWall.png"   ///// image paths for the different button types
-	  let sw = "images/SouthWall.png"  ////
-	  let ww = "images/WestWall.png"   ///
-	  let ew = "images/EastWall.png"  //
+	  let xn1 = "images/BlueTile.png"    //
+	  let x0 = "images/YellowTile.png"   ///
+	  let x1 = "images/NormalTile.png"   ////
+	  let x2 = "images/OrangeTile.png"  //// image paths for the different button types
+	  let BtnWall = "images/Wall.png"  ///
 	  let CycleButtons = [];
 	  function CreateButton (IdNum, x, y) {
 	    let grid = document.getElementById("grid-container");
@@ -32,7 +29,7 @@
   	    button.innerHTML = "0";
 		button.style.color = '#0000';
   	    button.onmousedown = function(){BtnClick(IdNum)};
-		button.oncontextmenu = function(e) {""; e.preventDefault();}
+		button.oncontextmenu = function(e) {e.preventDefault();}
 		button.onmouseenter = function(){BtnMouseEnter(IdNum)}; 
 		button.onmouseleave = function(){BtnMouseLeave(IdNum)};
 		img.id = IdNum + "img";
@@ -115,7 +112,7 @@
 			nWall.style.transform = "translate(" + document.getElementById(IdNum).offsetx + "px,"+ document.getElementById(IdNum).offsety + "px)";
 		  }
 		  document.getElementById(IdNum).walls = document.getElementById(IdNum).walls + "n";
-		  document.getElementById(IdNum + "nw").src = nw;
+		  document.getElementById(IdNum + "nw").src = BtnWall;
 		}
 	    if (String.includes("s") == true) {
 		  if (document.body.contains(document.getElementById(IdNum + "sw")) == false) {
@@ -124,10 +121,11 @@
 		    sWall.classList.add("wall");
 			document.getElementById("grid-container").appendChild(sWall);
 			sWall.style.position = "absolute"
-			sWall.style.transform = "translate(" + document.getElementById(IdNum).offsetx + "px,"+ document.getElementById(IdNum).offsety + "px)";
+			sWall.style.transform = "translate(" + document.getElementById(IdNum).offsetx + "px,"+ document.getElementById(IdNum).offsety + "px)" + "rotate(180deg)";
+
 		  }
 		  document.getElementById(IdNum).walls = document.getElementById(IdNum).walls + "s";
-		  document.getElementById(IdNum + "sw").src = sw;	
+		  document.getElementById(IdNum + "sw").src = BtnWall;	
 		}
 	    if (String.includes("w") == true) {
 		  if (document.body.contains(document.getElementById(IdNum + "ww")) == false) {
@@ -136,10 +134,10 @@
 		    wWall.classList.add("wall");
 			document.getElementById("grid-container").appendChild(wWall);
 			wWall.style.position = "absolute"
-			wWall.style.transform = "translate(" + document.getElementById(IdNum).offsetx + "px,"+ document.getElementById(IdNum).offsety + "px)";
+			wWall.style.transform = "translate(" + document.getElementById(IdNum).offsetx + "px,"+ document.getElementById(IdNum).offsety + "px)" + "rotate(270deg)";
 		  }
 		  document.getElementById(IdNum).walls = document.getElementById(IdNum).walls + "w";
-		  document.getElementById(IdNum + "ww").src = ww;
+		  document.getElementById(IdNum + "ww").src = BtnWall;
 		}
 	    if (String.includes("e") == true) {
 		  if (document.body.contains(document.getElementById(IdNum + "ew")) == false) {
@@ -148,10 +146,10 @@
 		    eWall.classList.add("wall");
 			document.getElementById("grid-container").appendChild(eWall);
 			eWall.style.position = "absolute"
-			eWall.style.transform = "translate(" + document.getElementById(IdNum).offsetx + "px,"+ document.getElementById(IdNum).offsety + "px)";
+			eWall.style.transform = "translate(" + document.getElementById(IdNum).offsetx + "px,"+ document.getElementById(IdNum).offsety + "px)" + "rotate(90deg)";
 		  }
 		  document.getElementById(IdNum).walls = document.getElementById(IdNum).walls + "e";
-		  document.getElementById(IdNum + "ew").src = ew;
+		  document.getElementById(IdNum + "ew").src = BtnWall;
 		}
 	  }
 
@@ -770,6 +768,8 @@
 		  }
           CycleEdges ("nsew");
 		  GenerateEasyLevel(size*size/2);	 ///////////////////////////////////////////////////////////////////// Level 18
+		} else {
+		  InitializeButtonGroups();
 		}	  
 	  }
 	  

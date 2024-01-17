@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en" onmousemove="StoreMousePos(event)" onmousedown="MouseDown()" onmouseup="MouseUp()" onmouseleave="MouseExit()" oncontextmenu="return false;">
+  <head>
+  
+    <script>
+	  let MX = 0;  // Tracks the X position of the mouse
+	  let MY = 0;  // Tracks the Y position of the mouse
+	  let LMDown = false;
+	  let RMDown = false;
+	  let xn1 = "images/BlueTriangle.png"    //
+	  let x0 = "images/YellowTriangle.png"   ///
+	  let x1 = "images/NormalTile.png"       ////
+	  let x2 = "images/OrangeTriangle.png"   //// image paths for the different button types
+	  let BtnWall = "images/TriangleWall.png" ///
+	  let size = 5;
+	
+	  function CreateButton (IdNum, Type, x, y) {
+	  	let grid = document.getElementById("grid-container");
+	    let button = document.createElement('BUTTON');
+		let p = document.createElement('p');
+		let offset = "translate(" + x + "px,"+ y + "px)";
+		let img = document.createElement('img');
+	    button.id = IdNum;
+	    button.classList.add("btn" + "-" + Type);
+		button.factor = 1;
+		button.offsetx = x;
+		button.offsety = y;
+		button.walls = "";
+		button.affectedButtons = [];    // stores which buttons this button will affect when pressed
+  	    button.onmousedown = function(){BtnClick(IdNum)};
+		button.oncontextmenu = function(e) {e.preventDefault();}
+		button.onmouseenter = function(){BtnMouseEnter(IdNum)}; 
+		button.onmouseleave = function(){BtnMouseLeave(IdNum)};
+	    button.tabindex = -1;
+		p.id = IdNum + "p"
+  	    p.innerHTML = "0";	
+		p.classList.add("p" + "-" + Type);
+		p.style.color = '#0000';
+		img.id = IdNum + "img";
+		img.src = x1;
+		img.classList.add("img" + "-" + Type);
+		button.appendChild(p);
+  	    grid.appendChild(button);
+        button.style.position = "absolute"
+		button.style.transform = offset;
+		grid.appendChild(img);
+        img.style.position = "absolute";
+		if (Type == "down") {
+		  img.style.transform = offset + "rotate(180deg)";
+		} else {
+		  img.style.transform = offset;		
+		}
+	  }
+
+      function DestroyGrid (){
+		if (document.body.contains(document.getElementById("grid-container")) == true){
+	      document.getElementById("grid-container").remove();
+        }
+      }	
+	  
+      function MouseDown(){
+        if (event.button == 0) {
+		  LMDown = true;
+		}
+		if (event.button == 2) {
+		  RMDown= true;
+		}
+	  }
+	  
+      function MouseUp(){
+        if (event.button == 0) {
+		  LMDown = false;
+		}
+		if (event.button == 2) {
+		  RMDown= false;
+		}
+	  }
+	  
+      function MouseExit(){
+		LMDown = false;
+		RMDown= false;
+	  }
+	  
+	  function GetRow (IdNum){
+	    let i = 1;
+		let inc = 1;
+		let row = 1;
+	    while (IdNum > i) {
+		  inc += 2;
+		  i += inc;	
+		  row++;
+		}
+		return row;
+	  }
+
+	  function AddButtonWall (IdNum, String) {
+	    let btn = document.getElementById(IdNum);
+	    if (String.includes("n") == true) {
+		  if (document.body.contains(document.getElementById(IdNum + "nw")) == false) {
+		    let nWall = document.createElement('img');
+			nWall.id = IdNum + "nw"
+		    nWall.classList.add("wall");
+			document.getElementById("grid-container").appendChild(nWall);
+			nWall.style.position = "absolute"
+			if (IsUpTriangle(btn)) {
+			  nWall.style.transform = "translate(" + document.getElementById(IdNum).offsetx + "px,"+ (document.getElementById(IdNum).offsety + 4) + "px)" + "rotate(180deg)";
+			} else {
+			  nWall.style.transform = "translate(" + document.getElementById(IdNum).offsetx + "px,"+ document.getElementById(IdNum).offsety + "px)";
+			}
+		  }
+		  document.getElementById(IdNum).walls = document.getElementById(IdNum).walls + "n";
+		  document.getElementById(IdNum + "nw").src = BtnWall;
+		}
+	    if (String.includes("w") == true) {
+		  if (document.body.contains(document.getElementById(IdNum + "ww")) == false) {
+		    let wWall = document.createElement('img');
+			wWall.id = IdNum + "ww"
+		    wWall.classList.add("wall");
+			document.getElementById("grid-container").appendChild(wWall);
+			wWall.style.position = "absolute"
+			if (IsUpTriangle(btn)) {
+              wWall.style.transform = "translate(" + (document.getElementById(IdNum).offsetx + 5) + "px,"+ (document.getElementById(IdNum).offsety + 15) + "px)" + "rotate(300deg)";
+			} else {
+			  wWall.style.transform = "translate(" + (document.getElementById(IdNum).offsetx + 6) + "px,"+ (document.getElementById(IdNum).offsety - 11) + "px)" + "rotate(240deg)";
+			}
+		  }
+		  document.getElementById(IdNum).walls = document.getElementById(IdNum).walls + "w";
+		  document.getElementById(IdNum + "ww").src = BtnWall;
+		}
+	    if (String.includes("e") == true) {
+		  if (document.body.contains(document.getElementById(IdNum + "ew")) == false) {
+		    let eWall = document.createElement('img');
+			eWall.id = IdNum + "ew"
+		    eWall.classList.add("wall");
+			document.getElementById("grid-container").appendChild(eWall);
+			eWall.style.position = "absolute"
+			if (IsUpTriangle(btn)) {
+			  eWall.style.transform = "translate(" + (document.getElementById(IdNum).offsetx - 6) + "px,"+ (document.getElementById(IdNum).offsety + 14) + "px)" + "rotate(60deg)";
+			} else {
+			  eWall.style.transform = "translate(" + (document.getElementById(IdNum).offsetx - 6) + "px,"+ (document.getElementById(IdNum).offsety - 10) + "px)" + "rotate(120deg)";
+			}
+		  }
+		  document.getElementById(IdNum).walls = document.getElementById(IdNum).walls + "e";
+		  document.getElementById(IdNum + "ew").src = BtnWall;
+		}
+	  }
+
+	  function ChangeButtonFactor (IdNum, Factor) {
+	    if (Factor == -1) {
+		  document.getElementById(IdNum).factor = -1;
+		  document.getElementById(IdNum + "img").src = xn1;
+		} else if (Factor == 0) {
+		  document.getElementById(IdNum).factor = 0;
+		  document.getElementById(IdNum + "img").src = x0;		
+		} else if (Factor == 2) {
+		  document.getElementById(IdNum).factor = 2;
+		  document.getElementById(IdNum + "img").src = x2;	
+		} else {
+		  document.getElementById(IdNum).factor = 1;
+		  document.getElementById(IdNum + "img").src = x1;		
+		}
+	  }
+	  
+      function RandomButtonFactor() {
+		  let rand = Math.trunc(Math.random()*3);
+		  if (rand == 0) {
+		    return 0;
+		  } else if (rand == 1) {
+		    return 2;
+		  } else if (rand == 2) {
+		    return -1;
+		  } else {
+		    return 1
+		  }
+	  }	  
+	  
+      function RandomButtonWall() {
+		  let rand = Math.trunc(Math.random()*3);
+		  if (rand == 0) {
+		    return "n";
+		  } else if (rand == 1) {
+		    return "e";
+		  } else if (rand == 2) {
+		    return "w";
+		  } else {
+		    return "";
+		  }
+	  }	  
+	
+      function ModifyButton(IdNum,Amount){
+        parseInt(document.getElementById(IdNum + "p").innerHTML = parseInt(document.getElementById(IdNum + "p").innerHTML) + Amount);
+		if (document.getElementById(IdNum + "p").innerHTML == 0){
+		  document.getElementById(IdNum + "p").style.color = '#0000';
+		}
+        if (parseInt(document.getElementById(IdNum + "p").innerHTML) < 0){
+		  document.getElementById(IdNum + "p").style.color = '#A80000';
+		} 
+		if (parseInt(document.getElementById(IdNum + "p").innerHTML) > 0) {
+		  document.getElementById(IdNum + "p").style.color = '#404040';
+		}
+      }
+
+      function ModifyButtonGroup(IdNum, Amount) {
+	    let btn = document.getElementById(IdNum);
+	  	for (let i = 0; i < btn.affectedButtons.length; i++) {
+		  if (btn.affectedButtons[i] == IdNum) {
+		    ModifyButton(btn.affectedButtons[i], Amount*btn.factor);
+		  } else {
+		    ModifyButton(btn.affectedButtons[i], Amount);		  
+		  }
+		}
+	  }
+
+      function InitializeButtonGroups()  {
+	    for (let j = 1; j <= size*size; j++) {
+	      let midBtn = document.getElementById(j);
+	      for (let i = 1; i <= size*size; i++) {
+		    let btn = document.getElementById(i);
+			let x = btn.offsetx - midBtn.offsetx;
+			let y = btn.offsety - midBtn.offsety;
+			let nw = 60;
+			let ew = 60;
+			let ww = 60;			
+			if (midBtn.walls.includes("n")) {
+			  nw = 0;		
+			}
+			if (midBtn.walls.includes("e")) {
+			  ew = 0;		
+			}
+			if (midBtn.walls.includes("w")) {
+			  ww = 0;		
+			}
+	
+
+			if (IsUpTriangle(midBtn)) {
+		      if (y > x*(44/25) - 12 - ew*2 &&
+		          y > x*(-44/25) - 12 - ww*2 &&
+			      y < 6 + nw &&
+				  y > -66 &&
+				  x < 66 &&
+				  x > -66) {
+                midBtn.affectedButtons.push(i);
+		      }			
+			} else {
+		      if (y < x*(44/25) + 12 + ww*2 &&
+		          y < x*(-44/25) + 12 + ew*2 &&
+			      y > -6 - nw &&
+				  y < 66 &&
+				  x > -66 &&
+				  x < 66) {
+                midBtn.affectedButtons.push(i);			
+              }				
+			}
+		  }
+		}
+	  }
+
+      function BtnClick(clickID) {
+	    if (event.button == 0){
+          BtnLeftClick(clickID);
+		} else if (event.button == 2){
+		  BtnRightClick(clickID);
+		}
+      }
+      
+      function BtnLeftClick(clickID) {
+        let btn = document.getElementById(clickID);
+		if (btn.classList.contains("btn-up") &&
+		    btn.classList.contains("btn-up-clicked") == false &&
+            btn.classList.contains("btn-up-marked") == false) {
+		  ModifyButtonGroup(clickID, -1);
+		  btn.classList.add("btn-up-clicked");
+		 }
+		else if (btn.classList.contains("btn-down") &&
+		         btn.classList.contains("btn-down-clicked") == false &&
+				 btn.classList.contains("btn-down-marked") == false) {
+		  ModifyButtonGroup(clickID, -1);
+		  btn.classList.add("btn-down-clicked");
+		}
+	    else if (btn.classList.contains("btn-up-clicked")) {
+		  ModifyButtonGroup(clickID, 1);
+		  btn.classList.remove("btn-up-clicked");
+		}
+		else if (btn.classList.contains("btn-down-clicked")) {
+		  ModifyButtonGroup(clickID, 1);
+		  btn.classList.remove("btn-down-clicked");
+		}
+	    VictoryCheck();
+      }
+	  
+	  function BtnRightClick(clickID) {
+        let btn = document.getElementById(clickID);
+		if (btn.classList.contains("btn-up") &&
+            btn.classList.contains("btn-up-clicked") == false &&
+			btn.classList.contains("btn-up-marked") == false) {
+		  btn.classList.add("btn-up-marked");
+		}
+		else if (btn.classList.contains("btn-up-clicked")) {
+		  ModifyButtonGroup(clickID, 1);
+		  btn.classList.add("btn-up-marked");
+		  btn.classList.remove("btn-up-clicked")
+		}
+	    else if (btn.classList.contains("btn-up-marked")) {
+		  btn.classList.remove("btn-up-marked");
+		} 
+		else if (btn.classList.contains("btn-down") &&
+                 btn.classList.contains("btn-down-clicked") == false &&
+				 btn.classList.contains("btn-down-marked") == false) {
+		  btn.classList.add("btn-down-marked");
+		}	
+		else if (btn.classList.contains("btn-down-clicked")) {
+		  ModifyButtonGroup(clickID, 1);
+		  btn.classList.add("btn-down-marked");
+		  btn.classList.remove("btn-down-clicked");
+		}
+		else if (btn.classList.contains("btn-down-marked")) {
+		  btn.classList.remove("btn-down-marked");
+        }
+      }
+	  
+      function BtnMouseEnter(clickID)  {
+	    let btn = document.getElementById(clickID);
+	    if (LMDown == true) {
+		  BtnLeftClick(clickID);
+		} else if (RMDown == true) {
+		  BtnRightClick(clickID);
+		}
+		for (i = 0; i < btn.affectedButtons.length; i++) {
+		  document.getElementById(btn.affectedButtons[i]).classList.add("btn-group");
+		}
+	  }
+
+      function BtnMouseLeave(clickID)  {
+	    let btn = document.getElementById(clickID);
+		for (i = 0; i < btn.affectedButtons.length; i++) {
+		  document.getElementById(btn.affectedButtons[i]).classList.remove("btn-group");
+		}	  
+	  }
+
+      function VictoryCheck () {
+	    let victory = true;
+	    for (i = 1; i <= size*size; i++) {
+		  if (document.getElementById(i + "p").innerHTML != 0) {
+		    victory = false;
+		  }
+		}
+		if (victory == true) {
+		  document.getElementById("new-level").innerHTML = "Victory!";
+		}
+	  }
+	  
+	  function ResetClick () {
+	    for (let IdNum = 0; IdNum < size*size; IdNum++) {
+		  if (document.getElementById(IdNum + 1).classList.contains("btn-up-clicked")){
+	  	  ModifyButtonGroup (IdNum + 1, 1);
+		  document.getElementById(IdNum + 1).classList.remove("btn-up-clicked");
+          }
+		  if (document.getElementById(IdNum + 1).classList.contains("btn-down-clicked")) {
+	  	    ModifyButtonGroup (IdNum + 1, 1);
+		    document.getElementById(IdNum + 1).classList.remove("btn-down-clicked");
+          }		
+		  document.getElementById(IdNum + 1).classList.remove("btn-up-marked");		  
+		  document.getElementById(IdNum + 1).classList.remove("btn-down-marked");  
+	    }
+	  }
+
+      function GenerateRandomClicks(Clicks) {
+	    let clicks = Clicks;
+		InitializeButtonGroups();
+		while (clicks > 0){
+	      let rand = Math.trunc(Math.random()*size*size)+1;
+	      if (document.getElementById(rand).classList.contains("btn-up") &&
+		      document.getElementById(rand).classList.contains("btn-up-clicked") == false &&
+		      document.getElementById(rand).classList.contains("btn-up-marked") == false) {
+            ModifyButtonGroup (rand, 1);
+            document.getElementById(rand).classList.add("btn-up-clicked");			
+		    clicks--;
+          } else if (document.getElementById(rand).classList.contains("btn-down") &&
+		             document.getElementById(rand).classList.contains("btn-down-clicked") == false &&
+                     document.getElementById(rand).classList.contains("btn-down-marked") == false) {
+            ModifyButtonGroup (rand, 1);
+            document.getElementById(rand).classList.add("btn-down-clicked");
+		    clicks--;		  
+		  }	
+        }
+	    for (i = 0; i < size*size; i++){
+	      document.getElementById(i + 1).classList.remove("btn-up-clicked", "btn-down-clicked", "btn-up-marked", "btn-down-marked");
+        }
+	  }
+
+      function GenerateLevelNum (Level) {
+        if (Level == 1) {                      /////////////////// Level 1
+		  GenerateRandomClicks(size*size/5);		
+		} else if (Level == 2) {	           ////////////////// Level 2
+		  GenerateRandomClicks(size*size/3);		
+		} else if (Level == 3) {              ////////////////// Level 3
+		  GenerateRandomClicks(size*size/2);		
+		} else if (Level == 4) {              ////////////////// Level 4
+		  let rand = RandomButtonFactor();
+		  for (i = 1; i <= size*size; i++) {
+		    let btn = document.getElementById(i);
+		    if (IsUpTriangle(btn)) {
+			  ChangeButtonFactor(i, rand);
+			}
+		  }
+		  GenerateRandomClicks(size*size/2);  //////////////// Level 4
+		} else if (Level == 5) {              //////////////// Level 5
+		  let rand = RandomButtonFactor();
+		  for (i = 1; i <= size*size; i++) {
+			ChangeButtonFactor(i, rand);
+		  }
+		  GenerateRandomClicks(size*size/2); ///////////////// Level 5
+		} else if (Level == 6) {              //////////////// Level 6
+		  for (i = 1; i <= size*size; i++) {
+		  	let rand = RandomButtonFactor();
+			ChangeButtonFactor(i, rand);
+		  }
+		  GenerateRandomClicks(size*size/2); ///////////////// Level 6
+		} else if (Level == 7) {              //////////////// Level 7
+		  let rand = Math.trunc(Math.random()*2) + 3;
+		  for (i = 1; i <= size*size; i++) {
+		    rand = rand - 1;
+			if (rand <= 0) {
+			  AddButtonWall(i, RandomButtonWall());	
+              rand = Math.trunc(Math.random()*2) + 3;			  
+			}
+		  }
+		  GenerateRandomClicks(size*size/2); ///////////////// Level 7
+		} else if (Level == 8) {              //////////////// Level 8
+		  for (i = 1; i <= size*size; i++) {
+            if (IsUpTriangle(document.getElementById(i)) == false) {
+			  AddButtonWall(i, RandomButtonWall());		
+			}
+		  }
+		  GenerateRandomClicks(size*size/2); ///////////////// Level 8
+		} else if (Level == 9) {              //////////////// Level 9
+		  let rand = RandomButtonWall();
+		  for (i = 1; i <= size*size; i++) {
+			  AddButtonWall(i, rand);		
+		  }
+		  GenerateRandomClicks(size*size/2); ///////////////// Level 9
+		} else {
+		  InitializeButtonGroups();
+		}
+	  }
+	  
+	  function NewLevel(){
+	    let rand = 0;
+		let i = 0;
+		let clicks = 0;
+        DestroyGrid();
+		let grid = document.createElement ('div');
+		grid.id = "grid-container";
+		document.getElementById("demo").appendChild(grid);
+		document.getElementById("new-level").innerHTML = "New Level";
+		if (parseInt(document.getElementById("level-size").value) < 3){
+		  document.getElementById("level-size").value = 3;
+		}
+		if (parseInt(document.getElementById("level-size").value) > 30){
+		  document.getElementById("level-size").value = 30;
+		}
+	  	size = parseInt(document.getElementById("level-size").value);
+		i = 0;
+	    for (let y = 0; y < size; y++) {	
+          for (let x = 0; x < 1 + y*2; x++){
+            i++;	  
+	        if (x%2 == 0) { 
+		      CreateButton (i, "up", -27 + (31*x - y*31), y*54);
+	        } else {
+	          CreateButton (i, "down", -27 + (31*x - y*31), y*54);
+	        }
+	      }  
+	      x = 0;
+        }
+		GenerateLevelNum(document.getElementById("level-number").value);
+      }	  
+  
+      function StoreMousePos (e){
+        MX = e.clientX;
+		MY = e.clientY;
+	  }	 
+
+      function IsUpTriangle (btn) {
+	    if (btn.classList.contains("btn-up")) {
+		  return true;
+		} else {
+		  return false;	
+		}
+	  } 	  
+	  
+	  function GameCycle () {
+	    for ( let i = 1; i <= size*size; i++) {
+		  let btn = document.getElementById(i);
+		  let disable = true;
+		  let wasDisabled = btn.disabled;
+		  let RX = MX - btn.getBoundingClientRect().left;
+		  let RY = MY - btn.getBoundingClientRect().top;
+		  if (IsUpTriangle(btn)) {
+		    if (RY > RX*(-44/25) + 51 &&
+		        RY > RX*(44/25) - 51 &&
+		        RY < 51) {
+              disable = false;					
+		    }
+		  }
+		  else {
+		    if (RY < RX*(44/25) && 
+		        RY < RX*(-44/25) + 102 &&
+			    RY > 0) {
+              disable = false;				
+		    }		  
+		  }
+
+		  btn.disabled = disable;
+		  
+		  if (wasDisabled == false &&   // Disabling/Enabling buttons causes problems with mouse exiting detection.
+		      btn.disabled == true) {  // So this checks whether or not a button that was enabled is now being disabled
+		    BtnMouseLeave (i);         // and calls the correct function
+		  }
+		}
+	  }
+  
+	</script>
+	
+    <link rel="stylesheet" href="css/clickboxTriangleStyles.css">
+  </head>
+  <body>
+    <main>	  	  
+	  <nav class="menu">
+        <div>
+		   <span class="menu-button"><a href="index.html">Square</a></span>
+           <span><strong>Triangle</strong></span>
+        </div>
+      </nav>	  
+	  
+	  
+	<div class="demo" id="demo">
+	  <div>
+	    <input type="number" class="level-number" id="level-number" value="1" min="1" max="9">
+	    <button class="new-level" id="new-level" onclick="NewLevel()" >New Level</button>
+	    <input type="number" class="level-size" id="level-size" value="5" min="3" max="30">
+	  </div>
+      <div><button class="reset" onclick="ResetClick()">Reset</button></div>
+	</div>
+	  
+    </main>
+	
+	
+	<script>
+	NewLevel();
+	let interval = setInterval(GameCycle, 20)
+	  
+	</script>  	
+	
+	
+  </body>
+</html>
