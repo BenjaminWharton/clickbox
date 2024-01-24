@@ -775,6 +775,8 @@
 	  
 	  function NewLevel(){
 	    let i = 0;
+		let xOffset = 0;
+		let yOffset = 0;
         DestroyGrid();
 		let grid = document.createElement ('div');
 		grid.id = "grid-container";
@@ -787,10 +789,20 @@
 		  document.getElementById("level-size").value = 30;
 		}
 	  	size = parseInt(document.getElementById("level-size").value);
-	    for (let y = 0; y < size; y++) {	
+	    for (let y = 0; y < size; y++) {
+//          if (y%2 == 0) {  /////////////////////////////////////////////////////// TO DO: add optional skew to square game
+//		    xOffset = 25;
+//		  } else {
+//    	    xOffset = 0;
+//		  }
           for (let x = 0; x < size; x++){
+//          if (x%2 == 0) {  /////////////////////////////////////////////////////// TO DO: add optional skew to square game
+//		    yOffset = 25;
+//		  } else {
+//		    yOffset = 0;
+//		  }
             i++;	  
-		    CreateButton (i, -25*size + 50*x, y*50);
+		    CreateButton (i, -25*size + 50*x + xOffset, y*50 + yOffset);
 	      }  
 	      x = 0;
         }		
@@ -838,6 +850,7 @@
         <div>
            <span><strong>Square</strong></span>
 		   <span class="menu-button"><a href="clickboxTriangle.html">Triangle</a></span>
+		   <span class="menu-button"><a href="clickboxPentagon.html">Pentagon</a></span>
         </div>
       </nav>	  
 	  
