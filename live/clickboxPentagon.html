@@ -10,7 +10,9 @@
 	  let RMDown = false;
 	  let bg = "images/PentagonButton.png"
 	  let bgc = "images/PentagonButtonClicked.png"
+	  let bgd = "images/PentagonButtonDoubled.png"
 	  let bgl = "images/PentagonButtonLocked.png"
+	  let bgcl = "images/PentagonButtonClickedLocked.png"
 	  let xn1 = "images/BlueTile.png"      //
 	  let x0 = "images/YellowTile.png"     ///
 	  let x1 = "images/NormalTile.png"    ////
@@ -243,15 +245,26 @@
         let btn = document.getElementById(clickID);
 		let btnBg = document.getElementById(clickID + "bg");
 		if (btn.classList.contains("btn-clicked") == false &&
-		    btn.classList.contains("btn-marked") == false) {			
+		    btn.classList.contains("btn-marked") == false &&
+			btn.classList.contains("btn-doubled") == false) {			
 		  btn.classList.add("btn-clicked");
 		  btnBg.src = bgc;
 		  ModifyButtonGroup(clickID, -1);
 		}
-	    else if (btn.classList.contains("btn-clicked")) {
+	    else if (btn.classList.contains("btn-clicked") &&
+		         btn.classList.contains("btn-doubled") == false &&
+				 btn.classList.contains("btn-marked") == false) {
 		  btn.classList.remove("btn-clicked");
+		  btn.classList.add("btn-doubled");
+		  btnBg.src = bgd;
+		  ModifyButtonGroup(clickID, -1);
+		}
+	    else if (btn.classList.contains("btn-clicked") == false &&
+		         btn.classList.contains("btn-doubled") &&
+				 btn.classList.contains("btn-marked") == false) {
+		  btn.classList.remove("btn-doubled");
 		  btnBg.src = bg;
-		  ModifyButtonGroup(clickID, 1);
+		  ModifyButtonGroup(clickID, 2);
 		}	  
 		VictoryCheck();
 	  }
@@ -260,19 +273,31 @@
         let btn = document.getElementById(clickID);
 		let btnBg = document.getElementById(clickID + "bg");
 		if (btn.classList.contains("btn-marked") == false &&
-		    btn.classList.contains("btn-clicked") == false) {
+		    btn.classList.contains("btn-clicked") == false &&
+			btn.classList.contains("btn-doubled") == false) {
 		  btn.classList.add("btn-marked");
 		  btnBg.src = bgl;
 		}
-	    else if (btn.classList.contains("btn-clicked") == true) {
-		  ModifyButtonGroup(clickID, 1);
+	    else if (btn.classList.contains("btn-clicked") == true &&
+		         btn.classList.contains("btn-marked") == false) {
 		  btn.classList.add("btn-marked");
-		  btn.classList.remove("btn-clicked");
+		  btnBg.src = bgcl;
+		}
+	    else if (btn.classList.contains("btn-doubled") == true) {
+		  ModifyButtonGroup(clickID, 2);
+		  btn.classList.add("btn-marked");
+		  btn.classList.remove("btn-doubled");
 		  btnBg.src = bgl;
 		} 
-		else if (btn.classList.contains("btn-marked")) {
+		else if (btn.classList.contains("btn-marked") == true &&
+		         btn.classList.contains("btn-clicked") == false) {
 		  btn.classList.remove("btn-marked");
 		  btnBg.src = bg;
+		}	
+		else if (btn.classList.contains("btn-marked") == true &&
+		         btn.classList.contains("btn-clicked") == true) {
+		  btn.classList.remove("btn-marked");
+		  btnBg.src = bgc;
 		}	
       }
 
@@ -316,15 +341,21 @@
 	    let clicks = Clicks;
         while (clicks > 0){
 	      rand = Math.trunc(Math.random()*size*size) + 1;
-	      if (document.getElementById(rand).classList.contains("btn-clicked") == false &&
-		      document.getElementById(rand).classList.contains("btn-marked") == false) {
+		  let btn = document.getElementById(rand);
+	      if (btn.classList.contains("btn-doubled") == false &&
+		      btn.classList.contains("btn-marked") == false) {
             ModifyButtonGroup (rand, 1);
-            document.getElementById(rand).classList.add("btn-clicked");	  
+			if (btn.classList.contains("btn-clicked")) {
+              btn.classList.add("btn-doubled");			
+			}
+			else {
+              btn.classList.add("btn-clicked");			
+			}  
 		    clicks--;
           }		  
         }
 	    for (let i = 1; i <= size*size; i++){
-	      document.getElementById(i).classList.remove("btn-clicked", "btn-marked");
+	      document.getElementById(i).classList.remove("btn-clicked", "btn-marked", "btn-doubled");
         }
 	  }
 
@@ -335,11 +366,11 @@
 	  
       function GenerateLevelNum (Level) {
 	    if (Level == 1) {                              //////////////////////////////////////////////////////////// Level 1
-		  GenerateLevel (size*size/5);                 //////////////////////////////////////////////////////////// Level 1
+		  GenerateLevel (size*size/3);                 //////////////////////////////////////////////////////////// Level 1
 	    } else if (Level == 2) {                       //////////////////////////////////////////////////////////// Level 2
-		  GenerateLevel (size*size/3);                 //////////////////////////////////////////////////////////// Level 2
+		  GenerateLevel (size*size/1.5);                 //////////////////////////////////////////////////////////// Level 2
 	    } else if (Level == 3) {                       //////////////////////////////////////////////////////////// Level 3
-		  GenerateLevel (size*size/2);                 //////////////////////////////////////////////////////////// Level 3
+		  GenerateLevel (size*size);                 //////////////////////////////////////////////////////////// Level 3
 		} else {
 		  InitializeButtonGroups();
 		}	
@@ -414,12 +445,16 @@
 	  
 	  function ResetClick () {
 	    for (let IdNum = 1; IdNum <= size*size; IdNum++) {
-		  if (document.getElementById(IdNum).classList.contains("btn-clicked")){
-	  	  BtnLeftClick (IdNum);
-	  	  }	  
 		  if (document.getElementById(IdNum).classList.contains("btn-marked")){
 	  	  BtnRightClick (IdNum);
-	  	  }	 
+	  	  }	
+		  if (document.getElementById(IdNum).classList.contains("btn-clicked")){
+	  	  BtnLeftClick(IdNum);
+		  BtnLeftClick(IdNum);
+	  	  }		
+		  if (document.getElementById(IdNum).classList.contains("btn-doubled")){
+	  	  BtnLeftClick(IdNum);
+	  	  }	    
 	    }
 	  }
 
