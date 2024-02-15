@@ -103,64 +103,78 @@ body {
   transform: translateY(4px);
 }
 
+.background-old {
+  width: 60px;
+  height: 60px;
+  user-select: none;
+  pointer-events: none;
+}
+
+.lock-vis {
+  fill: #0000;
+}
+
+.background {
+  fill: #CFD7D7;  
+  stroke: #000000;
+  stroke-width: 0px;
+  pointer-events: visiblePainted;
+}
+
+.background:hover {
+  stroke-width: 3px;	
+}
+
+.modifier {
+  fill: #0000;
+}
+
+.svg {
+  width: 60px;
+  height: 60px;
+  user-select: none;
+  pointer-events: none;
+}
+
 .btn {
-  width: 50px;
-  height: 50px;
-  background-color: #CFD7D7;
-  outline: none;
-  border-radius: 2px;
-  border: 1px solid black;
+  width: 60px;
+  height: 60px;
   font-size: 20px; 
   color: #404040;
+  outline: none;
+  border: 0px #0000;
+  background-color: #0000;
   user-select: none;
-}
-
-.btn:hover {
-  border-radius: 2px;
-  border: 2px solid black;
-}
-
-.btn-clicked {
-  background-color: #22c976;
-}
-
-.btn-marked {
-  background-color: #A0A5A5;
-}
-
-.img {
-  width: 40px;
-  height: 40px;	
-  margin: 5px;
   pointer-events: none;
-  user-select: none;
-}
-
-.img-cycle {
-  width: 26px;
-  height: 26px;	
-  margin: 12px;
 }
 
 .wall {
-  width: 50px;
-  height: 50px;	
+  width: 60px;
+  height: 60px;	
   pointer-events: none;
 }
 
 .wall-cycle {
-  width: 34px;
-  height: 34px;	
-  margin: 8px;
+  width: 40px;
+  height: 40px;	
+  margin: 10px;
 }
 
 .cycle {
-  width: 36px;
-  height: 36px;
-  border-radius: 7px;
-  border: 1px solid black;
-  margin: 7px;
+  width: 40px;
+  height: 40px;
+  margin: 10px;
+  font-size: 20px; 
+  color: #404040;
+  outline: none;
+  background-color: #0000;
+  user-select: none;
   pointer-events: none;
+}
+
+.triangle {
+  width: 80px;
+  height: 80px;
 }
 
 .btn-group {
