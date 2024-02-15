@@ -274,6 +274,10 @@ class TriangleButton extends GameButton {
       <div><button class="reset" onclick="ResetClick()">Reset</button></div>
 	</div>
 	<div id="dummy"></div>	  
+	<div class ="bottom">
+      <button id="press" class="press" ontouchstart="PressTouch(this)">Press</button>
+      <button id="lock" class="lock" ontouchstart="LockTouch(this)">Lock</button>
+	</div>
     </main>
 	
     <script>

@@ -1,23 +1,25 @@
 
 
-LMDown = false;
-RMDown = false;
-size = 5;
-GameButtons = [];
-CycleButtons = [];
-LastTouchedButton = null;
-normalColor = "#CFD7D7";
-lockedColor = "#A0A5A5";
-clickedColor = "#22c976";
-doubledColor = "#00FFFF";
-tripledColor = "#FF00FF";
-modifierColor0 = "#FFFF40";
-modifierColor1 = "#0000";
-modifierColor2 = "#FF8040";
-modifierColorN1 = "#80A0FF";
-textColorPositive = "#404040";
-textColorZero = "#0000";
-textColorNegative = "#A80000";
+var LMDown = false;
+var RMDown = false;
+var size = 5;
+var GameButtons = [];
+var CycleButtons = [];
+var LastTouchedButton = null;
+var PressSelected = false;
+var LockSelected = false;
+const normalColor = "#CFD7D7";
+const lockedColor = "#A0A5A5";
+const clickedColor = "#22c976";
+const doubledColor = "#00FFFF";
+const tripledColor = "#FF00FF";
+const modifierColor0 = "#FFFF40";
+const modifierColor1 = "#0000";
+const modifierColor2 = "#FF8040";
+const modifierColorN1 = "#80A0FF";
+const textColorPositive = "#404040";
+const textColorZero = "#0000";
+const textColorNegative = "#A80000";
 class GameButton {
 	constructor(x, y, Facing = "") {
         let grid = document.getElementById("grid-container");
@@ -53,6 +55,8 @@ class GameButton {
 		background.onmouseenter = function(){BtnMouseEnter(btn)};
         background.onmouseleave = function(){BtnMouseLeave(btn)};
 		background.ontouchstart = function(){BtnTouch(btn)};
+//		background.ontouchmove = function(){TouchMove(btn)};
+//		background.ontouchcancel = function(){TouchCancel(btn)};
 		this.btn.background = background;
 		this.createHitbox(svgBg, background);
 
@@ -466,17 +470,75 @@ function InitializeButtonGroups()  {
 		}
       }
 
-      function BtnTouch(clickID) {
+      function BtnTouch(btn) {
 		  event.preventDefault();
-		  if (LastTouchedButton != null) {
-              BtnMouseLeave(LastTouchedButton);	  
+		  let wasSelected = false;
+		  if (btn.background.classList.contains("selected")) {
+			  wasSelected = true;
 		  }
-		  BtnMouseEnter(clickID);
-          BtnLeftClick(clickID);
-		  LastTouchedButton = clickID;			  
-			  
-
+		  if (LastTouchedButton != null) {
+              BtnMouseLeave(LastTouchedButton);	
+              LastTouchedButton.background.classList.remove("selected");
+		  }
+		  BtnMouseEnter(btn);
+		  if (PressSelected == true) {
+              BtnLeftClick(btn);
+              btn.background.classList.add("selected");			  
+		  } else if (LockSelected == true) {
+			  BtnRightClick(btn);
+			  btn.background.classList.add("selected");
+		  }  else if (wasSelected == false) {
+			  btn.background.classList.add("selected");
+		  } else {
+			  btn.background.classList.remove("selected");
+			  BtnMouseLeave(btn);
+		  }
+		  LastTouchedButton = btn;			  
       }
+	  
+	  function TouchMove(btn) {
+		  event.preventDefault();
+//		  console.log(btn);
+//		  TouchCancel(btn);
+//		  btn.background.classList.add("disable-touch");
+		  
+	  }
+	  
+	  function TouchEnd() {
+//		  
+///////////////////////////////////////////////////////////////////////////////////////////  
+	  }
+	 
+	  function TouchCancel(btn) {
+//		  console.log(1);
+///////////////////////////////////////////////////////////////////////////////////////////
+	  }
+
+function PressTouch(btn) {
+//	event.preventDefault();
+    LockSelected = false;
+	document.getElementById("lock").classList.remove("bottom-selected");
+	if (PressSelected == false) {
+	  PressSelected = true;
+	  btn.classList.add("bottom-selected");
+	} else {
+		PressSelected = false;
+	    btn.classList.remove("bottom-selected");
+	}	
+}
+
+function LockTouch(btn) {
+//	event.preventDefault();
+    PressSelected = false;
+	document.getElementById("press").classList.remove("bottom-selected");
+	if (LockSelected == false) {
+	  LockSelected = true;
+	  btn.classList.add("bottom-selected");
+	} else {
+		LockSelected = false;
+	    btn.classList.remove("bottom-selected");
+	}	
+}
 
       function BtnLeftClick(btn)  {
 		  let value = 0;
