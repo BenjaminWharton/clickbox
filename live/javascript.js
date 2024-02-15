@@ -5,6 +5,7 @@ RMDown = false;
 size = 5;
 GameButtons = [];
 CycleButtons = [];
+LastTouchedButton = null;
 normalColor = "#CFD7D7";
 lockedColor = "#A0A5A5";
 clickedColor = "#22c976";
@@ -42,7 +43,7 @@ class GameButton {
 		
 		let svgBg = document.createElementNS("http://www.w3.org/2000/svg", 'svg');
    	    svgBg.style.position = "absolute";
-        svgBg.setAttribute("transform","translate(" + x + "," + y + ")");
+		svgBg.style.transform = "translate(" + x + "px," + y + "px)";
 		svgBg.classList.add("svg");
 		this.btn.svgBg = svgBg;
 		
@@ -51,12 +52,13 @@ class GameButton {
         background.onmousedown = function(){BtnClick(btn)};
 		background.onmouseenter = function(){BtnMouseEnter(btn)};
         background.onmouseleave = function(){BtnMouseLeave(btn)};
+		background.ontouchstart = function(){BtnTouch(btn)};
 		this.btn.background = background;
 		this.createHitbox(svgBg, background);
 
 		let svgL = document.createElementNS("http://www.w3.org/2000/svg", 'svg');
    	    svgL.style.position = "absolute";
-        svgL.setAttribute("transform","translate(" + x + "," + y + ")");
+        svgL.style.transform = "translate(" + x + "px," + y + "px)";
 		svgL.classList.add("svg");
 		svgL.setAttribute("viewBox", "-15 -15 90 90");
 		this.btn.svgL = svgL;
@@ -68,7 +70,7 @@ class GameButton {
 
 		let svgM = document.createElementNS("http://www.w3.org/2000/svg", 'svg');
    	    svgM.style.position = "absolute";
-        svgM.setAttribute("transform","translate(" + x + "," + y + ")");
+        svgM.style.transform = "translate(" + x + "px," + y + "px)";
 		svgM.classList.add("svg");
 		this.btn.svgM = svgM;
 
@@ -462,6 +464,18 @@ function InitializeButtonGroups()  {
 		} else if (event.button == 2){
 		  BtnRightClick(clickID);
 		}
+      }
+
+      function BtnTouch(clickID) {
+		  event.preventDefault();
+		  if (LastTouchedButton != null) {
+              BtnMouseLeave(LastTouchedButton);	  
+		  }
+		  BtnMouseEnter(clickID);
+          BtnLeftClick(clickID);
+		  LastTouchedButton = clickID;			  
+			  
+
       }
 
       function BtnLeftClick(btn)  {
