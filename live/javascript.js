@@ -399,7 +399,6 @@ function VictoryCheck() {
     document.getElementById("new-level").innerHTML = "Victory!";
   }
 }
-
 	  
 function CycleEdges (String) {
   if (String.includes("n") == true) {

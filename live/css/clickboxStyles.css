@@ -6,6 +6,7 @@
 html {
   box-sizing: border-box;
 }
+
 *, *:before, *:after {
   box-sizing: inherit;
 }
@@ -181,10 +182,11 @@ body {
 }
 
 .bottom {
-	display: none;
+  display: none;
 }
   
-@media screen and (max-width: 600px) {
+@media only screen and (hover: none) and (pointer: coarse){
+	
   .bottom {
 	display: initial;
   }
