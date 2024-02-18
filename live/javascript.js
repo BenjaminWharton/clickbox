@@ -22,109 +22,108 @@ const textColorZero = "#0000";
 const textColorNegative = "#A80000";
 class GameButton {
 	constructor(x, y, Facing = "") {
+		let gbtn = this;
         let grid = document.getElementById("grid-container");
-		let btn = document.createElement("button");
-		this.btn = btn;
-        this.btn.offsetx = x;
-        this.btn.offsety = y;
-		this.btn.innerHTML = "0";
-		this.btn.classList.add("btn");
-   	    this.btn.style.position = "absolute";
-        this.btn.style.transform = "translate(" + x + "px,"+ y + "px)";
-	    this.btn.clicks = 0;
-	    this.btn.maxClicks = 1;
-	    this.btn.locked = false;
-	    this.btn.walls = "";
-        this.btn.cycles = "";
-		this.btn.facing = Facing;
-        this.btn.factor = 1;
-        this.btn.affectedButtons = [];    // stores which buttons this button will affect when pressed
-        this.btn.counterparts = [];       // stores which cycle buttons this button connects with
-        this.btn.style.color = textColorZero;
-		this.btn.btnWall = "images/Wall.png";
+        this.offsetx = x;
+        this.offsety = y;
+		this.innerHTML = "0";
+	    this.clicks = 0;
+	    this.maxClicks = 2;
+	    this.locked = false;
+	    this.walls = "";
+        this.cycles = "";
+		this.facing = Facing;
+        this.factor = 1;
+        this.affectedButtons = [];    // stores which buttons this button will affect when pressed
+        this.counterparts = [];       // stores which cycle buttons this button connects with
+		this.btnWall = "images/Wall.png";
 		
-		let svgBg = document.createElementNS("http://www.w3.org/2000/svg", 'svg');
-   	    svgBg.style.position = "absolute";
-		svgBg.style.transform = "translate(" + x + "px," + y + "px)";
-		svgBg.classList.add("svg");
-		this.btn.svgBg = svgBg;
+		let svgBase = document.createElementNS("http://www.w3.org/2000/svg", 'svg');
+		svgBase.style.position = "absolute";
+		svgBase.style.transform = "translate(" + x + "px," + y + "px)";
+		svgBase.classList.add("svg");
+		this.svgBase = svgBase;
 		
 		let background = document.createElementNS("http://www.w3.org/2000/svg", 'polygon');
 		background.classList.add("background");
-        background.onmousedown = function(){BtnClick(btn)};
-		background.onmouseenter = function(){BtnMouseEnter(btn)};
-        background.onmouseleave = function(){BtnMouseLeave(btn)};
-		background.ontouchstart = function(){BtnTouch(btn)};
+        background.onmousedown = function(){BtnClick(gbtn)};
+		background.onmouseenter = function(){BtnMouseEnter(gbtn)};
+        background.onmouseleave = function(){BtnMouseLeave(gbtn)};
+		background.ontouchstart = function(){BtnTouch(gbtn)};
 //		background.ontouchmove = function(){TouchMove(btn)};
 //		background.ontouchcancel = function(){TouchCancel(btn)};
-		this.btn.background = background;
-		this.createHitbox(svgBg, background);
+		this.background = background;
+		this.createHitbox(svgBase, background);
 
 		let svgL = document.createElementNS("http://www.w3.org/2000/svg", 'svg');
-   	    svgL.style.position = "absolute";
-        svgL.style.transform = "translate(" + x + "px," + y + "px)";
-		svgL.classList.add("svg");
-		svgL.setAttribute("viewBox", "-15 -15 90 90");
-		this.btn.svgL = svgL;
+		svgL.setAttribute("viewBox", "-25 -25 150 150");
+		this.svgL = svgL;
 
 		let lockVis = document.createElementNS("http://www.w3.org/2000/svg", 'polygon');
 		lockVis.classList = "lock-vis";
-        this.btn.lockVis = lockVis;
+        this.lockVis = lockVis;
 		this.createHitbox(svgL, lockVis);
 
 		let svgM = document.createElementNS("http://www.w3.org/2000/svg", 'svg');
-   	    svgM.style.position = "absolute";
-        svgM.style.transform = "translate(" + x + "px," + y + "px)";
-		svgM.classList.add("svg");
-		this.btn.svgM = svgM;
+		this.svgM = svgM;
+
+		let svgWall = document.createElementNS("http://www.w3.org/2000/svg", 'svg');
+		svgWall.classList.add("wall");
+		this.svgWall = svgWall;
 
 		let modifier = document.createElementNS("http://www.w3.org/2000/svg", 'circle');
 		modifier.classList = "modifier";
-        this.btn.modifier = modifier;
+        this.modifier = modifier;
 		this.createModifier(modifier);
-		
 
-		grid.appendChild(svgBg);
-		grid.appendChild(svgL);
-		svgBg.appendChild(background);
+		let svgV = document.createElementNS("http://www.w3.org/2000/svg", 'svg');
+		this.svgV = svgV;
+		
+		let value = document.createElementNS("http://www.w3.org/2000/svg", 'text');
+		value.classList = "btn";
+		value.innerHTML = "0";
+		this.createText(value);
+        this.value = value;
+		
+		svgBase.setAttribute("viewBox", (-x) + " " + (-y) + " 100 100");
+		svgBase.setAttribute("width", 100-200/(size+2) + "px");
+		svgBase.setAttribute("height", 100-200/(size+2) + "px");
+		grid.appendChild(svgBase);
+		svgBase.appendChild(background);
+		svgBase.appendChild(svgL);
 		svgL.appendChild(lockVis);
-		grid.appendChild(svgM);
+		svgBase.appendChild(svgM);
+		svgBase.appendChild(svgWall);
 		svgM.appendChild(modifier);
-		grid.appendChild(this.btn);
+		svgBase.appendChild(svgV);
+		svgV.appendChild(value);
 	}
 
     createHitbox(svg, hitbox) {
-	    let point = svg.createSVGPoint();
-	    point.x = 1;
-	    point.y = 1;
-	    hitbox.points.appendItem(point);
-	    point = svg.createSVGPoint();
-	    point.x = 59;
-	    point.y = 1;
-	    hitbox.points.appendItem(point);
-	    point = svg.createSVGPoint();
-	    point.x = 59;
-	    point.y = 59;
-	    hitbox.points.appendItem(point);
-	    point = svg.createSVGPoint();
-	    point.x = 1;
-	    point.y = 59;
-	    hitbox.points.appendItem(point);
-	    point = svg.createSVGPoint();				
+		AddSVGPoint(svg, hitbox, 1, 1);
+		AddSVGPoint(svg, hitbox, 99, 1);
+		AddSVGPoint(svg, hitbox, 99, 99);
+		AddSVGPoint(svg, hitbox, 1, 99);
 	}
 
     createModifier(modifier) {
-        modifier.setAttribute("r","15px");
-        modifier.setAttribute("cx","30px");
-        modifier.setAttribute("cy","30px");		
+        modifier.setAttribute("r","25px");
+        modifier.setAttribute("cx","50px");
+        modifier.setAttribute("cy","50px");		
+	}
+
+    createText(value) {
+        value.setAttribute("x","50%");
+        value.setAttribute("y","60%");
+		value.setAttribute("font-size", "32px");
 	}
 
     defineArea() {
-	    let midBtn = this.btn
-        let n = 65;
-        let e = 65;
-        let s = 65;
-        let w = 65;
+	    let midBtn = this;
+        let n = 105;
+        let e = 105;
+        let s = 105;
+        let w = 105;
 		if (midBtn.walls.includes("n")) { // the presence of a wall will limit the area on that side
 		    n = 5;
 		}
@@ -138,7 +137,7 @@ class GameButton {
 		    w = 5;
 		}
 	    for (let i = 0; i < GameButtons.length; i++) {
-		    let btn = GameButtons[i].btn;
+		    let btn = GameButtons[i];
 		    if (btn.offsetx < midBtn.offsetx + e &&
 		        btn.offsetx > midBtn.offsetx - w &&
 			    btn.offsety < midBtn.offsety + s &&
@@ -147,18 +146,18 @@ class GameButton {
 		    }
 		  }
 		for (let c = 0; c < CycleButtons.length; c++) {
-			let cbtn = CycleButtons[c].btn;
+			let cbtn = CycleButtons[c];
 		    if (cbtn.offsetx < midBtn.offsetx + e &&
 		        cbtn.offsetx > midBtn.offsetx - w &&
 			    cbtn.offsety < midBtn.offsety + s &&
 			    cbtn.offsety > midBtn.offsety - n) {
-              midBtn.affectedButtons.push(cbtn.counterpart.btn);
+              midBtn.affectedButtons.push(cbtn.counterpart);
 		    }		
 	    }		
 	}
 	  
     changeFactor(Factor) {
-    	let btn = this.btn;
+    	let btn = this;
       if (Factor == -1) {
         btn.factor = -1;
         btn.modifier.style.fill = modifierColorN1;
@@ -174,53 +173,84 @@ class GameButton {
       }
     }
 
+    createWall(svg, Type) {
+		let rect1 = document.createElementNS("http://www.w3.org/2000/svg", 'polygon');
+        if (Type == "south") {
+	        AddSVGPoint(svg, rect1, 1, 99);
+	        AddSVGPoint(svg, rect1, 30, 99);
+	        AddSVGPoint(svg, rect1, 30, 85);
+	        AddSVGPoint(svg, rect1, 1, 85);	
+		} else if (Type == "west") {
+	        AddSVGPoint(svg, rect1, 1, 1);
+	        AddSVGPoint(svg, rect1, 15, 1);
+	        AddSVGPoint(svg, rect1, 15, 30);
+	        AddSVGPoint(svg, rect1, 1, 30);					
+		} else if (Type == "east") {
+	        AddSVGPoint(svg, rect1, 99, 1);
+	        AddSVGPoint(svg, rect1, 99, 30);
+	        AddSVGPoint(svg, rect1, 85, 30);
+	        AddSVGPoint(svg, rect1, 85, 1);					
+		} else {
+	        AddSVGPoint(svg, rect1, 1, 1);
+	        AddSVGPoint(svg, rect1, 30, 1);
+	        AddSVGPoint(svg, rect1, 30, 15);
+	        AddSVGPoint(svg, rect1, 1, 15);			
+		}
+		svg.appendChild(rect1);	
+		let rect2 = document.createElementNS("http://www.w3.org/2000/svg", 'polygon');		
+        if (Type == "south") {
+	        AddSVGPoint(svg, rect2, 99, 99);
+	        AddSVGPoint(svg, rect2, 70, 99);
+	        AddSVGPoint(svg, rect2, 70, 85);
+	        AddSVGPoint(svg, rect2, 99, 85);	
+		} else if (Type == "west") {
+	        AddSVGPoint(svg, rect2, 1, 99);
+	        AddSVGPoint(svg, rect2, 1, 70);
+	        AddSVGPoint(svg, rect2, 15, 70);
+	        AddSVGPoint(svg, rect2, 15, 99);				
+		} else if (Type == "east") {
+	        AddSVGPoint(svg, rect2, 99, 99);
+	        AddSVGPoint(svg, rect2, 99, 70);
+	        AddSVGPoint(svg, rect2, 85, 70);
+	        AddSVGPoint(svg, rect2, 85, 99);
+		} else {
+	        AddSVGPoint(svg, rect2, 99, 1);
+	        AddSVGPoint(svg, rect2, 70, 1);
+	        AddSVGPoint(svg, rect2, 70, 15);
+	        AddSVGPoint(svg, rect2, 99, 15);			
+		}
+        svg.appendChild(rect2);	
+        this.svgWall.appendChild(svg);	
+	}
+
     addWall (String) {
-    	let btn = this.btn;
+    	let btn = this;
       if (String.includes("n") == true) {
         if (btn.walls.includes("n") == false) {
-          let nWall = document.createElement('img');
-    	  btn.nWall = nWall;
-          nWall.classList.add("wall");
-          document.getElementById("grid-container").appendChild(nWall);
-          nWall.style.position = "absolute"
-          nWall.style.transform = "translate(" + btn.offsetx + "px,"+ btn.offsety + "px)";
-    	  nWall.src = btn.btnWall;
+          let nWall = document.createElementNS("http://www.w3.org/2000/svg", 'svg');
+		  btn.createWall(nWall, "north");
           btn.walls = btn.walls + "n";
         }
       }
       if (String.includes("s") == true) {
         if (btn.walls.includes("s") == false) {
-          let sWall = document.createElement('img');
-    	  btn.sWall = sWall;
-          sWall.classList.add("wall");
-          document.getElementById("grid-container").appendChild(sWall);
-          sWall.style.position = "absolute"
-          sWall.style.transform = "translate(" + btn.offsetx + "px,"+ btn.offsety + "px)" + "rotate(180deg)";
-    	  sWall.src = btn.btnWall;
+          let sWall = document.createElementNS("http://www.w3.org/2000/svg", 'svg');
+		  btn.createWall(sWall, "south");
           btn.walls = btn.walls + "s";
     	}	
       }
       if (String.includes("w") == true) {
         if (btn.walls.includes("w") == false) {
-          let wWall = document.createElement('img');
-    	  btn.wWall = wWall;
-          wWall.classList.add("wall");
-          document.getElementById("grid-container").appendChild(wWall);
-          wWall.style.position = "absolute"
-          wWall.style.transform = "translate(" + btn.offsetx + "px,"+ btn.offsety + "px)" + "rotate(270deg)";
-    	  wWall.src = btn.btnWall;
+          let wWall = document.createElementNS("http://www.w3.org/2000/svg", 'svg');
+		  btn.createWall(wWall, "west");
           btn.walls = btn.walls + "w";
         }
       }
       if (String.includes("e") == true) {
         if (btn.walls.includes("e") == false) {
-          let eWall = document.createElement('img');
+          let eWall = document.createElementNS("http://www.w3.org/2000/svg", 'svg');
+		  btn.createWall(eWall, "east");
     	  btn.eWall = eWall;
-          eWall.classList.add("wall");
-          document.getElementById("grid-container").appendChild(eWall);
-          eWall.style.position = "absolute"
-          eWall.style.transform = "translate(" + btn.offsetx + "px,"+ btn.offsety + "px)" + "rotate(90deg)";
-    	  eWall.src = btn.btnWall;
           btn.walls = btn.walls + "e";
         }
       }
@@ -247,7 +277,7 @@ class GameButton {
 	  }	 
 
       addCycle (String) {
-		  let btn = this.btn
+		  let btn = this;
 		  let str = btn.cycles;
 		  let idNum = null;
 		  for (let i = 0; i < GameButtons.length; i++) {
@@ -258,45 +288,57 @@ class GameButton {
 		  }
 	    if (String.includes("n") == true &&
 		    btn.cycles.includes("n") == false) {
-		    let nCycle = new GameButton(btn.offsetx, btn.offsety - 60);
-		    nCycle.btn.background.classList.add("cycle");
-            //nCycle.btn.modifier.classList.add("cycle");
-			nCycle.btn.svgBg.classList.add("cycle");
-			nCycle.btn.counterpart = GameButtons[idNum + size*size - size];               // used to store which regular button a cycle button connects with      
-			GameButtons[idNum + size*size - size].btn.counterparts.push(nCycle);          // used to store which cycle buttons a regular button connects with
+		    let nCycle = new GameButton(btn.offsetx, btn.offsety - 100);
+		    nCycle.background.classList.add("cycle");
+			nCycle.svgBase.classList.add("cycle");
+			nCycle.counterpart = GameButtons[idNum + size*size - size];               // used to store which regular button a cycle button connects with      
+			GameButtons[idNum + size*size - size].counterparts.push(nCycle);          // used to store which cycle buttons a regular button connects with
+			nCycle.svgBase.setAttribute("viewBox", (nCycle.offsetx*(-1.5) - 25) + " " + (nCycle.offsety*(-1.5) - 25) + " 150 150");
+			nCycle.svgL.setAttribute("viewBox", "0 0 150 150");
+			nCycle.svgV.setAttribute("viewBox", "16 16 100 100");
+			nCycle.svgM.setAttribute("viewBox", "16 16 100 100");
 			CycleButtons.push(nCycle);
 		    btn.cycles = btn.cycles + "n";
 		}	   
 	    if (String.includes("s") == true &&
 		    btn.cycles.includes("s") == false) {
-			let sCycle = new GameButton(btn.offsetx, btn.offsety - 60*(-1));
-			sCycle.btn.background.classList.add("cycle");
-            //sCycle.btn.modifier.classList.add("cycle");
-			sCycle.btn.svgBg.classList.add("cycle");
-            sCycle.btn.counterpart = GameButtons[idNum - size*size + size];
-			GameButtons[idNum - size*size + size].btn.counterparts.push(sCycle);
+			let sCycle = new GameButton(btn.offsetx, btn.offsety - 100*(-1));
+			sCycle.background.classList.add("cycle");
+			sCycle.svgBase.classList.add("cycle");
+            sCycle.counterpart = GameButtons[idNum - size*size + size];
+			GameButtons[idNum - size*size + size].counterparts.push(sCycle);
+			sCycle.svgBase.setAttribute("viewBox", (sCycle.offsetx*(-1.5) - 25) + " " + (sCycle.offsety*(-1.5) - 25) + " 150 150");
+			sCycle.svgL.setAttribute("viewBox", "0 0 150 150");
+			sCycle.svgV.setAttribute("viewBox", "16 16 100 100");
+			sCycle.svgM.setAttribute("viewBox", "16 16 100 100");
 			CycleButtons.push(sCycle);
 			btn.cycles = btn.cycles + "s";
 		}	
 	    if (String.includes("w") == true &&
 		    btn.cycles.includes("w") == false ) {
-			let wCycle = new GameButton(btn.offsetx - 60, btn.offsety);
-			wCycle.btn.background.classList.add("cycle");
-            //wCycle.btn.modifier.classList.add("cycle");
-			wCycle.btn.svgBg.classList.add("cycle");
-            wCycle.btn.counterpart = GameButtons[idNum + size - 1];
-			GameButtons[idNum + size - 1].btn.counterparts.push(wCycle);
+			let wCycle = new GameButton(btn.offsetx - 100, btn.offsety);
+			wCycle.background.classList.add("cycle");
+			wCycle.svgBase.classList.add("cycle");
+            wCycle.counterpart = GameButtons[idNum + size - 1];
+			GameButtons[idNum + size - 1].counterparts.push(wCycle);
+			wCycle.svgBase.setAttribute("viewBox", (wCycle.offsetx*(-1.5) - 25) + " " + (wCycle.offsety*(-1.5) - 25) + " 150 150");
+			wCycle.svgL.setAttribute("viewBox", "0 0 150 150");
+			wCycle.svgV.setAttribute("viewBox", "16 16 100 100");
+			wCycle.svgM.setAttribute("viewBox", "16 16 100 100");
 			CycleButtons.push(wCycle);
 			btn.cycles = btn.cycles + "w";
 		}	
 	    if (String.includes("e") == true &&
 		    btn.cycles.includes("e") == false) {
-			let eCycle = new GameButton(btn.offsetx - 60*(-1), btn.offsety);
-			eCycle.btn.background.classList.add("cycle");
-            //eCycle.btn.modifier.classList.add("cycle");
-			eCycle.btn.svgBg.classList.add("cycle");
-            eCycle.btn.counterpart = GameButtons[idNum - size + 1];
-			GameButtons[idNum - size + 1].btn.counterparts.push(eCycle);
+			let eCycle = new GameButton(btn.offsetx - 100*(-1), btn.offsety);
+			eCycle.background.classList.add("cycle");
+			eCycle.svgBase.classList.add("cycle");
+            eCycle.counterpart = GameButtons[idNum - size + 1];
+			GameButtons[idNum - size + 1].counterparts.push(eCycle);
+			eCycle.svgBase.setAttribute("viewBox", (eCycle.offsetx*(-1.5) - 25) + " " + (eCycle.offsety*(-1.5) - 25) + " 150 150");
+			eCycle.svgL.setAttribute("viewBox", "0 0 150 150");
+			eCycle.svgV.setAttribute("viewBox", "16 16 100 100");
+			eCycle.svgM.setAttribute("viewBox", "16 16 100 100");
 			CycleButtons.push(eCycle);
 			btn.cycles = btn.cycles + "e";			  
 		}		
@@ -304,12 +346,15 @@ class GameButton {
 		    btn.cycles.includes("w") == true) {
 		    if (str.includes("n") == false ||
 		        str.includes("w") == false) {
-			    let nwCycle = new GameButton(btn.offsetx - 60, btn.offsety - 60);
-			    nwCycle.btn.background.classList.add("cycle");
-                //nwCycle.btn.modifier.classList.add("cycle");
-			    nwCycle.btn.svgBg.classList.add("cycle");
-                nwCycle.btn.counterpart = GameButtons[size*size - 1];
-			    GameButtons[size*size - 1].btn.counterparts.push(nwCycle);
+			    let nwCycle = new GameButton(btn.offsetx - 100, btn.offsety - 100);
+			    nwCycle.background.classList.add("cycle");
+			    nwCycle.svgBase.classList.add("cycle");
+                nwCycle.counterpart = GameButtons[size*size - 1];
+			    GameButtons[size*size - 1].counterparts.push(nwCycle);
+			    nwCycle.svgBase.setAttribute("viewBox", (nwCycle.offsetx*(-1.5) - 25) + " " + (nwCycle.offsety*(-1.5) - 25) + " 150 150");
+			    nwCycle.svgL.setAttribute("viewBox", "0 0 150 150");
+			    nwCycle.svgV.setAttribute("viewBox", "16 16 100 100");
+			    nwCycle.svgM.setAttribute("viewBox", "16 16 100 100");
 			    CycleButtons.push(nwCycle);	
 		    }
 		}
@@ -317,12 +362,15 @@ class GameButton {
 		    btn.cycles.includes("e") == true) {
 		    if (str.includes("n") == false ||
 		        str.includes("e") == false) {
-			    let neCycle = new GameButton(btn.offsetx - 60*(-1), btn.offsety - 60);
-			    neCycle.btn.background.classList.add("cycle");
-                //neCycle.btn.modifier.classList.add("cycle");
-			    neCycle.btn.svgBg.classList.add("cycle");
-                neCycle.btn.counterpart = GameButtons[size*size - size];
-			    GameButtons[size*size - size].btn.counterparts.push(neCycle);
+			    let neCycle = new GameButton(btn.offsetx - 100*(-1), btn.offsety - 100);
+			    neCycle.background.classList.add("cycle");
+			    neCycle.svgBase.classList.add("cycle");
+                neCycle.counterpart = GameButtons[size*size - size];
+			    GameButtons[size*size - size].counterparts.push(neCycle);
+			    neCycle.svgBase.setAttribute("viewBox", (neCycle.offsetx*(-1.5) - 25) + " " + (neCycle.offsety*(-1.5) - 25) + " 150 150");
+			    neCycle.svgL.setAttribute("viewBox", "0 0 150 150");
+			    neCycle.svgV.setAttribute("viewBox", "16 16 100 100");
+			    neCycle.svgM.setAttribute("viewBox", "16 16 100 100");
 			    CycleButtons.push(neCycle);	
 		    }
 		}
@@ -330,12 +378,15 @@ class GameButton {
 		    btn.cycles.includes("w") == true) {
 		    if (str.includes("s") == false ||
 		        str.includes("w") == false) {
-			    let swCycle = new GameButton(btn.offsetx - 60, btn.offsety - 60*(-1));
-			    swCycle.btn.background.classList.add("cycle");
-                //swCycle.btn.modifier.classList.add("cycle");
-			    swCycle.btn.svgBg.classList.add("cycle");
-                swCycle.btn.counterpart = GameButtons[size - 1];
-			    GameButtons[size - 1].btn.counterparts.push(swCycle);
+			    let swCycle = new GameButton(btn.offsetx - 100, btn.offsety - 100*(-1));
+			    swCycle.background.classList.add("cycle");
+			    swCycle.svgBase.classList.add("cycle");
+                swCycle.counterpart = GameButtons[size - 1];
+			    GameButtons[size - 1].counterparts.push(swCycle);
+			    swCycle.svgBase.setAttribute("viewBox", (swCycle.offsetx*(-1.5) - 25) + " " + (swCycle.offsety*(-1.5) - 25) + " 150 150");
+			    swCycle.svgL.setAttribute("viewBox", "0 0 150 150");
+			    swCycle.svgV.setAttribute("viewBox", "16 16 100 100");
+			    swCycle.svgM.setAttribute("viewBox", "16 16 100 100");
 			    CycleButtons.push(swCycle);	
 		    }
 		}
@@ -343,12 +394,15 @@ class GameButton {
 		    btn.cycles.includes("e") == true) {
 		    if (str.includes("s") == false ||
 		        str.includes("e") == false) {
-			    let seCycle = new GameButton(btn.offsetx - 60*(-1), btn.offsety - 60*(-1));
-			    seCycle.btn.background.classList.add("cycle");
-                //seCycle.btn.modifier.classList.add("cycle");
-			    seCycle.btn.svgBg.classList.add("cycle");
-                seCycle.btn.counterpart = GameButtons[0];
-			    GameButtons[0].btn.counterparts.push(seCycle);
+			    let seCycle = new GameButton(btn.offsetx - 100*(-1), btn.offsety - 100*(-1));
+			    seCycle.background.classList.add("cycle");
+			    seCycle.svgBase.classList.add("cycle");
+                seCycle.counterpart = GameButtons[0];
+			    GameButtons[0].counterparts.push(seCycle);
+			    seCycle.svgBase.setAttribute("viewBox", (seCycle.offsetx*(-1.5) - 25) + " " + (seCycle.offsety*(-1.5) - 25) + " 150 150");
+			    seCycle.svgL.setAttribute("viewBox", "0 0 150 150");
+			    seCycle.svgV.setAttribute("viewBox", "16 16 100 100");
+			    seCycle.svgM.setAttribute("viewBox", "16 16 100 100");
 			    CycleButtons.push(seCycle);	
 		    }
 		}
@@ -356,7 +410,13 @@ class GameButton {
 	
 }
 
-    
+function AddSVGPoint(svg, rect, x, y) {
+	let point = svg.createSVGPoint();	
+	point.x = x;
+	point.y = y;
+	rect.points.appendItem(point);	
+}
+
 function MouseDown(){
   if (event.button == 0) {
     LMDown = true;
@@ -391,7 +451,7 @@ function DestroyGrid (){
 function VictoryCheck() {
   let victory = true;
   for (i = 0; i < GameButtons.length; i++) {
-    if (GameButtons[i].btn.innerHTML != 0) {
+    if (GameButtons[i].value.innerHTML != 0) {
       victory = false;
     }
   }
@@ -424,25 +484,24 @@ function CycleEdges (String) {
 }
 
 function ModifyButton(btn,Amount){
-  btn.innerHTML = parseInt(btn.innerHTML) + Amount;
-  if (btn.innerHTML == 0){
-    btn.style.color = textColorZero;
+  btn.value.innerHTML = parseInt(btn.value.innerHTML) + Amount;
+  if (btn.value.innerHTML == 0){
+    btn.value.style.fill = textColorZero;
   }
-  if (parseInt(btn.innerHTML) > 0) {
-    btn.style.color = textColorPositive;
+  if (parseInt(btn.value.innerHTML) > 0) {
+    btn.value.style.fill = textColorPositive;
   }
-  if (parseInt(btn.innerHTML) < 0){
-    btn.style.color = textColorNegative;
+  if (parseInt(btn.value.innerHTML) < 0){
+    btn.value.style.fill = textColorNegative;
   } 
   for (let i = 0; i < btn.counterparts.length; i++) {
     let cbtn = btn.counterparts[i];
-    cbtn.btn.innerHTML = btn.innerHTML;
-    cbtn.btn.background.style.fill = btn.background.style.fill;
-	cbtn.btn.lockVis.style.fill = btn.lockVis.style.fill;
-	cbtn.btn.style.color = btn.style.color;
+    cbtn.value.innerHTML = btn.value.innerHTML;
+    cbtn.background.style.fill = btn.background.style.fill;
+	cbtn.lockVis.style.fill = btn.lockVis.style.fill;
+	cbtn.value.style.fill = btn.value.style.fill;
   }
 }
-
 
 function InitializeButtonGroups()  {
     for (let i = 0; i < GameButtons.length; i++) {
@@ -596,30 +655,27 @@ function LockTouch(btn) {
 		btn.lockVis.style.fill = img;
 
 		for (let i = 0; i < btn.counterparts.length; i++) {
-			btn.counterparts[i].btn.lockVis.style.fill = btn.lockVis.style.fill;
-		    btn.counterparts[i].btn.background.style.fill = btn.background.style.fill;
+			btn.counterparts[i].lockVis.style.fill = btn.lockVis.style.fill;
+		    btn.counterparts[i].background.style.fill = btn.background.style.fill;
 		}		
       }
 
-
 function BtnMouseEnter(btn)  {
 	btn.background.classList.add("background-selected");
-	btn.modifier.classList.add("background-selected");
 	if (LMDown == true) {
 		BtnLeftClick(btn);
 	} else if (RMDown == true) {
 		BtnRightClick(btn);
 	}
 	for (let i = 0; i < btn.affectedButtons.length; i++) {
-		btn.affectedButtons[i].classList.add("btn-group");
+		btn.affectedButtons[i].value.classList.add("btn-group");
 	}
 }
 
 function BtnMouseLeave(btn)  {
 	btn.background.classList.remove("background-selected");
-	btn.modifier.classList.remove("background-selected");
 	for (let i = 0; i < btn.affectedButtons.length; i++) {
-		btn.affectedButtons[i].classList.remove("btn-group");
+		btn.affectedButtons[i].value.classList.remove("btn-group");
 	}	  
 }
 
@@ -639,7 +695,7 @@ function RandomButtonFactor() {
       function GenerateRandomClicks(Clicks) {
 	    let clicks = Clicks;
         while (clicks > 0){
-		  btn = GameButtons[Math.floor(Math.random() * GameButtons.length)].btn;
+		  btn = GameButtons[Math.floor(Math.random() * GameButtons.length)];
 	      if (btn.clicks < btn.maxClicks &&
 		      btn.locked == false) {
             ModifyButtonGroup (btn, 1);
@@ -648,8 +704,8 @@ function RandomButtonFactor() {
           }		  
         }
 	    for (let i = 0; i < GameButtons.length; i++){
-	      GameButtons[i].btn.clicks = 0;
-		  GameButtons[i].btn.locked = false;
+	      GameButtons[i].clicks = 0;
+		  GameButtons[i].locked = false;
         }
 		for (let i = 0; i < CycleButtons.length; i++) {
 		  CycleButtons[i].clicks = 0;
@@ -674,15 +730,15 @@ function RandomButtonFactor() {
 		  while (i < size/3 - 1){
 		    rand = parseInt(Math.trunc(Math.random()*size) + 1);
 			if (rand2 == 0){
-			  if (GameButtons[rand - 1].btn.clicks < GameButtons[rand - 1].btn.maxClicks &&
-			      GameButtons[rand - 1].btn.locked == false) {
+			  if (GameButtons[rand - 1].clicks < GameButtons[rand - 1].maxClicks &&
+			      GameButtons[rand - 1].locked == false) {
 			    for (let j = 0; j < size; j++){
 				  if(j%3 != 2){
-				    GameButtons[j*size + rand - 1].btn.locked = true;
+				    GameButtons[j*size + rand - 1].locked = true;
 				  }
 				  if (j%3 == 0) {
-				    ModifyButtonGroup(GameButtons[j*size + rand - 1].btn, 1);
-					GameButtons[j*size + rand - 1].btn.clicks = GameButtons[j*size + rand - 1].btn.clicks + 1;
+				    ModifyButtonGroup(GameButtons[j*size + rand - 1], 1);
+					GameButtons[j*size + rand - 1].clicks = GameButtons[j*size + rand - 1].clicks + 1;
 					clicks++				    
 				  }
 				}
@@ -690,15 +746,15 @@ function RandomButtonFactor() {
 			  }
 			}
 			else{
-			  if (GameButtons[rand*size - 1].btn.clicks < GameButtons[rand*size - 1].btn.maxClicks &&
-			      GameButtons[rand*size - 1].btn.locked == false) {
+			  if (GameButtons[rand*size - 1].clicks < GameButtons[rand*size - 1].maxClicks &&
+			      GameButtons[rand*size - 1].locked == false) {
 			    for (let j = 0; j < size; j++){
 				  if(j%3 != 2){
-				    GameButtons[rand*size - j - 1].btn.locked = true;
+				    GameButtons[rand*size - j - 1].locked = true;
 				  }
 				  if(j%3 == 0) {
-				    ModifyButtonGroup(GameButtons[rand*size - j - 1].btn, 1);
-					GameButtons[rand*size - j - 1].btn.clicks = GameButtons[rand*size - j - 1].btn.clicks + 1;
+				    ModifyButtonGroup(GameButtons[rand*size - j - 1], 1);
+					GameButtons[rand*size - j - 1].clicks = GameButtons[rand*size - j - 1].clicks + 1;
 					clicks++
 				  }
 				}
@@ -710,7 +766,6 @@ function RandomButtonFactor() {
         GenerateRandomClicks (Clicks - clicks);
 	  }
 	  
-
 	  function GenerateHardLevel (Clicks) {
 	    let clicks = 0;
 		let i = 0;
@@ -722,15 +777,15 @@ function RandomButtonFactor() {
 		  while (i < size/2 - 1){
 		    rand = parseInt(Math.trunc(Math.random()*size) + 1);
 			if (rand2 == 0){
-			  if (GameButtons[rand - 1].btn.clicks < GameButtons[rand - 1].btn.maxClicks &&
-			      GameButtons[rand - 1].btn.locked == false) {
+			  if (GameButtons[rand - 1].clicks < GameButtons[rand - 1].maxClicks &&
+			      GameButtons[rand - 1].locked == false) {
 			    for (let j = 0; j < size; j++){
 				  if(j%3 != 2){
-				    GameButtons[j*size + rand - 1].btn.locked = true;
+				    GameButtons[j*size + rand - 1].locked = true;
 				  }
 				  if (j%3 == 0) {
-				    ModifyButtonGroup(GameButtons[j*size + rand - 1].btn, 1);
-					GameButtons[j*size + rand - 1].btn.clicks = GameButtons[j*size + rand - 1].btn.clicks + 1;
+				    ModifyButtonGroup(GameButtons[j*size + rand - 1], 1);
+					GameButtons[j*size + rand - 1].clicks = GameButtons[j*size + rand - 1].clicks + 1;
 					rand2 = 1;
 					clicks++				    
 				  }
@@ -739,15 +794,15 @@ function RandomButtonFactor() {
 			  }
 			}
 			else{
-			  if (GameButtons[rand*size - 1].btn.clicks < GameButtons[rand*size - 1].btn.maxClicks &&
-			      GameButtons[rand*size - 1].btn.locked == false) {
+			  if (GameButtons[rand*size - 1].clicks < GameButtons[rand*size - 1].maxClicks &&
+			      GameButtons[rand*size - 1].locked == false) {
 			    for (let j = 0; j < size; j++){
 				  if(j%3 != 2){
-				    GameButtons[rand*size - j - 1].btn.locked = true;
+				    GameButtons[rand*size - j - 1].locked = true;
 				  }
 				  if(j%3 == 0) {
-				    ModifyButtonGroup(GameButtons[rand*size - j - 1].btn, 1);
-					GameButtons[rand*size - j - 1].btn.clicks = GameButtons[rand*size - j - 1].btn.clicks + 1;
+				    ModifyButtonGroup(GameButtons[rand*size - j - 1], 1);
+					GameButtons[rand*size - j - 1].clicks = GameButtons[rand*size - j - 1].clicks + 1;
 					rand2 = 0;
 					clicks++
 				  }
@@ -988,14 +1043,10 @@ function RandomButtonFactor() {
 	  }
 	  
 	  function NewLevel(){
-	    let i = 0;
 		let xOffset = 0;
 		let yOffset = 0;
 		let skew = false;
         DestroyGrid();
-		let grid = document.createElement ('div');
-		grid.id = "grid-container";
-		document.getElementById("demo").appendChild(grid);
 		document.getElementById("new-level").innerHTML = "New Level";
 		if (parseInt(document.getElementById("level-number").value) < 0){
 		  skew = true;
@@ -1007,52 +1058,47 @@ function RandomButtonFactor() {
 		  document.getElementById("level-size").value = 30;
 		}
 	  	size = parseInt(document.getElementById("level-size").value);
+		let grid = document.createElementNS("http://www.w3.org/2000/svg", 'svg');
+		grid.setAttribute("viewBox", "0 0 " + size*100 + " " + size*100);
+		//grid.style.width = 60*size + "px";
+		//grid.style.height = 60*size + "px";
+		grid.style.width = "100%";
+		grid.style.height = "auto";
+		grid.id = "grid-container";
+		document.getElementById("demo").appendChild(grid);
 	    for (let y = 0; y < size; y++) {
           if (skew == true && y%2 == 0 ) {  /////////////////////////////////////////////////////// adds a skew to the grid if skew is true
-		    xOffset = 25;
+		    xOffset = 50;
 		  } else {
     	    xOffset = 0;
 		  }
-          for (let x = 0; x < size; x++){
-            i++;	  
-			GameButtons.push(new GameButton(-30*size + 60*x + xOffset, y*60 + yOffset));
+          for (let x = 0; x < size; x++){  
+			GameButtons.push(new GameButton(100*x + xOffset + 100, y*100 + yOffset + 100));
 	      }  
 	      x = 0;
         }		
 		GenerateLevelNum (document.getElementById("level-number").value);
 		for (i = 0; i < CycleButtons.length; i++) {
 		  let cbtn = CycleButtons[i];
-		  cbtn.changeFactor(cbtn.btn.counterpart.btn.factor);
-          cbtn.addWall(cbtn.btn.counterpart.btn.walls);
-		  if (cbtn.btn.walls.includes("n")) {
-		    cbtn.btn.nWall.classList.add("wall-cycle");
-		  }
-		  if (cbtn.btn.walls.includes("e")) {
-		    cbtn.btn.eWall.classList.add("wall-cycle");
-		  }
-		  if (cbtn.btn.walls.includes("s")) {
-		    cbtn.btn.sWall.classList.add("wall-cycle");
-		  }
-		  if (cbtn.btn.walls.includes("w")) {
-		    cbtn.btn.wWall.classList.add("wall-cycle");
-		  }
+		  cbtn.changeFactor(cbtn.counterpart.factor);
+          cbtn.addWall(cbtn.counterpart.walls);
 		}
-		document.getElementById("dummy").style.height = size*60 + "px";
       }
 
 	  function ResetClick () {
 	    for (let IdNum = 0; IdNum < GameButtons.length; IdNum++) {
-			let btn = GameButtons[IdNum].btn;
+			let btn = GameButtons[IdNum];
 			btn.locked = false;
 		  if (btn.clicks > 0){
 	  	  ModifyButtonGroup(btn, btn.clicks);
 	  	  }	  
 	    btn.clicks = 0;
-		btn.background.src = btn.bg;
+		btn.background.style.fill = normalColor;
+		btn.lockVis.style.fill = normalColor;
 	    }
 		for (let i = 0; i < CycleButtons.length; i++) {
-		  CycleButtons[i].btn.background.fill = CycleButtons[i].btn.counterpart.btn.background.fill;
+		  CycleButtons[i].background.fill = CycleButtons[i].counterpart.background.fill;
 		}
+	    
 	  }
-	  
 

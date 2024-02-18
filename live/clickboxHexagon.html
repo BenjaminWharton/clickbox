@@ -7,48 +7,43 @@
 class HexagonButton extends GameButton {
 	constructor(x, y, Facing = "") {
 	  	super(x, y, Facing = ""); 
-        this.btn.maxClicks = 2;	
-		this.btn.svgBg.classList.add("triangle");
-		this.btn.svgL.classList.add("triangle");
-		this.btn.classList.add("triangle");
-		this.btn.svgL.style.transform = "translate(" + (x + 0) + "px,"+ (y - 3) + "px)";	
-		this.btn.svgL.setAttribute("viewBox", "-20 -25 120 120");		
+        this.maxClicks = 2;		
 	}
 
     createHitbox(svg, hitbox) {
 	    let point = svg.createSVGPoint();
-	    point.x = 40;
-	    point.y = 79;
+	    point.x = 50;
+	    point.y = 99;
 	    hitbox.points.appendItem(point);
 	    point = svg.createSVGPoint();
-	    point.x = 79;
-	    point.y = 59;
+	    point.x = 99;
+	    point.y = 75;
 	    hitbox.points.appendItem(point);
 	    point = svg.createSVGPoint();
-	    point.x = 79;
-	    point.y = 21;
+	    point.x = 99;
+	    point.y = 25;
 	    hitbox.points.appendItem(point);
 	    point = svg.createSVGPoint();			
-	    point.x = 40;
+	    point.x = 50;
 	    point.y = 1;
 	    hitbox.points.appendItem(point);
 	    point = svg.createSVGPoint();	
 	    point.x = 1;
-	    point.y = 21;
+	    point.y = 25;
 	    hitbox.points.appendItem(point);
 	    point = svg.createSVGPoint();
 	    point.x = 1;
-	    point.y = 59;
+	    point.y = 75;
 	    hitbox.points.appendItem(point);
 	    point = svg.createSVGPoint();			
 	}
 
     defineArea() {
-	    let midBtn = this.btn
-        let n = 85;
-        let e = 85;
-        let s = 85;
-        let w = 85;
+	    let midBtn = this;
+        let n = 105;
+        let e = 105;
+        let s = 105;
+        let w = 105;
 		if (midBtn.walls.includes("n")) { // the presence of a wall will limit the area on that side
 		    n = 5;
 		}
@@ -62,7 +57,7 @@ class HexagonButton extends GameButton {
 		    w = 5;
 		}
 	    for (let i = 0; i < GameButtons.length; i++) {
-		    let btn = GameButtons[i].btn;
+		    let btn = GameButtons[i];
 		    if (btn.offsetx < midBtn.offsetx + e &&
 		        btn.offsetx > midBtn.offsetx - w &&
 			    btn.offsety < midBtn.offsety + s &&
@@ -71,49 +66,21 @@ class HexagonButton extends GameButton {
 		    }
 		  }
 		for (let c = 0; c < CycleButtons.length; c++) {
-			let cbtn = CycleButtons[c].btn;
+			let cbtn = CycleButtons[c];
 		    if (cbtn.offsetx < midBtn.offsetx + e &&
 		        cbtn.offsetx > midBtn.offsetx - w &&
 			    cbtn.offsety < midBtn.offsety + s &&
 			    cbtn.offsety > midBtn.offsety - n) {
-              midBtn.affectedButtons.push(cbtn.counterpart.btn);
+              midBtn.affectedButtons.push(cbtn.counterpart);
 		    }		
 	    }		
 	}
 
     createModifier(modifier) {
-        modifier.setAttribute("r","15px");
-        modifier.setAttribute("cx","40px");
-        modifier.setAttribute("cy","40px");		
+        modifier.setAttribute("r","20px");
+        modifier.setAttribute("cx","50px");
+        modifier.setAttribute("cy","50px");		
 	}
-	
-    createHitboxOld(svg, hitbox) {    //////////////////////////////////////////////// DEPRICATED
-	    let point = svg.createSVGPoint();
-	    point.x = 30;
-	    point.y = 59;
-	    hitbox.points.appendItem(point);
-	    point = svg.createSVGPoint();
-	    point.x = 59;
-	    point.y = 44;
-	    hitbox.points.appendItem(point);
-	    point = svg.createSVGPoint();
-	    point.x = 59;
-	    point.y = 16;
-	    hitbox.points.appendItem(point);
-	    point = svg.createSVGPoint();			
-	    point.x = 30;
-	    point.y = 1;
-	    hitbox.points.appendItem(point);
-	    point = svg.createSVGPoint();	
-	    point.x = 1;
-	    point.y = 16;
-	    hitbox.points.appendItem(point);
-	    point = svg.createSVGPoint();
-	    point.x = 1;
-	    point.y = 44;
-	    hitbox.points.appendItem(point);
-	    point = svg.createSVGPoint();			
-	}	
 	
 }	  
 	  
@@ -134,9 +101,6 @@ class HexagonButton extends GameButton {
 		let xOffset = 0;
 		let yOffset = 0;
         DestroyGrid();
-		let grid = document.createElement ('div');
-		grid.id = "grid-container";
-		document.getElementById("demo").appendChild(grid);
 		document.getElementById("new-level").innerHTML = "New Level";
 		if (parseInt(document.getElementById("level-size").value) < 3){
 		  document.getElementById("level-size").value = 3;
@@ -144,21 +108,26 @@ class HexagonButton extends GameButton {
 		if (parseInt(document.getElementById("level-size").value) > 30){
 		  document.getElementById("level-size").value = 30;
 		}
-	  	size = parseInt(document.getElementById("level-size").value);  	
+		let grid = document.createElementNS("http://www.w3.org/2000/svg", 'svg');
+	  	size = parseInt(document.getElementById("level-size").value); 
+		grid.setAttribute("viewBox", "0 0 " + size*100 + " " + size*100);
+		grid.style.width = "100%";
+		grid.style.height = "auto";
+		grid.id = "grid-container";	
+		document.getElementById("demo").appendChild(grid);		
 	    for (let y = 0; y < size; y++) {
           if (y%2 == 0) {
-		    xOffset = 40;
+		    xOffset = 50;
 		  } else {
 		    xOffset = 0;
 		  }
           for (let x = 0; x < size; x++){
             i++;	 			
-	        GameButtons.push(new HexagonButton(-40*size + 80*x + xOffset, y*60 + yOffset));
+	        GameButtons.push(new HexagonButton(100*x + xOffset + 75, y*75 + yOffset + 75));
 	      }  
 	      x = 0;
         }	
 		GenerateLevelNum (document.getElementById("level-number").value);
-		document.getElementById("dummy").style.height = size*60 + "px";
       }
  
 	</script>
@@ -184,7 +153,6 @@ class HexagonButton extends GameButton {
 	  </div>
       <div><button class="reset" onclick="ResetClick()">Reset</button></div>
 	</div>
-	<div id="dummy"></div>  
 	<div class ="bottom">
       <button id="press" class="press" ontouchstart="PressTouch(this)">Press</button>
       <button id="lock" class="lock" ontouchstart="LockTouch(this)">Lock</button>
