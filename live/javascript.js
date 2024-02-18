@@ -29,7 +29,7 @@ class GameButton {
         this.offsety = y;
 		this.innerHTML = "0";
 	    this.clicks = 0;
-	    this.maxClicks = 2;
+	    this.maxClicks = 1;
 	    this.locked = false;
 	    this.walls = "";
         this.cycles = "";
@@ -530,10 +530,10 @@ function InitializeButtonGroups()  {
       }
 
       function BtnTouch(btn) {
-		  if (PressSelected == true ||
-		      LockSelected == true){
+		 // if (PressSelected == true ||
+		      //LockSelected == true){
 		          event.preventDefault();				  
-			  }
+			  //}
 		  let wasSelected = false;
 		  if (btn.background.classList.contains("selected")) {
 			  wasSelected = true;
