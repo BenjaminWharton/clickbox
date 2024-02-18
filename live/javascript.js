@@ -1,5 +1,6 @@
 
-
+/////////////////////////////////////////////////////// Allow scroll when neither lock nor press is active?
+                   /////////////////////////////////////// Catch the on-zoom event and only chnage grid size instead
 var LMDown = false;
 var RMDown = false;
 var size = 5;
@@ -529,7 +530,10 @@ function InitializeButtonGroups()  {
       }
 
       function BtnTouch(btn) {
-		  event.preventDefault();
+		  if (PressSelected == true ||
+		      LockSelected == true){
+		          event.preventDefault();				  
+			  }
 		  let wasSelected = false;
 		  if (btn.background.classList.contains("selected")) {
 			  wasSelected = true;
