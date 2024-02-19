@@ -40,8 +40,6 @@ class GameButton {
 		this.btnWall = "images/Wall.png";
 		
 		let svgBase = document.createElementNS("http://www.w3.org/2000/svg", 'svg');
-		svgBase.style.position = "absolute";
-		svgBase.style.transform = "translate(" + x + "px," + y + "px)";
 		svgBase.classList.add("svg");
 		this.svgBase = svgBase;
 		
