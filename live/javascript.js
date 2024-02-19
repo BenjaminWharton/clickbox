@@ -87,8 +87,8 @@ class GameButton {
         this.value = value;
 		
 		svgBase.setAttribute("viewBox", (-x) + " " + (-y) + " 100 100");
-		svgBase.setAttribute("width", 100-200/(size+2) + "px");
-		svgBase.setAttribute("height", 100-200/(size+2) + "px");
+		svgBase.setAttribute("width", "100px");
+		svgBase.setAttribute("height", "100px");
 		grid.appendChild(svgBase);
 		svgBase.appendChild(background);
 		svgBase.appendChild(svgL);
@@ -1063,7 +1063,7 @@ function RandomButtonFactor() {
 		}
 	  	size = parseInt(document.getElementById("level-size").value);
 		let grid = document.createElementNS("http://www.w3.org/2000/svg", 'svg');
-		grid.setAttribute("viewBox", "0 0 " + size*100 + " " + size*100);
+		grid.setAttribute("viewBox", "0 0 " + (size + 2)*100 + " " + (size + 2)*100);
 		grid.style.width = "100%";
 		grid.style.height = "auto";
 		grid.id = "grid-container";

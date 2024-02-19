@@ -198,7 +198,7 @@ class PentagonButton extends GameButton {
 	  	size = parseInt(document.getElementById("level-size").value);
 		let grid = document.createElementNS("http://www.w3.org/2000/svg", 'svg');
 	  	size = parseInt(document.getElementById("level-size").value); 
-		grid.setAttribute("viewBox", "0 0 " + size*100 + " " + size*100);
+		grid.setAttribute("viewBox", "0 0 " + (size + 2)*100 + " " + (size + 2)*75);
 		grid.style.width = "100%";
 		grid.style.height = "auto";
 		grid.id = "grid-container";	
