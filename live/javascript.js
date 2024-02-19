@@ -1064,8 +1064,6 @@ function RandomButtonFactor() {
 	  	size = parseInt(document.getElementById("level-size").value);
 		let grid = document.createElementNS("http://www.w3.org/2000/svg", 'svg');
 		grid.setAttribute("viewBox", "0 0 " + size*100 + " " + size*100);
-		//grid.style.width = 60*size + "px";
-		//grid.style.height = 60*size + "px";
 		grid.style.width = "100%";
 		grid.style.height = "auto";
 		grid.id = "grid-container";

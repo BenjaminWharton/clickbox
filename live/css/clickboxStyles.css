@@ -44,8 +44,9 @@ body {
   display: none;
   position: absolute;
   background-color: #f9f9f9;
-  top: max(60px, 6vh);
-  min-width: 28vw;
+  top: max(50px, 5vh);
+  left: 1vw;
+  min-width: 27vw;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
   z-index: 1;
 }
@@ -197,12 +198,6 @@ body {
 
 .wall {
   fill: #000000;
-}
-
-.wall-old {
-  width: 60px;
-  height: 60px;	
-  pointer-events: none;
 }
 
 .wall-cycle {
