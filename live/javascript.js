@@ -3,12 +3,14 @@
                    /////////////////////////////////////// Catch the on-zoom event and only chnage grid size instead
 var LMDown = false;
 var RMDown = false;
+var MMDown = false;
 var size = 5;
 var GameButtons = [];
 var CycleButtons = [];
 var LastTouchedButton = null;
 var PressSelected = false;
 var LockSelected = false;
+var ClearSelected = false;
 const normalColor = "#CFD7D7";
 const lockedColor = "#A0A5A5";
 const clickedColor = "#22c976";
@@ -420,6 +422,9 @@ function MouseDown(){
   if (event.button == 0) {
     LMDown = true;
   }
+  if (event.button == 1) {
+    MMDown= true;
+  }
   if (event.button == 2) {
     RMDown= true;
   }
@@ -428,6 +433,9 @@ function MouseDown(){
 function MouseUp(){
   if (event.button == 0) {
     LMDown = false;
+  }
+  if (event.button == 1) {
+    MMDown = false;
   }
   if (event.button == 2) {
     RMDown= false;
@@ -519,11 +527,13 @@ function InitializeButtonGroups()  {
 		}
 	  }
 
-      function BtnClick(clickID) {
+      function BtnClick(btn) {
 	    if (event.button == 0){
-          BtnLeftClick(clickID);
+          BtnLeftClick(btn);
+		} else if (event.button == 1){
+		  ClearButton(btn);
 		} else if (event.button == 2){
-		  BtnRightClick(clickID);
+		  BtnRightClick(btn);
 		}
       }
 
@@ -547,7 +557,11 @@ function InitializeButtonGroups()  {
 		  } else if (LockSelected == true) {
 			  BtnRightClick(btn);
 			  btn.background.classList.add("selected");
-		  }  else if (wasSelected == false) {
+		  }  else if (ClearSelected == true) {
+			  ClearButton(btn);	  
+			  btn.background.classList.remove("selected");
+              BtnMouseLeave(btn);
+		  } else if (wasSelected == false) {
 			  btn.background.classList.add("selected");
 		  } else {
 			  btn.background.classList.remove("selected");
@@ -578,6 +592,8 @@ function PressTouch(btn) {
 //	event.preventDefault();
     LockSelected = false;
 	document.getElementById("lock").classList.remove("bottom-selected");
+    ClearSelected = false;
+	document.getElementById("clear").classList.remove("bottom-selected");
 	if (PressSelected == false) {
 	  PressSelected = true;
 	  btn.classList.add("bottom-selected");
@@ -591,11 +607,28 @@ function LockTouch(btn) {
 //	event.preventDefault();
     PressSelected = false;
 	document.getElementById("press").classList.remove("bottom-selected");
+    ClearSelected = false;
+	document.getElementById("clear").classList.remove("bottom-selected");
 	if (LockSelected == false) {
 	  LockSelected = true;
 	  btn.classList.add("bottom-selected");
 	} else {
 		LockSelected = false;
+	    btn.classList.remove("bottom-selected");
+	}	
+}
+
+function ClearTouch(btn) {
+//	event.preventDefault();
+    PressSelected = false;
+	document.getElementById("press").classList.remove("bottom-selected");
+    LockSelected = false;
+	document.getElementById("lock").classList.remove("bottom-selected");
+	if (ClearSelected == false) {
+	  ClearSelected = true;
+	  btn.classList.add("bottom-selected");
+	} else {
+		ClearSelected = false;
 	    btn.classList.remove("bottom-selected");
 	}	
 }
@@ -662,12 +695,28 @@ function LockTouch(btn) {
 		}		
       }
 
+function ClearButton (btn) {
+    btn.locked = false;
+    if (btn.clicks > 0){
+        ModifyButtonGroup(btn, btn.clicks);
+    }	  
+    btn.clicks = 0;
+    btn.background.style.fill = normalColor;
+    btn.lockVis.style.fill = normalColor;
+    for (let i = 0; i < btn.counterparts.length; i++) {
+        btn.counterparts[i].background.style.fill = normalColor;
+        btn.counterparts[i].lockVis.style.fill = normalColor;
+    }
+}	
+
 function BtnMouseEnter(btn)  {
 	btn.background.classList.add("background-selected");
 	if (LMDown == true) {
 		BtnLeftClick(btn);
 	} else if (RMDown == true) {
 		BtnRightClick(btn);
+	} else if (MMDown == true) {
+		ClearButton(btn);
 	}
 	for (let i = 0; i < btn.affectedButtons.length; i++) {
 		btn.affectedButtons[i].value.classList.add("btn-group");
@@ -1084,20 +1133,11 @@ function RandomButtonFactor() {
           cbtn.addWall(cbtn.counterpart.walls);
 		}
       }
+	  
 
 	  function ResetClick () {
-	    for (let IdNum = 0; IdNum < GameButtons.length; IdNum++) {
-			let btn = GameButtons[IdNum];
-			btn.locked = false;
-		  if (btn.clicks > 0){
-	  	  ModifyButtonGroup(btn, btn.clicks);
-	  	  }	  
-	    btn.clicks = 0;
-		btn.background.style.fill = normalColor;
-		btn.lockVis.style.fill = normalColor;
-	    }
-		for (let i = 0; i < CycleButtons.length; i++) {
-		  CycleButtons[i].background.fill = CycleButtons[i].counterpart.background.fill;
+	    for (let i = 0; i < GameButtons.length; i++) {
+			ClearButton(GameButtons[i]);
 		}
 	    
 	  }

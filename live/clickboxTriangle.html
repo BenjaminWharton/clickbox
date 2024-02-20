@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" onmousedown="MouseDown()" onmouseup="MouseUp()" onmouseleave="MouseExit()" oncontextmenu="return false;">
+<html lang="en"onmousedown="MouseDown()" onmouseup="MouseUp()" onmouseleave="MouseExit()" oncontextmenu="return false;">
   <head>
     <script src="javascript.js"></script>	
     <link rel="stylesheet" href="css/clickboxStyles.css">
@@ -331,7 +331,9 @@ class TriangleButton extends GameButton {
 	</div>
 	<div class ="bottom">
       <button id="press" class="press" ontouchstart="PressTouch(this)">Press</button>
+	  <button id="clear" class="clear" ontouchstart="ClearTouch(this)">Clear</button>
       <button id="lock" class="lock" ontouchstart="LockTouch(this)">Lock</button>
+	</div>
 	</div>
     </main>
 	
