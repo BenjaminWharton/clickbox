@@ -16,6 +16,7 @@ const lockedColor = "#A0A5A5";
 const clickedColor = "#22c976";
 const doubledColor = "#00FFFF";
 const tripledColor = "#FF00FF";
+const quadrupledColor = "#FF4040";
 const modifierColor0 = "#FFFF40";
 const modifierColor1 = "#0000";
 const modifierColor2 = "#FF8040";
@@ -652,9 +653,12 @@ function ClearTouch(btn) {
 		  } else if (btn.clicks == 2) {
 			  btn.background.style.fill = doubledColor;
 			  btn.lockVis.style.fill = doubledColor;
-		  } else if (btn.clicks >= 3) {
+		  } else if (btn.clicks == 3) {
 			  btn.background.style.fill = tripledColor;
 			  btn.lockVis.style.fill = tripledColor;
+		  } else if (btn.clicks >= 4) {
+			  btn.background.style.fill = quadrupledColor;
+			  btn.lockVis.style.fill = quadrupledColor;
 		  }
           ModifyButtonGroup(btn, value);
 		}  
@@ -730,8 +734,11 @@ function BtnMouseLeave(btn)  {
 	}	  
 }
 
-function RandomButtonFactor() {
-    let rand = Math.trunc(Math.random()*3);
+function RandomFactor( none = false) {
+    let rand = Math.trunc(Math.random()*3);	
+	if (none == true) {
+      rand = Math.trunc(Math.random()*4);		
+	}
     if (rand == 0) {
         return 0;
     } else if (rand == 1) {
@@ -878,7 +885,7 @@ function RandomButtonFactor() {
 		} else if (Level == 3) {                       //////////////////////////////////////////////////////////// Level 3
 		  GenerateHardLevel (size*size/2);             //////////////////////////////////////////////////////////// Level 3
 		} else if (Level == 4) {                       //////////////////////////////////////////////////////////// Level 4
-		    let type = RandomButtonFactor();
+		    let type = RandomFactor();
             for (let i = 0; i < size; i++) {                                         // top
 		      GameButtons[i].changeFactor(type);
 		    }
@@ -893,7 +900,7 @@ function RandomButtonFactor() {
 			}
 		    GenerateLevel (size*size/2);		////////////////////////////////////////////////////////////// Level 4	
 		} else if (Level == 5) {   		            ////////////////////////////////////////////////////////////// Level 5
-		  let type = RandomButtonFactor();
+		  let type = RandomFactor();
 		  for (let x = 0; x < parseInt(size/2 - 1); x = x + 3) {
             for (let y = size*(x+2); y < size*(x+3); y++) {                              // top
 		      GameButtons[y].changeFactor(type);
@@ -916,13 +923,13 @@ function RandomButtonFactor() {
 		  }
 		  GenerateHardLevel (size*size/2);		  
 	    } else if (Level == 6)   {              /////////////////////////////////////////////////////////////////// Level 5
-		  let type = RandomButtonFactor();      /////////////////////////////////////////////////////////////////// Level 6
+		  let type = RandomFactor();      /////////////////////////////////////////////////////////////////// Level 6
 		  for (let i = 0; i < GameButtons.length; i++) {
 		    GameButtons[i].changeFactor(type);		  
 		  }
 		  GenerateLevel(size*size/2);       //////////////////////////////////////////////////////////////////// Level 6
 		} else if (Level == 7) {                 /////////////////////////////////////////////////////////////////// Level 7
-		  let type = RandomButtonFactor();
+		  let type = RandomFactor();
 		  for (let x = 0; x < size; x = x + 2) {
             for (let y = size*x; y < size*(x+1); y++) {
 		      GameButtons[y].changeFactor(type);
@@ -930,7 +937,7 @@ function RandomButtonFactor() {
 	  	  }	
           GenerateLevel (size*size/2);		/////////////////////////////////////////////////////////////////// Level 7
 		} else if (Level == 8) {                /////////////////////////////////////////////////////////////////// Level 8
-		  let type = RandomButtonFactor();
+		  let type = RandomFactor();
 		  let bool = 1;
 		  for (let x = 0; x < size; x++) {
 		    for (let y = 0; y < size; y++) {
@@ -955,11 +962,7 @@ function RandomButtonFactor() {
 		  GenerateLevel(size*size/2);	 ///////////////////////////////////////////////////////////////////// Level 8	  
 		} else if (Level == 9) {             ///////////////////////////////////////////////////////////////////// Level 9
 		  for (let i = 0; i < GameButtons.length; i++) {
-		    let type = RandomButtonFactor();
-			let rand = Math.trunc(Math.random()*5);
-			if (rand == 4) {
-			  type = 1;
-			}
+		    let type = RandomFactor(true);
 		    GameButtons[i].changeFactor(type);		  
 		  }          		
 		  GenerateLevel(size*size/2);	 ///////////////////////////////////////////////////////////////////// Level 9
@@ -1003,7 +1006,7 @@ function RandomButtonFactor() {
 		  GenerateLevel(size*size/2);	 ///////////////////////////////////////////////////////////////////// Level 11
 		} else if (Level == 12) {             ///////////////////////////////////////////////////////////////////// Level 12
 		  for (let i = 0; i < GameButtons.length; i++) {
-		    let type = RandomButtonFactor();
+		    let type = RandomFactor();
 			let rand = Math.trunc(Math.random()*5);
 			if (rand == 4) {
 			  type = 1;
@@ -1058,7 +1061,7 @@ function RandomButtonFactor() {
           CycleEdges ("nsew");
 		  GenerateLevel(size*size/2);	 ///////////////////////////////////////////////////////////////////// Level 16
 		} else if (Level == 17) {             //////////////////////////////////////////////////////////////////// Level 17
-		  let type = RandomButtonFactor();
+		  let type = RandomFactor();
 		  for (let x = 1; x < parseInt(size/2); x = x + 3) {
             for (let y = 0 + size*(x+1); y < size*(x+2); y++) {                           // top
 		      GameButtons[y].changeFactor(type);
@@ -1082,7 +1085,7 @@ function RandomButtonFactor() {
           CycleEdges ("nsew");
 		  GenerateLevel(size*size/2);	 ///////////////////////////////////////////////////////////////////// Level 17
 		} else if (Level == 18) {             //////////////////////////////////////////////////////////////////// Level 18
-		  let type = RandomButtonFactor();
+		  let type = RandomFactor();
 		  for (let i = 0; i < size*size; i++) {
 		    GameButtons[i].changeFactor(type);
 		  }

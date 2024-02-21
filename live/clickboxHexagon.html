@@ -91,9 +91,36 @@ class HexagonButton extends GameButton {
 		  GenerateLevel (size*size/1.5);                 //////////////////////////////////////////////////////////// Level 2
 	    } else if (Level == 3) {                       //////////////////////////////////////////////////////////// Level 3
 		  GenerateLevel (size*size);                 //////////////////////////////////////////////////////////// Level 3
+	    } else if (Level == 4) {                       //////////////////////////////////////////////////////////// Level 4
+		  for ( let i = 0; i < GameButtons.length; i++) {
+		      GameButtons[i].changeFactor(RandomFactor(true));
+		  }
+		  GenerateLevel (size*size);                 //////////////////////////////////////////////////////////// Level 4
+	    } else if (Level == 5) {                       //////////////////////////////////////////////////////////// Level 5
+		  for ( let i = 0; i < GameButtons.length; i++) {
+		      GameButtons[i].maxClicks = 3;
+		  }
+		  GenerateLevel (size*size*1.5);                 //////////////////////////////////////////////////////////// Level 5
+	    } else if (Level == 6) {                       //////////////////////////////////////////////////////////// Level 6
+		  for ( let i = 0; i < GameButtons.length; i++) {
+		      GameButtons[i].maxClicks = 3;
+			  GameButtons[i].changeFactor(RandomFactor(true));
+		  }
+		  GenerateLevel (size*size*1.5);                 //////////////////////////////////////////////////////////// Level 6
+	    } else if (Level == 7) {                       //////////////////////////////////////////////////////////// Level 7
+		  for ( let i = 0; i < GameButtons.length; i++) {
+		      GameButtons[i].maxClicks = 4;
+		  }
+		  GenerateLevel (size*size*2);                 //////////////////////////////////////////////////////////// Level 7
+	    } else if (Level == 8) {                       //////////////////////////////////////////////////////////// Level 8
+		  for ( let i = 0; i < GameButtons.length; i++) {
+		      GameButtons[i].maxClicks = 4;
+			  GameButtons[i].changeFactor(RandomFactor(true));
+		  }
+		  GenerateLevel (size*size*2);                 //////////////////////////////////////////////////////////// Level 8
 		} else {
 		  InitializeButtonGroups();
-		}	
+		}
 	  }
 	  
 	  function NewLevel(){
@@ -149,7 +176,7 @@ class HexagonButton extends GameButton {
 	  <div>
 	    <div class="level-num-div">
 		  <p class="size-num-text">Number</p>
-	      <input type="number" class="level-number" id="level-number" value="1" min="-18" max="18">		
+	      <input type="number" class="level-number" id="level-number" value="1" min="0" max="8">		
 		</div>
 	    <button class="new-level" id="new-level" onclick="NewLevel()" >New Level</button>
 		<div class="level-size-div">
