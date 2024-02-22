@@ -269,7 +269,7 @@ body {
 	position: fixed;
 	bottom: max(75px, 8%);
 	margin-bottom: 50px;
-	left: 5%;
+	left: 15%;
 	width: 75px;	
     height: 75px;	   
    }
@@ -278,7 +278,7 @@ body {
 	position: fixed;
 	bottom: max(75px, 8%);
 	margin-bottom: 50px;
-	right: 5%;
+	right: 15%;
 	width: 75px;	
     height: 75px;	   
    }
