@@ -131,21 +131,21 @@ body {
 
 .size-num-text {
 	color: #FFFFFF;
-	font-size: 36px;
+	font-size: 42px;
 	display: inline;
 }
 
 .level-number {
-	height: 40px;
+	height: 46px;
 	width: 70px;
-	font-size: 32px;
+	font-size: 40px;
 	pointer-events: auto;
 }
 
 .level-size {
-	height: 40px;
+	height: 46px;
 	width: 70px;
-	font-size: 32px;
+	font-size: 40px;
 	pointer-events: auto;
 }
 
