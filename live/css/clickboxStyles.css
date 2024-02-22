@@ -135,21 +135,21 @@ body {
 
 .size-num-text {
 	color: #FFFFFF;
-	font-size: 42px;
+	font-size: 44px;
 	display: inline;
 }
 
 .level-number {
 	height: 46px;
 	width: 70px;
-	font-size: 40px;
+	font-size: 44px;
 	pointer-events: auto;
 }
 
 .level-size {
 	height: 46px;
 	width: 70px;
-	font-size: 40px;
+	font-size: 44px;
 	pointer-events: auto;
 }
 
@@ -278,8 +278,8 @@ body {
 	bottom: max(75px, 8%);
 	margin-bottom: 50px;
 	left: 15%;
-	width: 75px;	
-    height: 75px;	   
+	width: 80px;	
+    height: 80px;	   
    }
    
    .translate {
@@ -287,8 +287,8 @@ body {
 	bottom: max(75px, 8%);
 	margin-bottom: 50px;
 	right: 15%;
-	width: 75px;	
-    height: 75px;	   
+	width: 80px;	
+    height: 80px;	   
    }
  
   .bottom-selected {
