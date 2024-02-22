@@ -129,6 +129,10 @@ body {
   transform: translateY(4px);
 }
 
+#grid-container {
+	position: relative;
+}
+
 .size-num-text {
 	color: #FFFFFF;
 	font-size: 42px;
@@ -220,6 +224,10 @@ body {
 }
 
 @media only screen and (hover: none) and (pointer: coarse){	 
+
+#grid-container {
+	position: fixed;
+}
 
   .bottom {
 	display: initial;

@@ -271,14 +271,6 @@ class TriangleButton extends GameButton {
 		let i = 0;
 		let clicks = 0;
         DestroyGrid();
-		document.getElementById("new-level").innerHTML = "New Level";
-		if (parseInt(document.getElementById("level-size").value) < 3){
-		  document.getElementById("level-size").value = 3;
-		}
-		if (parseInt(document.getElementById("level-size").value) > 30){
-		  document.getElementById("level-size").value = 30;
-		}
-	  	size = parseInt(document.getElementById("level-size").value);
         InitializeGrid();
 		i = 0;
 	    for (let y = 0; y < size; y++) {	
@@ -319,7 +311,7 @@ class TriangleButton extends GameButton {
 	    <button class="new-level" id="new-level" onclick="NewLevel()" >New Level</button>
 		<div class="level-size-div">
 		  <p class="size-num-text">Size</p>
-	      <input type="number" class="level-size" id="level-size" value="5" min="3" max="30">		
+	      <input type="number" class="level-size" id="level-size" value="5" min="3" max="20">		
 		</div>
 	  </div>
       <div><button class="reset" onclick="ResetClick()">Reset</button></div>

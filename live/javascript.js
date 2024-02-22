@@ -1208,9 +1208,16 @@ function RandomFactor( none = false) {
 	  }
 
 function InitializeGrid() {
-		let grid = document.createElementNS("http://www.w3.org/2000/svg", 'svg');
+		document.getElementById("new-level").innerHTML = "New Level";
+		if (parseInt(document.getElementById("level-size").value) < 3){
+		  document.getElementById("level-size").value = 3;
+		}
+		if (parseInt(document.getElementById("level-size").value) > 20){
+		  document.getElementById("level-size").value = 20;
+		}
+	  	size = parseInt(document.getElementById("level-size").value); 
+		let grid = document.createElementNS("http://www.w3.org/2000/svg", 'svg');		
 		grid.setAttribute("viewBox", "0 0 " + (size + 2)*100 + " " + (size + 2)*100);
-		grid.style.position = "fixed";
 		grid.style.left = "0px";
 		grid.style.width = "100%";
 		grid.style.height = "auto";
