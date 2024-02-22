@@ -1,16 +1,29 @@
 
-/////////////////////////////////////////////////////// Allow scroll when neither lock nor press is active?
-                   /////////////////////////////////////// Catch the on-zoom event and only chnage grid size instead
-var LMDown = false;
-var RMDown = false;
-var MMDown = false;
 var size = 5;
 var GameButtons = [];
 var CycleButtons = [];
+
+var LMDown = false;
+var RMDown = false;
+var MMDown = false;
+
 var LastTouchedButton = null;
 var PressSelected = false;
 var LockSelected = false;
 var ClearSelected = false;
+
+var ScaleStartPoint = 0;
+var LastScalePoint = 0;
+var GridScale = 1;
+var GridMaxScale = (size+2)/4;
+
+var TranslateStartPointX = 0;
+var LastTranslatePointX = 0;
+var TranslateStartPointY = 0;
+var LastTranslatePointY = 0;
+var GridOffsetX = 0;
+var GridOffsetY = 0;
+
 const normalColor = "#CFD7D7";
 const lockedColor = "#A0A5A5";
 const clickedColor = "#22c976";
@@ -454,6 +467,9 @@ function DestroyGrid (){
   }
   GameButtons = [];
   CycleButtons = [];
+
+  GridOffsetX = 0;
+  GridOffsetY = 0;
 }		    	
 
 function VictoryCheck() {
@@ -539,10 +555,7 @@ function InitializeButtonGroups()  {
       }
 
       function BtnTouch(btn) {
-		 // if (PressSelected == true ||
-		      //LockSelected == true){
-		          event.preventDefault();				  
-			  //}
+		  event.preventDefault();				  
 		  let wasSelected = false;
 		  if (btn.background.classList.contains("selected")) {
 			  wasSelected = true;
@@ -590,7 +603,7 @@ function InitializeButtonGroups()  {
 	  }
 
 function PressTouch(btn) {
-//	event.preventDefault();
+	event.preventDefault();
     LockSelected = false;
 	document.getElementById("lock").classList.remove("bottom-selected");
     ClearSelected = false;
@@ -605,7 +618,7 @@ function PressTouch(btn) {
 }
 
 function LockTouch(btn) {
-//	event.preventDefault();
+	event.preventDefault();
     PressSelected = false;
 	document.getElementById("press").classList.remove("bottom-selected");
     ClearSelected = false;
@@ -620,7 +633,7 @@ function LockTouch(btn) {
 }
 
 function ClearTouch(btn) {
-//	event.preventDefault();
+	event.preventDefault();
     PressSelected = false;
 	document.getElementById("press").classList.remove("bottom-selected");
     LockSelected = false;
@@ -632,6 +645,104 @@ function ClearTouch(btn) {
 		ClearSelected = false;
 	    btn.classList.remove("bottom-selected");
 	}	
+}
+
+function ScaleTouch(e) {
+	e.preventDefault();
+    ScaleStartPoint = e.changedTouches[0].clientY;
+	LastScalePoint = e.changedTouches[0].clientY;
+}
+
+function ScaleMove(e) {
+	e.preventDefault();
+	if (e.changedTouches[0].clientY < LastScalePoint &&
+	    LastScalePoint < ScaleStartPoint) {
+	    ScaleGrid(0.05);		
+	} else if (e.changedTouches[0].clientY > LastScalePoint &&
+	           LastScalePoint > ScaleStartPoint) {
+	    ScaleGrid(-0.05);			
+	}
+    LastScalePoint = e.changedTouches[0].clientY;
+}
+
+function ScaleGrid(amount) {
+	let grid = document.getElementById("grid-container");
+    let translate = true;
+    let boundStart = document.getElementById("grid-container").getBoundingClientRect();
+
+	if (GridScale + amount < GridMaxScale) {
+	    GridScale = GridScale + amount;	
+	} else {
+	    GridScale = GridMaxScale;
+		translate = false;
+	}
+	if (GridScale + amount < 1) {
+	    GridScale = 1;
+		translate = false;
+	}
+
+	grid.style.width = 100*GridScale + "%";	
+
+    let boundEnd = document.getElementById("grid-container").getBoundingClientRect();	
+
+	GridOffsetX = GridOffsetX + ((boundStart.width - boundEnd.width)/2)
+	grid.style.left = GridOffsetX + "px";
+	GridOffsetY = GridOffsetY + ((boundStart.height - boundEnd.height)/2)
+	grid.style.top = GridOffsetY + "px";
+	
+    TranslateGrid(0, 0);
+	
+}
+
+function TranslateTouch(e) {
+	e.preventDefault();
+    TranslateStartPointX = e.changedTouches[0].clientX;
+	TranslateStartPointY = e.changedTouches[0].clientY;
+    LastTranslatePointX = e.changedTouches[0].clientX;
+	LastTranslatePointY = e.changedTouches[0].clientY;
+}
+
+function TranslateMove(e) {
+	e.preventDefault();
+	x = LastTranslatePointX - e.changedTouches[0].clientX;
+	y = LastTranslatePointY - e.changedTouches[0].clientY;
+    LastTranslatePointX = e.changedTouches[0].clientX;	
+    LastTranslatePointY = e.changedTouches[0].clientY;
+	TranslateGrid(x, y);
+}
+
+function TranslateGrid(x, y) {
+	let grid = document.getElementById("grid-container");
+	let bounds = document.getElementById("grid-container").getBoundingClientRect();
+	let width = 0;
+	let height = 0;
+	if (window.innerWidth != null) {
+		width = window.innerWidth;
+		height = window.innerHeight;
+	} else {
+		width = document.documentElement.clientWidth;
+        height = document.documentElement.clientHeight;
+	}
+
+		GridOffsetX = GridOffsetX + x;	
+		GridOffsetY = GridOffsetY + y;	
+
+    if (GridOffsetX > width*0.7) {
+		GridOffsetX = width*0.7;
+	}
+    if (GridOffsetX < bounds.width*(-1) + (width*0.3)) {
+		GridOffsetX = bounds.width*(-1) + width*(0.3);
+	}
+    if (GridOffsetY > height*0.7) {
+		GridOffsetY = height*0.7;
+	}
+    if (GridOffsetY < bounds.height*(-1) + (height*0.3)) {
+		GridOffsetY = bounds.height*(-1) + height*(0.3);
+
+	}
+	
+	grid.style.left = GridOffsetX + "px";
+	grid.style.top = GridOffsetY + "px";
 }
 
       function BtnLeftClick(btn)  {
@@ -1095,6 +1206,26 @@ function RandomFactor( none = false) {
 		  InitializeButtonGroups();
 		}	  
 	  }
+
+function InitializeGrid() {
+		let grid = document.createElementNS("http://www.w3.org/2000/svg", 'svg');
+		grid.setAttribute("viewBox", "0 0 " + (size + 2)*100 + " " + (size + 2)*100);
+		grid.style.position = "fixed";
+		grid.style.left = "0px";
+		grid.style.width = "100%";
+		grid.style.height = "auto";
+		grid.id = "grid-container";
+        GridScale = 1;
+        GridMaxScale = ((size+2))/4;
+		document.getElementById("demo").appendChild(grid);
+		let height = 0;
+	if (window.innerWidth != null) {
+		height = window.innerHeight;
+	} else {
+        height = document.documentElement.clientHeight;
+	}
+		TranslateGrid(0, height/5);	
+}
 	  
 	  function NewLevel(){
 		let xOffset = 0;
@@ -1112,12 +1243,7 @@ function RandomFactor( none = false) {
 		  document.getElementById("level-size").value = 30;
 		}
 	  	size = parseInt(document.getElementById("level-size").value);
-		let grid = document.createElementNS("http://www.w3.org/2000/svg", 'svg');
-		grid.setAttribute("viewBox", "0 0 " + (size + 2)*100 + " " + (size + 2)*100);
-		grid.style.width = "100%";
-		grid.style.height = "auto";
-		grid.id = "grid-container";
-		document.getElementById("demo").appendChild(grid);
+        InitializeGrid();
 	    for (let y = 0; y < size; y++) {
           if (skew == true && y%2 == 0 ) {  /////////////////////////////////////////////////////// adds a skew to the grid if skew is true
 		    xOffset = 50;

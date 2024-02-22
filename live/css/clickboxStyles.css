@@ -5,6 +5,7 @@
 
 html {
   box-sizing: border-box;
+  touch-action: none;
 }
 
 *, *:before, *:after {
@@ -37,6 +38,9 @@ body {
 .dropdown {
   position: fixed;
   display: inline-block;
+  z-index: 10;
+  pointer-events: auto;
+  touch-action: auto;
 }
 
 /* Dropdown Content (Hidden by Default) */
@@ -48,7 +52,7 @@ body {
   left: 1vw;
   min-width: 27vw;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-  z-index: 1;
+  z-index: 20;
 }
 
 /* Links inside the dropdown */
@@ -75,12 +79,6 @@ body {
 
 /* Game
 -------------------------------------*/
-.demo {
-  padding-bottom: 100px;
-  padding-top: 200px;
-  text-align: center;
-  user-select: none;
-}
 
 .new-level {  
   background-color: #2ac759;
@@ -93,7 +91,10 @@ body {
   left: 30%;
   top: 2px;
   position: fixed;
+  z-index: 10;
   user-select: none;
+  pointer-events: auto;
+  touch-action: auto;
 }
 
 .new-level:hover {
@@ -114,7 +115,10 @@ body {
   right: 1%;
   top: 2px;
   position: fixed;	
-  user-select: none;  
+  z-index: 10;
+  user-select: none; 
+  pointer-events: auto;  
+  touch-action: auto;
 }
 
 .reset:hover {
@@ -150,6 +154,7 @@ body {
     top: max(60px, 6%);
 	margin-top: 30px;
 	right: 1%;
+	z-index: 10;
 	pointer-events: none;	
 }
 
@@ -158,6 +163,7 @@ body {
     top: max(60px, 6%);
 	margin-top: 85px;
 	right: 1%;
+    z-index: 10;
 	pointer-events: none;
 }
 
@@ -217,6 +223,7 @@ body {
 
   .bottom {
 	display: initial;
+	z-index: 10;
   }
 
   .press {
@@ -257,6 +264,24 @@ body {
 	width: 35%;	
     height: max(75px, 8%);
   }
+ 
+   .scale {
+	position: fixed;
+	bottom: max(75px, 8%);
+	margin-bottom: 50px;
+	left: 5%;
+	width: 75px;	
+    height: 75px;	   
+   }
+   
+   .translate {
+	position: fixed;
+	bottom: max(75px, 8%);
+	margin-bottom: 50px;
+	right: 5%;
+	width: 75px;	
+    height: 75px;	   
+   }
  
   .bottom-selected {
 	background-color: #2ac759;

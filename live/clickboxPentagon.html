@@ -222,13 +222,7 @@ class PentagonButton extends GameButton {
 		  document.getElementById("level-size").value = 30;
 		}
 	  	size = parseInt(document.getElementById("level-size").value);
-		let grid = document.createElementNS("http://www.w3.org/2000/svg", 'svg');
-	  	size = parseInt(document.getElementById("level-size").value); 
-		grid.setAttribute("viewBox", "0 0 " + (size + 2)*100 + " " + (size + 2)*75);
-		grid.style.width = "100%";
-		grid.style.height = "auto";
-		grid.id = "grid-container";	
-		document.getElementById("demo").appendChild(grid);				
+        InitializeGrid();			
 	    for (let y = 0; y < size; y++) {	
           for (let x = 0; x < size; x++){
             i++;	    
@@ -298,7 +292,7 @@ class PentagonButton extends GameButton {
 	  <div>
 	    <div class="level-num-div">
 		  <p class="size-num-text">Number</p>
-	      <input type="number" class="level-number" id="level-number" value="1" min="0" max="8">		
+	      <input type="number" class="level-number" id="level-number" value="1" min="-18" max="18">		
 		</div>
 	    <button class="new-level" id="new-level" onclick="NewLevel()" >New Level</button>
 		<div class="level-size-div">
@@ -312,16 +306,14 @@ class PentagonButton extends GameButton {
       <button id="press" class="press" ontouchstart="PressTouch(this)">Press</button>
 	  <button id="clear" class="clear" ontouchstart="ClearTouch(this)">Clear</button>
       <button id="lock" class="lock" ontouchstart="LockTouch(this)">Lock</button>
+	  <img id="scale" class="scale" src="images/scaleGrid.png" ontouchstart="ScaleTouch(event)" ontouchmove="ScaleMove(event)">
+	  <img id="translate" class="translate" src="images/translateGrid.png" ontouchstart="TranslateTouch(event)" ontouchmove="TranslateMove(event)">
 	</div>
     </main>
-	
-	
+		
 	<script>
-
 	NewLevel();
-	  
+	
 	</script>  	
-	
-	
   </body>
 </html>
