@@ -15,6 +15,7 @@ var ClearSelected = false;
 var ScaleStartPoint = 0;
 var LastScalePoint = 0;
 var GridScale = 1;
+var GridMinScale = 0.5;
 var GridMaxScale = (size+2)/4;
 
 var TranslateStartPointX = 0;
@@ -667,18 +668,15 @@ function ScaleMove(e) {
 
 function ScaleGrid(amount) {
 	let grid = document.getElementById("grid-container");
-    let translate = true;
     let boundStart = document.getElementById("grid-container").getBoundingClientRect();
 
 	if (GridScale + amount < GridMaxScale) {
 	    GridScale = GridScale + amount;	
 	} else {
 	    GridScale = GridMaxScale;
-		translate = false;
 	}
-	if (GridScale + amount < 1) {
-	    GridScale = 1;
-		translate = false;
+	if (GridScale + amount < GridMinScale) {
+	    GridScale = GridMinScale;
 	}
 
 	grid.style.width = 100*GridScale + "%";	
