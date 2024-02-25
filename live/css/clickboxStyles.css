@@ -140,15 +140,15 @@ body {
 }
 
 .level-number {
-	height: 46px;
-	width: 70px;
+	height: 48px;
+	width: 90px;
 	font-size: 44px;
 	pointer-events: auto;
 }
 
 .level-size {
-	height: 46px;
-	width: 70px;
+	height: 48px;
+	width: 90px;
 	font-size: 44px;
 	pointer-events: auto;
 }

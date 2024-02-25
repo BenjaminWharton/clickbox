@@ -188,13 +188,8 @@ class TriangleButton extends GameButton {
 		}
 	  }
 
-      randomWall(none=false) {
-	      let rand = null;
-	      if (none == false) {
-		      rand = Math.trunc(Math.random()*3);		  
-		  } else {
-		      rand = Math.trunc(Math.random()*4);			  
-		  }
+      randomWall(extra = 0) {
+	      let rand = Math.trunc(Math.random()*(3 + extra));		  
 
 		  if (rand == 0) {
 		    return "n";

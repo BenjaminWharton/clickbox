@@ -178,7 +178,7 @@ class PentagonButton extends GameButton {
 		  GenerateLevel (size*size);                 //////////////////////////////////////////////////////////// Level 3
 	    } else if (Level == 4) {                       //////////////////////////////////////////////////////////// Level 4
 		  for ( let i = 0; i < GameButtons.length; i++) {
-		      GameButtons[i].changeFactor(RandomFactor(true));
+		      GameButtons[i].changeFactor(RandomFactor(1));
 		  }
 		  GenerateLevel (size*size);                 //////////////////////////////////////////////////////////// Level 4
 	    } else if (Level == 5) {                       //////////////////////////////////////////////////////////// Level 5
@@ -189,7 +189,7 @@ class PentagonButton extends GameButton {
 	    } else if (Level == 6) {                       //////////////////////////////////////////////////////////// Level 6
 		  for ( let i = 0; i < GameButtons.length; i++) {
 		      GameButtons[i].maxClicks = 3;
-			  GameButtons[i].changeFactor(RandomFactor(true));
+			  GameButtons[i].changeFactor(RandomFactor(1));
 		  }
 		  GenerateLevel (size*size*1.5);                 //////////////////////////////////////////////////////////// Level 6
 	    } else if (Level == 7) {                       //////////////////////////////////////////////////////////// Level 7
@@ -200,7 +200,7 @@ class PentagonButton extends GameButton {
 	    } else if (Level == 8) {                       //////////////////////////////////////////////////////////// Level 8
 		  for ( let i = 0; i < GameButtons.length; i++) {
 		      GameButtons[i].maxClicks = 4;
-			  GameButtons[i].changeFactor(RandomFactor(true));
+			  GameButtons[i].changeFactor(RandomFactor(1));
 		  }
 		  GenerateLevel (size*size*2);                 //////////////////////////////////////////////////////////// Level 8
 		} else {

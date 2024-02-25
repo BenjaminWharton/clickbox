@@ -272,12 +272,8 @@ class GameButton {
       }
     }
 
-      randomWall(none = false) {
-	      if (none == false) {
-		      let rand = Math.trunc(Math.random()*4);		  
-		  } else {
-		      let rand = Math.trunc(Math.random()*5);			  
-		  }
+      randomWall(extra = 0) {
+		  let rand = Math.trunc(Math.random()*(4 + extra));	// "extra" decreases the chance of getting a wall
 
 		  if (rand == 0) {
 		    return "n";
@@ -843,11 +839,9 @@ function BtnMouseLeave(btn)  {
 	}	  
 }
 
-function RandomFactor( none = false) {
-    let rand = Math.trunc(Math.random()*3);	
-	if (none == true) {
-      rand = Math.trunc(Math.random()*4);		
-	}
+function RandomFactor( extra = 0) {
+    let rand = Math.trunc(Math.random()*(4 + extra));		
+
     if (rand == 0) {
         return 0;
     } else if (rand == 1) {
@@ -879,7 +873,6 @@ function RandomFactor( none = false) {
 		  CycleButtons[i].locked = false;
 		}
 	  }
-
 
       function GenerateLevel(Clicks) {
 	    InitializeButtonGroups();
@@ -980,8 +973,7 @@ function RandomFactor( none = false) {
 		  }
 		}
         GenerateRandomClicks (Clicks - clicks);
-	  }
-	  
+	  }	  
 
       function GenerateLevelNum (Level) {
 	    if (Level < 0) {
@@ -1071,7 +1063,7 @@ function RandomFactor( none = false) {
 		  GenerateLevel(size*size/2);	 ///////////////////////////////////////////////////////////////////// Level 8	  
 		} else if (Level == 9) {             ///////////////////////////////////////////////////////////////////// Level 9
 		  for (let i = 0; i < GameButtons.length; i++) {
-		    let type = RandomFactor(true);
+		    let type = RandomFactor(1);
 		    GameButtons[i].changeFactor(type);		  
 		  }          		
 		  GenerateLevel(size*size/2);	 ///////////////////////////////////////////////////////////////////// Level 9
