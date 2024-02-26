@@ -1,3 +1,7 @@
+/* This source code is copyrighted by Benjamin Wharton 2023. */
+
+
+
 
 var size = 5;
 var GameButtons = [];
