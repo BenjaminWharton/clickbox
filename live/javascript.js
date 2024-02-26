@@ -274,7 +274,7 @@ class GameButton {
       }
     }
 
-      randomWall(extra = 0) {
+    randomWall(extra = 0) {
 		  let rand = Math.trunc(Math.random()*(4 + extra));	// "extra" decreases the chance of getting a wall
 
 		  if (rand == 0) {
@@ -290,7 +290,7 @@ class GameButton {
 		  }
 	  }	 
 
-      addCycle (String) {
+    addCycle (String) {
 		  let btn = this;
 		  let str = btn.cycles;
 		  let idNum = null;
@@ -388,41 +388,41 @@ class GameButton {
 			    CycleButtons.push(neCycle);	
 		    }
 		}
-	    if (btn.cycles.includes("s") == true &&
-		    btn.cycles.includes("w") == true) {
-		    if (str.includes("s") == false ||
-		        str.includes("w") == false) {
-			    let swCycle = new GameButton(btn.offsetx - 100, btn.offsety - 100*(-1));
-			    swCycle.background.classList.add("cycle");
-			    swCycle.svgBase.classList.add("cycle");
-                swCycle.counterpart = GameButtons[size - 1];
-			    GameButtons[size - 1].counterparts.push(swCycle);
-			    swCycle.svgBase.setAttribute("viewBox", (swCycle.offsetx*(-1.5) - 25) + " " + (swCycle.offsety*(-1.5) - 25) + " 150 150");
-			    swCycle.svgL.setAttribute("viewBox", "0 0 150 150");
-			    swCycle.svgV.setAttribute("viewBox", "16 16 100 100");
-			    swCycle.svgM.setAttribute("viewBox", "16 16 100 100");
-			    CycleButtons.push(swCycle);	
+    if (btn.cycles.includes("s") == true &&
+		btn.cycles.includes("w") == true) {
+        if (str.includes("s") == false ||
+		    str.includes("w") == false) {
+			let swCycle = new GameButton(btn.offsetx - 100, btn.offsety - 100*(-1));
+			swCycle.background.classList.add("cycle");
+			swCycle.svgBase.classList.add("cycle");
+            swCycle.counterpart = GameButtons[size - 1];
+			GameButtons[size - 1].counterparts.push(swCycle);
+			swCycle.svgBase.setAttribute("viewBox", (swCycle.offsetx*(-1.5) - 25) + " " + (swCycle.offsety*(-1.5) - 25) + " 150 150");
+			swCycle.svgL.setAttribute("viewBox", "0 0 150 150");
+			swCycle.svgV.setAttribute("viewBox", "16 16 100 100");
+			swCycle.svgM.setAttribute("viewBox", "16 16 100 100");
+			CycleButtons.push(swCycle);	
+		}
+	}
+    if (btn.cycles.includes("s") == true &&
+        btn.cycles.includes("e") == true) {
+        if (str.includes("s") == false ||
+            str.includes("e") == false) {
+            let seCycle = new GameButton(btn.offsetx - 100*(-1), btn.offsety - 100*(-1));
+            seCycle.background.classList.add("cycle");
+            seCycle.svgBase.classList.add("cycle");
+            seCycle.counterpart = GameButtons[0];
+            GameButtons[0].counterparts.push(seCycle);
+            seCycle.svgBase.setAttribute("viewBox", (seCycle.offsetx*(-1.5) - 25) + " " + (seCycle.offsety*(-1.5) - 25) + " 150 150");
+            seCycle.svgL.setAttribute("viewBox", "0 0 150 150");
+            seCycle.svgV.setAttribute("viewBox", "16 16 100 100");
+            seCycle.svgM.setAttribute("viewBox", "16 16 100 100");
+            CycleButtons.push(seCycle);	
 		    }
 		}
-	    if (btn.cycles.includes("s") == true &&
-		    btn.cycles.includes("e") == true) {
-		    if (str.includes("s") == false ||
-		        str.includes("e") == false) {
-			    let seCycle = new GameButton(btn.offsetx - 100*(-1), btn.offsety - 100*(-1));
-			    seCycle.background.classList.add("cycle");
-			    seCycle.svgBase.classList.add("cycle");
-                seCycle.counterpart = GameButtons[0];
-			    GameButtons[0].counterparts.push(seCycle);
-			    seCycle.svgBase.setAttribute("viewBox", (seCycle.offsetx*(-1.5) - 25) + " " + (seCycle.offsety*(-1.5) - 25) + " 150 150");
-			    seCycle.svgL.setAttribute("viewBox", "0 0 150 150");
-			    seCycle.svgV.setAttribute("viewBox", "16 16 100 100");
-			    seCycle.svgM.setAttribute("viewBox", "16 16 100 100");
-			    CycleButtons.push(seCycle);	
-		    }
-		}
-	  }	  
+    }	
 	
-}
+} // GameButton
 
 function AddSVGPoint(svg, rect, x, y) {
 	let point = svg.createSVGPoint();	
@@ -667,7 +667,9 @@ function ScaleMove(e) {
 function ScaleGrid(amount) {
 	let grid = document.getElementById("grid-container");
     let boundStart = document.getElementById("grid-container").getBoundingClientRect();
-
+	let width = 0;
+	let height = 0;
+	
 	if (GridScale + amount < GridMaxScale) {
 	    GridScale = GridScale + amount;	
 	} else {
@@ -677,7 +679,8 @@ function ScaleGrid(amount) {
 	    GridScale = GridMinScale;
 	}
 
-	grid.style.width = 100*GridScale + "%";	
+	grid.style.width = 100*GridScale + "%";
+	grid.style.height = 84*GridScale + "%";
 
     let boundEnd = document.getElementById("grid-container").getBoundingClientRect();	
 
@@ -709,6 +712,7 @@ function TranslateMove(e) {
 
 function TranslateGrid(x, y) {
 	let grid = document.getElementById("grid-container");
+	let demobounds = document.getElementById("demo").getBoundingClientRect();
 	let bounds = document.getElementById("grid-container").getBoundingClientRect();
 	let width = 0;
 	let height = 0;
@@ -720,25 +724,28 @@ function TranslateGrid(x, y) {
         height = document.documentElement.clientHeight;
 	}
 
+		width = demobounds.width;
+        height = demobounds.height;
+
 		GridOffsetX = GridOffsetX + x;	
 		GridOffsetY = GridOffsetY + y;	
 
-    if (GridOffsetX > width*0.7) {
-		GridOffsetX = width*0.7;
+    if (GridOffsetX > width*0.6) {
+		GridOffsetX = width*0.6;
 	}
-    if (GridOffsetX < bounds.width*(-1) + (width*0.3)) {
-		GridOffsetX = bounds.width*(-1) + width*(0.3);
+    if (GridOffsetX < bounds.width*(-1) + (width*0.4)) {
+		GridOffsetX = bounds.width*(-1) + width*(0.4);
 	}
-    if (GridOffsetY > height*0.7) {
-		GridOffsetY = height*0.7;
+    if (GridOffsetY > height*0.64) {
+		GridOffsetY = height*0.64;
 	}
-    if (GridOffsetY < bounds.height*(-1) + (height*0.3)) {
-		GridOffsetY = bounds.height*(-1) + height*(0.3);
+    if (GridOffsetY < bounds.height*(-1) + (height*0.36) + demobounds.top) {
+		GridOffsetY = bounds.height*(-1) + (height*0.36) + demobounds.top;
 
 	}
 	
 	grid.style.left = GridOffsetX + "px";
-	grid.style.top = GridOffsetY + "px";
+	grid.style.top = GridOffsetY + demobounds.top + "px";
 }
 
       function BtnLeftClick(btn)  {
@@ -771,7 +778,6 @@ function TranslateGrid(x, y) {
 		}  
 		VictoryCheck();
 	  }
-
 
 	  function BtnRightClick(btn) {
 	    let img = normalColor;
@@ -1200,30 +1206,22 @@ function RandomFactor( extra = 0) {
 	  }
 
 function InitializeGrid() {
-		document.getElementById("new-level").innerHTML = "New Level";
-		if (parseInt(document.getElementById("level-size").value) < 3){
-		  document.getElementById("level-size").value = 3;
-		}
-		if (parseInt(document.getElementById("level-size").value) > 20){
-		  document.getElementById("level-size").value = 20;
-		}
-	  	size = parseInt(document.getElementById("level-size").value); 
-		let grid = document.createElementNS("http://www.w3.org/2000/svg", 'svg');		
-		grid.setAttribute("viewBox", "0 0 " + (size + 2)*100 + " " + (size + 2)*100);
-		grid.style.left = "0px";
-		grid.style.width = "100%";
-		grid.style.height = "auto";
-		grid.id = "grid-container";
-        GridScale = 1;
-        GridMaxScale = ((size+2))/4;
-		document.getElementById("demo").appendChild(grid);
-		let height = 0;
-	if (window.innerWidth != null) {
-		height = window.innerHeight;
-	} else {
-        height = document.documentElement.clientHeight;
+	document.getElementById("new-level").innerHTML = "New Level";
+	if (parseInt(document.getElementById("level-size").value) < 3){
+	  document.getElementById("level-size").value = 3;
 	}
-		TranslateGrid(0, height/5);	
+	if (parseInt(document.getElementById("level-size").value) > 20){
+		document.getElementById("level-size").value = 20;
+	}
+	size = parseInt(document.getElementById("level-size").value); 
+	let grid = document.createElementNS("http://www.w3.org/2000/svg", 'svg');		
+	grid.setAttribute("viewBox", "0 0 " + (size + 2)*100 + " " + (size + 2)*100);
+    grid.style.width = 100*GridScale + "%";
+	grid.style.height = 84*GridScale + "%";
+	grid.id = "grid-container";
+    GridScale = 1;
+    GridMaxScale = ((size+2))/4;
+	document.getElementById("demo").appendChild(grid);
 }
 	  
 	  function NewLevel(){
