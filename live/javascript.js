@@ -805,11 +805,11 @@ function ClearButton (btn) {
         ModifyButtonGroup(btn, btn.clicks);
     }	  
     btn.clicks = 0;
-    btn.background.style.fill = normalColor;
-    btn.lockVis.style.fill = normalColor;
+    btn.background.style.fill = clickedColors[0];
+    btn.lockVis.style.fill = clickedColors[0];
     for (let i = 0; i < btn.counterparts.length; i++) {
-        btn.counterparts[i].background.style.fill = normalColor;
-        btn.counterparts[i].lockVis.style.fill = normalColor;
+        btn.counterparts[i].background.style.fill = clickedColors[0];
+        btn.counterparts[i].lockVis.style.fill = clickedColors[0];
     }
 }	
 
@@ -1205,6 +1205,9 @@ function InitializeGrid() {
 	}
 	if (parseInt(document.getElementById("level-size").value) > 20){
 		document.getElementById("level-size").value = 20;
+	}
+	if (parseInt(document.getElementById("level-number").value) > parseInt(document.getElementById("level-number").max)){
+		document.getElementById("level-number").value = parseInt(document.getElementById("level-number").max);
 	}
 	size = parseInt(document.getElementById("level-size").value); 
 	let grid = document.createElementNS("http://www.w3.org/2000/svg", 'svg');		

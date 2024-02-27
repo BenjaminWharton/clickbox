@@ -207,13 +207,13 @@ class TriangleButton extends GameButton {
 }	  
   
 
-      function GenerateLevelNum (Level) {
+      function GenerateLevelNum (Level, Clicks) {
         if (Level == 1) {                      /////////////////// Level 1
-		  GenerateLevel(size*size/5);		
+		  GenerateLevel(size*size*(Clicks/5));		
 		} else if (Level == 2) {	           ////////////////// Level 2
-		  GenerateLevel(size*size/3);		
+		  GenerateLevel(size*size*(Clicks/3));		
 		} else if (Level == 3) {              ////////////////// Level 3
-		  GenerateLevel(size*size/2);		
+		  GenerateLevel(size*size*(Clicks/2));		
 		} else if (Level == 4) {              ////////////////// Level 4
 		  let rand = RandomFactor();
 		  for (i = 0; i < GameButtons.length; i++) {
@@ -222,19 +222,19 @@ class TriangleButton extends GameButton {
 			  gbtn.changeFactor(rand);
 			}
 		  }
-		  GenerateLevel(size*size/2);  //////////////// Level 4
+		  GenerateLevel(size*size*(Clicks/2));  //////////////// Level 4
 		} else if (Level == 5) {              //////////////// Level 5
 		  let rand = RandomFactor();
 		  for (i = 0; i < GameButtons.length; i++) {
 			GameButtons[i].changeFactor(rand);
 		  }
-		  GenerateLevel(size*size/2); ///////////////// Level 5
+		  GenerateLevel(size*size*(Clicks/2)); ///////////////// Level 5
 		} else if (Level == 6) {              //////////////// Level 6
 		  for (i = 0; i < GameButtons.length; i++) {
 		  	let rand = RandomFactor();
 			GameButtons[i].changeFactor(rand);
 		  }
-		  GenerateLevel(size*size/2); ///////////////// Level 6
+		  GenerateLevel(size*size*(Clicks/2)); ///////////////// Level 6
 		} else if (Level == 7) {              //////////////// Level 7
 		  let rand = Math.trunc(Math.random()*2) + 3;
 		  for (i = 0; i < GameButtons.length; i++) {
@@ -244,26 +244,26 @@ class TriangleButton extends GameButton {
               rand = Math.trunc(Math.random()*2) + 3;			  
 			}
 		  }
-		  GenerateLevel(size*size/2); ///////////////// Level 7
+		  GenerateLevel(size*size*(Clicks/2)); ///////////////// Level 7
 		} else if (Level == 8) {              //////////////// Level 8
 		  for (i = 0; i < GameButtons.length; i++) {
             if (GameButtons[i].facing == "down") {
 			  GameButtons[i].addWall(GameButtons[i].randomWall());		
 			}
 		  }
-		  GenerateLevel(size*size/2); ///////////////// Level 8
+		  GenerateLevel(size*size*(Clicks/2)); ///////////////// Level 8
 		} else if (Level == 9) {              //////////////// Level 9
 		  let rand = GameButtons[0].randomWall();
 		  for (i = 0; i < GameButtons.length; i++) {
 			  GameButtons[i].addWall(rand);	
 		  }
-		  GenerateLevel(size*size/2); ///////////////// Level 9
+		  GenerateLevel(size*size*(Clicks/2)); ///////////////// Level 9
 		} else if (Level == 10) {              //////////////// Level 10
 		  for (i = 0; i < GameButtons.length; i++) {
 		      GameButtons[i].changeFactor(RandomFactor(2));	
 			  GameButtons[i].addWall(GameButtons[i].randomWall(2));
 		  }
-		  GenerateLevel(size*size/2); ///////////////// Level 10
+		  GenerateLevel(size*size*(Clicks/2)); ///////////////// Level 10
 		} else {
 		  InitializeButtonGroups();
 		}
@@ -272,9 +272,14 @@ class TriangleButton extends GameButton {
 	  function NewLevel(){
 	    let rand = 0;
 		let i = 0;
-		let clicks = 0;
+		let clicks = 1;
         DestroyGrid();
         InitializeGrid();
+		let levelNum = document.getElementById("level-number").value;
+		while (levelNum > 10) {
+		    levelNum = levelNum - 10;
+			clicks++
+		}
 		i = 0;
 	    for (let y = 0; y < size; y++) {	
           for (let x = 0; x < 1 + y*2; x++){
@@ -287,7 +292,10 @@ class TriangleButton extends GameButton {
 	      }  
 	      x = 0;
         }
-		GenerateLevelNum(document.getElementById("level-number").value);
+		for (i = 0; i < GameButtons.length; i++) {
+		    GameButtons[i].maxClicks = clicks;
+		}
+		GenerateLevelNum(levelNum, clicks);
       }	  
 
     </script>
@@ -309,7 +317,7 @@ class TriangleButton extends GameButton {
 	  <div>
 	    <div class="level-num-div">
 		  <p class="size-num-text">Number</p>
-	      <input type="number" class="level-number" id="level-number" value="1" min="0" max="10">		
+	      <input type="number" class="level-number" id="level-number" value="1" min="0" max="40">
 		</div>
 	    <button class="new-level" id="new-level" onclick="NewLevel()" >New Level</button>
 		<div class="level-size-div">
