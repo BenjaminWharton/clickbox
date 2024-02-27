@@ -861,26 +861,33 @@ function RandomFactor( extra = 0) {
     }
 }
 
-      function GenerateRandomClicks(Clicks) {
-	    let clicks = Clicks;
-        while (clicks > 0){
-		  btn = GameButtons[Math.floor(Math.random() * GameButtons.length)];
-	      if (btn.clicks < btn.maxClicks &&
-		      btn.locked == false) {
-            ModifyButtonGroup (btn, 1);
-            btn.clicks = btn.clicks + 1;  
-		    clicks--;
-          }		  
-        }
-	    for (let i = 0; i < GameButtons.length; i++){
-	      GameButtons[i].clicks = 0;
-		  GameButtons[i].locked = false;
-        }
-		for (let i = 0; i < CycleButtons.length; i++) {
-		  CycleButtons[i].clicks = 0;
-		  CycleButtons[i].locked = false;
-		}
-	  }
+function GenerateRandomClicks(Clicks) {
+    let clicks = Clicks;
+    while (clicks > 0){
+	    btn = GameButtons[Math.floor(Math.random() * GameButtons.length)];
+	    if (btn.locked == false) {
+            if (btn.clicks < btn.maxClicks) {
+                ModifyButtonGroup (btn, 1);
+                btn.clicks = btn.clicks + 1;  
+	            clicks--;
+            }					  
+	    } else {
+            if (btn.clicks < btn.maxClicks - 1) {
+                ModifyButtonGroup (btn, 1);
+                btn.clicks = btn.clicks + 1;  
+	            clicks--;
+            }					
+		}  
+    }
+    for (let i = 0; i < GameButtons.length; i++){
+        GameButtons[i].clicks = 0;
+	    GameButtons[i].locked = false;
+       }
+	for (let i = 0; i < CycleButtons.length; i++) {
+	    CycleButtons[i].clicks = 0;
+	    CycleButtons[i].locked = false;
+	}
+}
 
       function GenerateLevel(Clicks) {
 	    InitializeButtonGroups();
@@ -983,13 +990,13 @@ function RandomFactor( extra = 0) {
         GenerateRandomClicks (Clicks - clicks);
 	  }	  
 
-      function GenerateLevelNum (Level) {
+      function GenerateLevelNum (Level, Clicks) {
 	    if (Level == 1) {                              //////////////////////////////////////////////////////////// Level 1
-		  GenerateLevel (size*size/5);             //////////////////////////////////////////////////////////// Level 1
+		  GenerateLevel (size*size*(Clicks/5));             //////////////////////////////////////////////////////////// Level 1
 		} else if (Level == 2) {                       //////////////////////////////////////////////////////////// Level 2
-		  GenerateMediumLevel (size*size/3);           //////////////////////////////////////////////////////////// Level 2
+		  GenerateMediumLevel (size*size*(Clicks/3));           //////////////////////////////////////////////////////////// Level 2
 		} else if (Level == 3) {                       //////////////////////////////////////////////////////////// Level 3
-		  GenerateHardLevel (size*size/2);             //////////////////////////////////////////////////////////// Level 3
+		  GenerateHardLevel (size*size*(Clicks/2));             //////////////////////////////////////////////////////////// Level 3
 		} else if (Level == 4) {                       //////////////////////////////////////////////////////////// Level 4
 		    let type = RandomFactor();
             for (let i = 0; i < size; i++) {                                         // top
@@ -1004,7 +1011,7 @@ function RandomFactor( extra = 0) {
             for (let i = size - 1; i < size*size; i = i + size) {                    // right
 		      GameButtons[i].changeFactor(type);
 			}
-		    GenerateLevel (size*size/2);		////////////////////////////////////////////////////////////// Level 4	
+		    GenerateLevel (size*size*(Clicks/2));		////////////////////////////////////////////////////////////// Level 4	
 		} else if (Level == 5) {   		            ////////////////////////////////////////////////////////////// Level 5
 		  let type = RandomFactor();
 		  for (let x = 0; x < parseInt(size/2 - 1); x = x + 3) {
@@ -1027,13 +1034,13 @@ function RandomFactor( extra = 0) {
 		      GameButtons[y].changeFactor(type);
 		    }
 		  }
-		  GenerateHardLevel (size*size/2);		  
+		  GenerateHardLevel (size*size*(Clicks/2));		  
 	    } else if (Level == 6)   {              /////////////////////////////////////////////////////////////////// Level 5
 		  let type = RandomFactor();      /////////////////////////////////////////////////////////////////// Level 6
 		  for (let i = 0; i < GameButtons.length; i++) {
 		    GameButtons[i].changeFactor(type);		  
 		  }
-		  GenerateLevel(size*size/2);       //////////////////////////////////////////////////////////////////// Level 6
+		  GenerateLevel(size*size*(Clicks/2));       //////////////////////////////////////////////////////////////////// Level 6
 		} else if (Level == 7) {                 /////////////////////////////////////////////////////////////////// Level 7
 		  let type = RandomFactor();
 		  for (let x = 0; x < size; x = x + 2) {
@@ -1041,7 +1048,7 @@ function RandomFactor( extra = 0) {
 		      GameButtons[y].changeFactor(type);
 		    }
 	  	  }	
-          GenerateLevel (size*size/2);		/////////////////////////////////////////////////////////////////// Level 7
+          GenerateLevel (size*size*(Clicks/2));		/////////////////////////////////////////////////////////////////// Level 7
 		} else if (Level == 8) {                /////////////////////////////////////////////////////////////////// Level 8
 		  let type = RandomFactor();
 		  let bool = 1;
@@ -1065,13 +1072,13 @@ function RandomFactor( extra = 0) {
 			}
 			y = 0;
 		  }          
-		  GenerateLevel(size*size/2);	 ///////////////////////////////////////////////////////////////////// Level 8	  
+		  GenerateLevel(size*size*(Clicks/2));	 ///////////////////////////////////////////////////////////////////// Level 8	  
 		} else if (Level == 9) {             ///////////////////////////////////////////////////////////////////// Level 9
 		  for (let i = 0; i < GameButtons.length; i++) {
 		    let type = RandomFactor(1);
 		    GameButtons[i].changeFactor(type);		  
 		  }          		
-		  GenerateLevel(size*size/2);	 ///////////////////////////////////////////////////////////////////// Level 9
+		  GenerateLevel(size*size*(Clicks/2));	 ///////////////////////////////////////////////////////////////////// Level 9
 		} else if (Level == 10) {             ///////////////////////////////////////////////////////////////////// Level 10   		
 		  for (let x = 1; x < parseInt(size/2); x = x + 3) {
             for (let y = size*(x+1); y < size*(x+2); y++) {                             // top
@@ -1093,7 +1100,7 @@ function RandomFactor( extra = 0) {
 			  GameButtons[y].addWall("w");
 		    }
 		  }			  
-		  GenerateHardLevel(size*size/2);	 ///////////////////////////////////////////////////////////////////// Level 10	
+		  GenerateHardLevel(size*size*(Clicks/2));	 ///////////////////////////////////////////////////////////////////// Level 10	
 		} else if (Level == 11) {             ///////////////////////////////////////////////////////////////////// Level 11 		
 		  let i = Math.trunc(Math.random()*4);
 		  for (let x = 0; x < GameButtons.length; x++) {
@@ -1109,7 +1116,7 @@ function RandomFactor( extra = 0) {
               i = 0;			  
 			}
 	  	  }			  
-		  GenerateLevel(size*size/2);	 ///////////////////////////////////////////////////////////////////// Level 11
+		  GenerateLevel(size*size*(Clicks/2));	 ///////////////////////////////////////////////////////////////////// Level 11
 		} else if (Level == 12) {             ///////////////////////////////////////////////////////////////////// Level 12
 		  for (let i = 0; i < GameButtons.length; i++) {
 		    let type = RandomFactor();
@@ -1131,7 +1138,7 @@ function RandomFactor( extra = 0) {
 			  GameButtons[i].addWall("w");			  
 			}
 	  	  }			  
-		  GenerateLevel(size*size/2);	 ///////////////////////////////////////////////////////////////////// Level 12
+		  GenerateLevel(size*size*(Clicks/2));	 ///////////////////////////////////////////////////////////////////// Level 12
 		} else if (Level == 13) {             //////////////////////////////////////////////////////////////////// Level 13
           CycleEdges ("nsew");
 		  for (let i = Math.trunc(size/2) - 1; i < size*size; i = i + size) {
@@ -1142,7 +1149,7 @@ function RandomFactor( extra = 0) {
 		    GameButtons[i].addWall("s");
 			GameButtons[i + size].addWall("n");
 		  }
-		  GenerateLevel(size*size/2);	 ///////////////////////////////////////////////////////////////////// Level 13
+		  GenerateLevel(size*size*(Clicks/2));	 ///////////////////////////////////////////////////////////////////// Level 13
 		} else if (Level == 14) {             //////////////////////////////////////////////////////////////////// Level 14
           let rand = Math.trunc(Math.random()*2);		  
 		    if (rand == 1){
@@ -1150,7 +1157,7 @@ function RandomFactor( extra = 0) {
 			} else {
               CycleEdges ("ew");			
 			}
-		  GenerateLevel(size*size/2);	 ///////////////////////////////////////////////////////////////////// Level 14
+		  GenerateLevel(size*size*(Clicks/2));	 ///////////////////////////////////////////////////////////////////// Level 14
 		} else if (Level == 15) {             //////////////////////////////////////////////////////////////////// Level 15
           let rand = Math.trunc(Math.random()*4);
 		    if (rand == 1){
@@ -1162,10 +1169,10 @@ function RandomFactor( extra = 0) {
 			} else {
               CycleEdges ("se");
 			}
-		  GenerateLevel(size*size/2);	 ///////////////////////////////////////////////////////////////////// Level 15
+		  GenerateLevel(size*size*(Clicks/2));	 ///////////////////////////////////////////////////////////////////// Level 15
 		} else if (Level == 16) {             //////////////////////////////////////////////////////////////////// Level 16
           CycleEdges ("nsew");
-		  GenerateLevel(size*size/2);	 ///////////////////////////////////////////////////////////////////// Level 16
+		  GenerateLevel(size*size*(Clicks/2));	 ///////////////////////////////////////////////////////////////////// Level 16
 		} else if (Level == 17) {             //////////////////////////////////////////////////////////////////// Level 17
 		  let type = RandomFactor();
 		  for (let x = 1; x < parseInt(size/2); x = x + 3) {
@@ -1189,17 +1196,30 @@ function RandomFactor( extra = 0) {
 		    }
 		  }	
           CycleEdges ("nsew");
-		  GenerateLevel(size*size/2);	 ///////////////////////////////////////////////////////////////////// Level 17
+		  GenerateLevel(size*size*(Clicks/2));	 ///////////////////////////////////////////////////////////////////// Level 17
 		} else if (Level == 18) {             //////////////////////////////////////////////////////////////////// Level 18
+		  for (let i = 0; i < size*size; i++) {
+		    GameButtons[i].addWall(GameButtons[i].randomWall(6));
+		  }
+          CycleEdges ("nsew");
+		  GenerateLevel(size*size*(Clicks/2));	 ///////////////////////////////////////////////////////////////////// Level 18
+		} else if (Level == 19) {             //////////////////////////////////////////////////////////////////// Level 19
 		  let type = RandomFactor();
 		  for (let i = 0; i < size*size; i++) {
 		    GameButtons[i].changeFactor(type);
 		  }
           CycleEdges ("nsew");
-		  GenerateLevel(size*size/2);	 ///////////////////////////////////////////////////////////////////// Level 18
+		  GenerateLevel(size*size*(Clicks/2));	 ///////////////////////////////////////////////////////////////////// Level 19
+		} else if (Level == 20) {             //////////////////////////////////////////////////////////////////// Level 20
+		  for (let i = 0; i < size*size; i++) {
+			GameButtons[i].addWall(GameButtons[i].randomWall(6));
+		    GameButtons[i].changeFactor(RandomFactor(3));
+		  }
+          CycleEdges ("nsew");
+		  GenerateLevel(size*size*(Clicks/2));	 ///////////////////////////////////////////////////////////////////// Level 20
 		} else {
 		  InitializeButtonGroups();
-		}	  
+		}	
 	  }
 
 function InitializeGrid() {
@@ -1227,21 +1247,15 @@ function InitializeGrid() {
 	  function NewLevel(){
 		let xOffset = 0;
 		let yOffset = 0;
+		let clicks = 1;
 		let skew = false;
         DestroyGrid();
-		document.getElementById("new-level").innerHTML = "New Level";
-		if (parseInt(document.getElementById("level-number").value) < 0){
-		  skew = true;
-		  document.getElementById("level-number").value = document.getElementById("level-number").value*(-1);
-		}
-		if (parseInt(document.getElementById("level-size").value) < 3){
-		  document.getElementById("level-size").value = 3;
-		}
-		if (parseInt(document.getElementById("level-size").value) > 30){
-		  document.getElementById("level-size").value = 30;
-		}
-	  	size = parseInt(document.getElementById("level-size").value);
         InitializeGrid();
+		let levelNum = document.getElementById("level-number").value;
+		while (levelNum > 20) {
+		    levelNum = levelNum - 20;
+			clicks++
+		}
 	    for (let y = 0; y < size; y++) {
           if (skew == true && y%2 == 0 ) {  /////////////////////////////////////////////////////// adds a skew to the grid if skew is true
 		    xOffset = 50;
@@ -1252,8 +1266,11 @@ function InitializeGrid() {
 			GameButtons.push(new GameButton(100*x + xOffset + 100, y*100 + yOffset + 100));
 	      }  
 	      x = 0;
-        }		
-		GenerateLevelNum (document.getElementById("level-number").value);
+        }
+		for (i = 0; i < GameButtons.length; i++) {
+		    GameButtons[i].maxClicks = clicks;
+		}		
+		GenerateLevelNum (levelNum, clicks);
 		for (i = 0; i < CycleButtons.length; i++) {
 		  let cbtn = CycleButtons[i];
 		  cbtn.changeFactor(cbtn.counterpart.factor);
