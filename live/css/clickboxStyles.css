@@ -227,6 +227,10 @@ body {
   text-shadow: 0px 0px 2px #fff, 0px 0px 10px #002060, 0px 0px 10px #002060, 0px 0px 10px #002060 !important;
 }
 
+.btn-negative {
+  fill: #FF0000 !important;
+}
+
 .bottom {
   display: none;
 }

@@ -27,12 +27,8 @@ var LastTranslatePointY = 0;
 var GridOffsetX = 0;
 var GridOffsetY = 0;
 
-const normalColor = "#CFD7D7";
+const clickedColors = ["#CFD7D7", "#22c976", "#00FFFF", "#FF00FF", "#FF4040"]
 const lockedColor = "#A0A5A5";
-const clickedColor = "#22c976";
-const doubledColor = "#00FFFF";
-const tripledColor = "#FF00FF";
-const quadrupledColor = "#FF4040";
 const modifierColor0 = "#FFFF40";
 const modifierColor1 = "#0000";
 const modifierColor2 = "#FF8040";
@@ -506,6 +502,12 @@ function CycleEdges (String) {
   }
 }
 
+function InitializeButtonGroups()  {
+    for (let i = 0; i < GameButtons.length; i++) {
+        GameButtons[i].defineArea();
+	}
+}
+
 function ModifyButton(btn,Amount){
   btn.value.innerHTML = parseInt(btn.value.innerHTML) + Amount;
   if (btn.value.innerHTML == 0){
@@ -525,13 +527,6 @@ function ModifyButton(btn,Amount){
 	cbtn.value.style.fill = btn.value.style.fill;
   }
 }
-
-function InitializeButtonGroups()  {
-    for (let i = 0; i < GameButtons.length; i++) {
-        GameButtons[i].defineArea();
-	}
-}
-
 
 	  function ModifyButtonGroup (btn, Amount)  {
         for (let i = 0; i < btn.affectedButtons.length; i++) {
@@ -758,29 +753,21 @@ function TranslateGrid(x, y) {
 		  } else {
 			  value = -1;
 		  }
-		  if (btn.clicks == 0) {
-			  btn.background.style.fill = normalColor;
-			  btn.lockVis.style.fill = normalColor;
-		  } else if (btn.clicks == 1) {
-			  btn.background.style.fill = clickedColor;
-			  btn.lockVis.style.fill = clickedColor;
-		  } else if (btn.clicks == 2) {
-			  btn.background.style.fill = doubledColor;
-			  btn.lockVis.style.fill = doubledColor;
-		  } else if (btn.clicks == 3) {
-			  btn.background.style.fill = tripledColor;
-			  btn.lockVis.style.fill = tripledColor;
-		  } else if (btn.clicks >= 4) {
-			  btn.background.style.fill = quadrupledColor;
-			  btn.lockVis.style.fill = quadrupledColor;
+          if (btn.clicks <= clickedColors.length) {
+              btn.background.style.fill = clickedColors[btn.clicks];
+		      btn.lockVis.style.fill = clickedColors[btn.clicks];	 
+		  } else {
+              btn.background.style.fill = clickedColors[-1];
+		      btn.lockVis.style.fill = clickedColors[-1];			  
 		  }
           ModifyButtonGroup(btn, value);
+		  BtnMouseEnter(btn);
 		}  
 		VictoryCheck();
 	  }
 
 	  function BtnRightClick(btn) {
-	    let img = normalColor;
+	    let img = clickedColors[0];
 		
 		if (btn.locked == false) {
 		    btn.locked = true;
@@ -802,7 +789,7 @@ function TranslateGrid(x, y) {
 		    btn.background.style.fill = lockedColor;
 		} else if (btn.clicks == 0 &&
 		           btn.locked == false) {
-			btn.background.style.fill = normalColor;
+			btn.background.style.fill = clickedColors[0];
 		}
 		btn.lockVis.style.fill = img;
 
@@ -837,6 +824,11 @@ function BtnMouseEnter(btn)  {
 	}
 	for (let i = 0; i < btn.affectedButtons.length; i++) {
 		btn.affectedButtons[i].value.classList.add("btn-group");
+		if (btn.affectedButtons[i].value.innerHTML < 0) {
+			btn.affectedButtons[i].value.classList.add("btn-negative");	
+		} else {
+			btn.affectedButtons[i].value.classList.remove("btn-negative");
+		}
 	}
 }
 
@@ -844,6 +836,7 @@ function BtnMouseLeave(btn)  {
 	btn.background.classList.remove("background-selected");
 	for (let i = 0; i < btn.affectedButtons.length; i++) {
 		btn.affectedButtons[i].value.classList.remove("btn-group");
+	    btn.affectedButtons[i].value.classList.remove("btn-negative");		
 	}	  
 }
 
