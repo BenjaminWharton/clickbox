@@ -743,28 +743,35 @@ function TranslateGrid(x, y) {
 	grid.style.top = GridOffsetY + demobounds.top + "px";
 }
 
-      function BtnLeftClick(btn)  {
-		  let value = 0;
-		if (btn.locked == false) {
-		  btn.clicks = btn.clicks + 1;
-		  if (btn.clicks > btn.maxClicks) {
+function BtnLeftClick(btn)  {
+    let value = 0;
+    if (btn.locked == false) {
+        btn.clicks = btn.clicks + 1;
+        if (btn.clicks > btn.maxClicks) {
 		    value = btn.clicks - 1;
 			btn.clicks = 0;		
-		  } else {
+		} else {
 			  value = -1;
-		  }
+		}
           if (btn.clicks <= clickedColors.length) {
-              btn.background.style.fill = clickedColors[btn.clicks];
-		      btn.lockVis.style.fill = clickedColors[btn.clicks];	 
-		  } else {
-              btn.background.style.fill = clickedColors[-1];
-		      btn.lockVis.style.fill = clickedColors[-1];			  
-		  }
-          ModifyButtonGroup(btn, value);
-		  BtnMouseEnter(btn);
-		}  
-		VictoryCheck();
-	  }
+                btn.background.style.fill = clickedColors[btn.clicks];
+		        btn.lockVis.style.fill = clickedColors[btn.clicks];	 
+		} else {
+                btn.background.style.fill = clickedColors[-1];
+		        btn.lockVis.style.fill = clickedColors[-1];			  
+		}
+        ModifyButtonGroup(btn, value);
+	    for (let i = 0; i < btn.affectedButtons.length; i++) {
+	        btn.affectedButtons[i].value.classList.add("btn-group");
+	        if (btn.affectedButtons[i].value.innerHTML < 0) {
+	        	btn.affectedButtons[i].value.classList.add("btn-negative");	
+	        } else {
+	        	btn.affectedButtons[i].value.classList.remove("btn-negative");
+	        }
+	    }
+	}  
+	VictoryCheck();
+}
 
 	  function BtnRightClick(btn) {
 	    let img = clickedColors[0];
@@ -977,9 +984,6 @@ function RandomFactor( extra = 0) {
 	  }	  
 
       function GenerateLevelNum (Level) {
-	    if (Level < 0) {
-		  Level = Level *(-1)
-		}
 	    if (Level == 1) {                              //////////////////////////////////////////////////////////// Level 1
 		  GenerateLevel (size*size/5);             //////////////////////////////////////////////////////////// Level 1
 		} else if (Level == 2) {                       //////////////////////////////////////////////////////////// Level 2
@@ -1228,6 +1232,7 @@ function InitializeGrid() {
 		document.getElementById("new-level").innerHTML = "New Level";
 		if (parseInt(document.getElementById("level-number").value) < 0){
 		  skew = true;
+		  document.getElementById("level-number").value = document.getElementById("level-number").value*(-1);
 		}
 		if (parseInt(document.getElementById("level-size").value) < 3){
 		  document.getElementById("level-size").value = 3;
