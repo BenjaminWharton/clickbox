@@ -848,7 +848,7 @@ function BtnMouseLeave(btn)  {
 }
 
 function RandomFactor( extra = 0) {
-    let rand = Math.trunc(Math.random()*(4 + extra));		
+    let rand = Math.trunc(Math.random()*(3 + extra));		
 
     if (rand == 0) {
         return 0;

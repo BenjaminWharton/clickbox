@@ -139,6 +139,7 @@ body {
 
 #grid-container {
 	position: relative;
+	top: max(75px, 8%);
 }
 
 .size-num-text {
