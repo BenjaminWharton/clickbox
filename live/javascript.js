@@ -1249,6 +1249,10 @@ function InitializeGrid() {
 		let yOffset = 0;
 		let clicks = 1;
 		let skew = false;
+		if (parseInt(document.getElementById("level-number").value) < 0) {
+			skew = true;
+			document.getElementById("level-number").value = parseInt(document.getElementById("level-number").value)*(-1);
+		}
         DestroyGrid();
         InitializeGrid();
 		let levelNum = document.getElementById("level-number").value;
@@ -1258,9 +1262,9 @@ function InitializeGrid() {
 		}
 	    for (let y = 0; y < size; y++) {
           if (skew == true && y%2 == 0 ) {  /////////////////////////////////////////////////////// adds a skew to the grid if skew is true
-		    xOffset = 50;
+		    xOffset = 25;
 		  } else {
-    	    xOffset = 0;
+    	    xOffset = -25;
 		  }
           for (let x = 0; x < size; x++){  
 			GameButtons.push(new GameButton(100*x + xOffset + 100, y*100 + yOffset + 100));
