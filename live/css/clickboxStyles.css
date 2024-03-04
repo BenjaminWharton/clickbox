@@ -144,21 +144,21 @@ body {
 
 .size-num-text {
 	color: #FFFFFF;
-	font-size: 44px;
+	font-size: 52px;
 	display: inline;
 }
 
 .level-number {
-	height: 48px;
-	width: 90px;
-	font-size: 44px;
+	height: 54px;
+	width: 95px;
+	font-size: 46px;
 	pointer-events: auto;
 }
 
 .level-size {
-	height: 48px;
-	width: 90px;
-	font-size: 44px;
+	height: 54px;
+	width: 95px;
+	font-size: 46px;
 	pointer-events: auto;
 }
 
@@ -174,7 +174,7 @@ body {
 .level-size-div {
 	position: fixed;
     top: max(60px, 6%);
-	margin-top: 85px;
+	margin-top: 90px;
 	right: 1%;
     z-index: 10;
 	pointer-events: none;
