@@ -159,8 +159,8 @@ body {
 	
 .level-num-div {
     position: fixed;
-    top: max(60px, 6%);
-	margin-top: 30px;
+    top: max(75px, 8%);
+	margin-top: 5px;
 	right: 1%;
 	z-index: 10;
 	pointer-events: none;	
@@ -275,20 +275,20 @@ body {
  
    .scale {
 	position: fixed;
-	bottom: max(75px, 8%);
-	margin-bottom: 25px;
+	bottom: max(60px, 8%);
+	margin-bottom: 15px;
 	left: 12%;
-	width: 90px;	
-    height: 90px;	   
+	width: 85px;	
+    height: 85px;	   
    }
    
    .translate {
 	position: fixed;
-	bottom: max(75px, 8%);
-	margin-bottom: 25px;
+	bottom: max(60px, 8%);
+	margin-bottom: 15px;
 	right: 12%;
-	width: 90px;	
-    height: 90px;	   
+	width: 85px;	
+    height: 85px;	   
    }
  
   .bottom-selected {
@@ -301,7 +301,7 @@ body {
 	font-size: 50px;
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1201px) {
   .text-size {
     font-size: 40px;
   }
@@ -314,17 +314,17 @@ body {
   	width: 110px;
   }
    .scale {
-	width: 75px;	
-    height: 75px;	   
+	width: 70px;	
+    height: 70px;	   
    }
    
    .translate {
-	width: 75px;	
-    height: 75px;	   
+	width: 70px;	
+    height: 70px;	   
    }  
 }
 
-@media (max-width: 720px) {
+@media (max-width: 721px) {
   .text-size {
     font-size: 30px;
   }
@@ -338,17 +338,17 @@ body {
   }
   
    .scale {
-	width: 60px;	
-    height: 60px;	   
+	width: 55px;	
+    height: 55px;	   
    }
    
    .translate {
-	width: 60px;	
-    height: 60px;	   
+	width: 55px;	
+    height: 55px;	   
    }    
 }
 
-@media (max-width: 480px) {
+@media (max-width: 481px) {
   .text-size {
     font-size: 20px;
   }
@@ -362,12 +362,12 @@ body {
   }
   
    .scale {
-	width: 50px;	
-    height: 50px;	   
+	width: 45px;	
+    height: 45px;	   
    }
    
    .translate {
-	width: 50px;	
-    height: 50px;	   
+	width: 45px;	
+    height: 45px;	   
    }     
 }
