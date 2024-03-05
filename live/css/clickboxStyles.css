@@ -243,7 +243,7 @@ body {
 	bottom: 0%;
 	right: 0%;
 	width: 35%;
-    height: max(75px, 8%);
+    height: max(60px, 8%);
   }
 
   .clear{
@@ -255,7 +255,7 @@ body {
 	bottom: 0%;
 	left: 35%;
 	width: 30%;	
-    height: max(75px, 8%);
+    height: max(60px, 8%);
   }
   
   .lock {
@@ -267,14 +267,14 @@ body {
 	bottom: 0%;
 	left: 0%;
 	width: 35%;	
-    height: max(75px, 8%);
+    height: max(60px, 8%);
   }
  
    .scale {
 	position: fixed;
 	bottom: max(75px, 8%);
 	margin-bottom: 25px;
-	left: 15%;
+	left: 12%;
 	width: 90px;	
     height: 90px;	   
    }
@@ -283,7 +283,7 @@ body {
 	position: fixed;
 	bottom: max(75px, 8%);
 	margin-bottom: 25px;
-	right: 15%;
+	right: 12%;
 	width: 90px;	
     height: 90px;	   
    }
@@ -335,13 +335,13 @@ body {
   }
   
    .scale {
-	width: 65px;	
-    height: 65px;	   
+	width: 60px;	
+    height: 60px;	   
    }
    
    .translate {
-	width: 65px;	
-    height: 65px;	   
+	width: 60px;	
+    height: 60px;	   
    }    
 }
 
@@ -359,12 +359,12 @@ body {
   }
   
    .scale {
-	width: 55px;	
-    height: 55px;	   
+	width: 50px;	
+    height: 50px;	   
    }
    
    .translate {
-	width: 55px;	
-    height: 55px;	   
+	width: 50px;	
+    height: 50px;	   
    }     
 }
