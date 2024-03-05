@@ -150,11 +150,12 @@ body {
 
 .level-size {
 	width: 130px;
+	float: right;
 	pointer-events: auto;
 }
-
+	
 .level-num-div {
-	position: fixed;
+    position: fixed;
     top: max(60px, 6%);
 	margin-top: 30px;
 	right: 1%;
@@ -163,12 +164,7 @@ body {
 }
 
 .level-size-div {
-	position: fixed;
-    top: max(60px, 6%);
-	margin-top: 100px;
-	right: 1%;
-    z-index: 10;
-	pointer-events: none;
+	margin-top: 1px;
 }
 
 .lock-vis {
@@ -307,10 +303,6 @@ body {
     font-size: 40px;
   }
   
-  .level-size-div {
-  	margin-top: 85px;
-  }
-  
   .level-number {
   	width: 110px;
   }
@@ -332,10 +324,6 @@ body {
 @media (max-width: 720px) {
   .text-size {
     font-size: 30px;
-  }
-  
-  .level-size-div {
-  	margin-top: 75px;
   }
   
   .level-number {
@@ -360,10 +348,6 @@ body {
 @media (max-width: 480px) {
   .text-size {
     font-size: 20px;
-  }
-  
-  .level-size-div {
-  	margin-top: 61px;
   }
   
   .level-number {
