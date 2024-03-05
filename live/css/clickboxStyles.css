@@ -230,6 +230,7 @@ body {
 
 #grid-container {
 	position: fixed;
+	top: max(75px, 8%);
 }
 
   .bottom {

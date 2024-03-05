@@ -1242,6 +1242,7 @@ function InitializeGrid() {
     GridScale = 1;
     GridMaxScale = ((size+2))/4;
 	document.getElementById("demo").appendChild(grid);
+	TranslateGrid(0, 0);
 }
 	  
 	  function NewLevel(){
@@ -1261,11 +1262,14 @@ function InitializeGrid() {
 			clicks++
 		}
 	    for (let y = 0; y < size; y++) {
-          if (skew == true && y%2 == 0 ) {  /////////////////////////////////////////////////////// adds a skew to the grid if skew is true
-		    xOffset = 25;
-		  } else {
-    	    xOffset = -25;
+          if (skew == true) {  /////////////////////////////////////////////////////// adds a skew to the grid if skew is true
+		    if (y%2 == 0) {
+		        xOffset = 25;
+		    } else {
+    	        xOffset = -25;
+		    }				
 		  }
+
           for (let x = 0; x < size; x++){  
 			GameButtons.push(new GameButton(100*x + xOffset + 100, y*100 + yOffset + 100));
 	      }  
