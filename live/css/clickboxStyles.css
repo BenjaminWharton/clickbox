@@ -27,6 +27,7 @@ body {
   background-color: #4CAF50;
   color: white;
   border-radius: 5px;
+  border-color: black;
   cursor: pointer;
   width: 29%;
   top: 2px;
@@ -91,6 +92,7 @@ body {
   outline: none;
   color: #fff;
   border-radius: 5px;
+  border-color: black;
   height: max(75px, 8%);
   width: 40%;
   left: 30%;
@@ -114,6 +116,7 @@ body {
   background-color: #cfcf34;
   color: #fff;
   border-radius: 5px;
+  border-color: black;
   height: max(60px, 6%);
   width: 29%;
   right: 1%;
