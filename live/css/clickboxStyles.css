@@ -239,22 +239,22 @@ body {
   }
 
   .press {
-    background-color: #31B0D5;
+    background-color: #31A0D5;
     color: white;
-    border-radius: 4px;
-    border-color: #46b8da;
+    border-radius: 3px;
+    border-color: #000000;
 	position: fixed;
 	bottom: 0%;
 	right: 0%;
-	width: 35%;
+	width: 36%;
     height: max(60px, 8%);
   }
 
   .clear{
-    background-color: #31B0D5;
+    background-color: #31A0D5;
     color: white;
-    border-radius: 4px;
-    border-color: #46b8da;
+    border-radius: 3px;
+    border-color: #000000;
 	position: fixed;
 	bottom: 0%;
 	left: 35%;
@@ -263,14 +263,14 @@ body {
   }
   
   .lock {
-    background-color: #31B0D5;
+    background-color: #31A0D5;
     color: white;
-    border-radius: 4px;
-    border-color: #46b8da;
+    border-radius: 3px;
+    border-color: #000000;
 	position: fixed;
 	bottom: 0%;
 	left: 0%;
-	width: 35%;	
+	width: 36%;	
     height: max(60px, 8%);
   }
  
@@ -291,10 +291,6 @@ body {
 	width: 85px;	
     height: 85px;	   
    }
- 
-  .bottom-selected {
-	background-color: #2ac759;
-  }
  
 }
 

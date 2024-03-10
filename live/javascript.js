@@ -27,7 +27,12 @@ var LastTranslatePointY = 0;
 var GridOffsetX = 0;
 var GridOffsetY = 0;
 
-const clickedColors = ["#CFD7D7", "#22c976", "#00FFFF", "#FF00FF", "#FF4040"]
+const clickedColors = ["#CFD7D7", // 0
+                       "#22c976", // 1
+   					   "#00DDDD", // 2
+					   "#EE00EE", // 3
+					   "#EE4040"] // 4
+					
 const lockedColor = "#A0A5A5";
 const modifierColor0 = "#FFFF40";
 const modifierColor1 = "#0000";
@@ -599,45 +604,45 @@ function ModifyButton(btn,Amount){
 function PressTouch(btn) {
 	event.preventDefault();
     LockSelected = false;
-	document.getElementById("lock").classList.remove("bottom-selected");
+	document.getElementById("lock").style.background = '#31A0D5';
     ClearSelected = false;
-	document.getElementById("clear").classList.remove("bottom-selected");
+	document.getElementById("clear").style.background = '#31A0D5';
 	if (PressSelected == false) {
 	  PressSelected = true;
-	  btn.classList.add("bottom-selected");
+	  btn.style.background = clickedColors[GameButtons[0].maxClicks];
 	} else {
 		PressSelected = false;
-	    btn.classList.remove("bottom-selected");
+		btn.style.background = '#31A0D5';
 	}	
 }
 
 function LockTouch(btn) {
 	event.preventDefault();
     PressSelected = false;
-	document.getElementById("press").classList.remove("bottom-selected");
+	document.getElementById("press").style.background = '#31A0D5';
     ClearSelected = false;
-	document.getElementById("clear").classList.remove("bottom-selected");
+	document.getElementById("clear").style.background = '#31A0D5';
 	if (LockSelected == false) {
 	  LockSelected = true;
-	  btn.classList.add("bottom-selected");
+	  btn.style.background = clickedColors[GameButtons[0].maxClicks];
 	} else {
 		LockSelected = false;
-	    btn.classList.remove("bottom-selected");
+		btn.style.background = '#31A0D5';
 	}	
 }
 
 function ClearTouch(btn) {
 	event.preventDefault();
     PressSelected = false;
-	document.getElementById("press").classList.remove("bottom-selected");
+	document.getElementById("press").style.background = '#31A0D5';
     LockSelected = false;
-	document.getElementById("lock").classList.remove("bottom-selected");
+	document.getElementById("lock").style.background = '#31A0D5';
 	if (ClearSelected == false) {
 	  ClearSelected = true;
-	  btn.classList.add("bottom-selected");
+	  btn.style.background = clickedColors[GameButtons[0].maxClicks];
 	} else {
 		ClearSelected = false;
-	    btn.classList.remove("bottom-selected");
+		btn.style.background = '#31A0D5';
 	}	
 }
 
@@ -1241,6 +1246,18 @@ function InitializeGrid() {
 	document.getElementById("demo").appendChild(grid);
 	TranslateGrid(0, 0);
 }
+
+function InitializeBottomButtonColors() {
+	if (PressSelected == true) {
+		document.getElementById("press").style.background = clickedColors[GameButtons[0].maxClicks];
+	}
+	if (LockSelected == true) {
+		document.getElementById("lock").style.background = clickedColors[GameButtons[0].maxClicks];
+	}
+	if (ClearSelected == true) {
+		document.getElementById("clear").style.background = clickedColors[GameButtons[0].maxClicks];
+	}
+}
 	  
 	  function NewLevel(){
 		let xOffset = 0;
@@ -1274,7 +1291,8 @@ function InitializeGrid() {
         }
 		for (i = 0; i < GameButtons.length; i++) {
 		    GameButtons[i].maxClicks = clicks;
-		}		
+		}
+        InitializeBottomButtonColors();		
 		GenerateLevelNum (levelNum, clicks);
 		for (i = 0; i < CycleButtons.length; i++) {
 		  let cbtn = CycleButtons[i];
