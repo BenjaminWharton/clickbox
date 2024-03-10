@@ -70,7 +70,7 @@ class GameButton {
 		this.createHitbox(svgBase, background);
 
 		let svgL = document.createElementNS("http://www.w3.org/2000/svg", 'svg');
-		svgL.setAttribute("viewBox", "-25 -25 150 150");
+		svgL.setAttribute("viewBox", "-15 -15 130 130");
 		this.svgL = svgL;
 
 		let lockVis = document.createElementNS("http://www.w3.org/2000/svg", 'polygon');
@@ -773,38 +773,35 @@ function BtnLeftClick(btn)  {
 	VictoryCheck();
 }
 
-	  function BtnRightClick(btn) {
-	    let img = clickedColors[0];
+function BtnRightClick(btn) {
+    let color = clickedColors[0];
 		
-		if (btn.locked == false) {
-		    btn.locked = true;
-			img = lockedColor;
-		} else {
-			btn.locked = false;
-		}		
+    if (btn.locked == false) {
+        btn.locked = true;
+        color = lockedColor;
+    } else {
+        btn.locked = false;
+    }		
 
-	    if (btn.clicks >= btn.maxClicks) {
-			ModifyButtonGroup(btn, btn.clicks)
-			btn.clicks = 0;
-		} else if (btn.clicks > 0 &&
-		           btn.locked == false) {
-			img = btn.background.style.fill;
-		}	
+    if (btn.clicks > 0 &&
+        btn.locked == false) {
+        color = btn.lockVis.style.fill;
+    }	
 
-        if (btn.clicks == 0 &&
-		    btn.locked == true) {
-		    btn.background.style.fill = lockedColor;
-		} else if (btn.clicks == 0 &&
-		           btn.locked == false) {
-			btn.background.style.fill = clickedColors[0];
-		}
-		btn.lockVis.style.fill = img;
+    if (btn.clicks == 0 &&
+        btn.locked == true) {
+        btn.lockVis.style.fill = lockedColor;
+    } else if (btn.clicks == 0 &&
+               btn.locked == false) {
+        btn.lockVis.style.fill = clickedColors[0];
+    }
+    btn.background.style.fill = color;
 
-		for (let i = 0; i < btn.counterparts.length; i++) {
-			btn.counterparts[i].lockVis.style.fill = btn.lockVis.style.fill;
-		    btn.counterparts[i].background.style.fill = btn.background.style.fill;
-		}		
-      }
+    for (let i = 0; i < btn.counterparts.length; i++) {
+        btn.counterparts[i].lockVis.style.fill = btn.lockVis.style.fill;
+        btn.counterparts[i].background.style.fill = btn.background.style.fill;
+	}		
+}
 
 function ClearButton (btn) {
     btn.locked = false;
