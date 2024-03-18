@@ -314,6 +314,10 @@ body {
   .background:hover {
     stroke-width: 0;
   }
+
+  .btn {
+    pointer-events: none;
+  }
  
 }
 

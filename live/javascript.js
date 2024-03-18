@@ -533,55 +533,58 @@ function ModifyButton(btn,Amount){
   }
 }
 
-	  function ModifyButtonGroup (btn, Amount)  {
-        for (let i = 0; i < btn.affectedButtons.length; i++) {
-		  if (btn.affectedButtons[i] == btn) {
-		    ModifyButton (btn.affectedButtons[i], Amount*btn.factor);
-		  } else {
+function ModifyButtonGroup (btn, Amount)  {
+    for (let i = 0; i < btn.affectedButtons.length; i++) {
+        if (btn.affectedButtons[i] == btn) {
+            ModifyButton (btn.affectedButtons[i], Amount*btn.factor);
+        } else {
 		    ModifyButton (btn.affectedButtons[i], Amount);
-		  }
-		}
-	  }
+        }
+    }
+}
 
-      function BtnClick(btn) {
-	    if (event.button == 0){
-          BtnLeftClick(btn);
-		} else if (event.button == 1){
-		  ClearButton(btn);
-		} else if (event.button == 2){
-		  BtnRightClick(btn);
-		}
-      }
+function BtnTouch(btn) {
+    event.preventDefault();	  
+    let wasSelected = false;
+    if (btn.background.classList.contains("selected")) {
+        wasSelected = true;
+    }
+    if (LastTouchedButton != null) {
+        BtnMouseLeave(LastTouchedButton);	
+        LastTouchedButton.background.classList.remove("selected");
+    }
+    BtnMouseEnter(btn);
+    if (PressSelected == true) {
+        BtnLeftClick(btn);
+        btn.background.classList.add("selected");			  
+    } else if (LockSelected == true) {
+        BtnRightClick(btn);
+        btn.background.classList.add("selected");
+    }  else if (ClearSelected == true) {
+        ClearButton(btn);	  
+        btn.background.classList.remove("selected");
+        BtnMouseLeave(btn);
+    } else if (wasSelected == false) {
+         btn.background.classList.add("selected");
+    } else {
+        btn.background.classList.remove("selected");
+        BtnMouseLeave(btn);
+    }
+    LastTouchedButton = btn;			  
+}
 
-      function BtnTouch(btn) {
-		  event.preventDefault();				  
-		  let wasSelected = false;
-		  if (btn.background.classList.contains("selected")) {
-			  wasSelected = true;
-		  }
-		  if (LastTouchedButton != null) {
-              BtnMouseLeave(LastTouchedButton);	
-              LastTouchedButton.background.classList.remove("selected");
-		  }
-		  BtnMouseEnter(btn);
-		  if (PressSelected == true) {
-              BtnLeftClick(btn);
-              btn.background.classList.add("selected");			  
-		  } else if (LockSelected == true) {
-			  BtnRightClick(btn);
-			  btn.background.classList.add("selected");
-		  }  else if (ClearSelected == true) {
-			  ClearButton(btn);	  
-			  btn.background.classList.remove("selected");
-              BtnMouseLeave(btn);
-		  } else if (wasSelected == false) {
-			  btn.background.classList.add("selected");
-		  } else {
-			  btn.background.classList.remove("selected");
-			  BtnMouseLeave(btn);
-		  }
-		  LastTouchedButton = btn;			  
-      }
+function BtnClick(btn) {
+	if (( navigator.maxTouchPoints == 0 ) || 
+       (  navigator.msMaxTouchPoints == 0)) {
+        if (event.button == 0){
+            BtnLeftClick(btn);
+        } else if (event.button == 1){
+            ClearButton(btn);
+        } else if (event.button == 2){
+            BtnRightClick(btn);
+        }
+	}
+}
 	  
 	  function TouchMove(btn) {
 		  event.preventDefault();
@@ -823,14 +826,17 @@ function ClearButton (btn) {
 }	
 
 function BtnMouseEnter(btn)  {
-	btn.background.classList.add("background-selected");
-	if (LMDown == true) {
-		BtnLeftClick(btn);
-	} else if (RMDown == true) {
-		BtnRightClick(btn);
-	} else if (MMDown == true) {
-		ClearButton(btn);
+	if (( navigator.maxTouchPoints == 0 ) || 
+       (  navigator.msMaxTouchPoints == 0)) {
+	    if (LMDown == true) {
+	  	    BtnLeftClick(btn);
+	    } else if (RMDown == true) {
+	  	    BtnRightClick(btn);
+	    } else if (MMDown == true) {
+	  	    ClearButton(btn);
+	    }		
 	}
+
 	for (let i = 0; i < btn.affectedButtons.length; i++) {
 		btn.affectedButtons[i].value.classList.add("btn-group");
 		if (btn.affectedButtons[i].value.innerHTML < 0) {
