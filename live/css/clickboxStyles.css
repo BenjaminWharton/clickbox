@@ -217,16 +217,16 @@ body {
 .btn-group {
   fill: #FFFFFF !important;
   text-shadow:
-    1px 1px 0 #000,
-    -1px 1px 0 #000,
-    -1px -1px 0 #000,
-    1px -1px 0 #000,
-    0 1px 0 #000,
-    0 -1px 0 #000,
-    1px 0 0 #000,
-    -1px 0 0 #000,
-	0 0 5px #000,
-	0 0 10px #000;
+    1px 1px 0px #000,
+    -1px 1px 0px #000,
+    -1px -1px 0px #000,
+    1px -1px 0px #000,
+    0px 1px 0px #000,
+    0px -1px 0px #000,
+    1px 0px 0px #000,
+    -1px 0px 0px #000,
+	0px 0px 5px #000,
+	0px 0px 10px #000;
 }
 
 .btn-negative {
@@ -312,7 +312,7 @@ body {
   }
  
   .background:hover {
-    stroke-width: 0;
+    stroke-width: 0px;
   }
 
   .btn {
