@@ -202,6 +202,7 @@ body {
 .btn {
   text-anchor: middle;
   fill: #0000;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 .wall {
@@ -215,7 +216,17 @@ body {
 
 .btn-group {
   fill: #FFFFFF !important;
-  text-shadow: 0px 0px 2px #fff, 0px 0px 10px #002060, 0px 0px 10px #002060, 0px 0px 10px #002060 !important;
+  text-shadow:
+    1px 1px 0 #000,
+    -1px 1px 0 #000,
+    -1px -1px 0 #000,
+    1px -1px 0 #000,
+    0 1px 0 #000,
+    0 -1px 0 #000,
+    1px 0 0 #000,
+    -1px 0 0 #000,
+	0 0 5px #000,
+	0 0 10px #000;
 }
 
 .btn-negative {
@@ -291,6 +302,18 @@ body {
 	width: 85px;	
     height: 85px;	   
    }
+
+  .new-level:hover {
+    background-color: #2ac759;
+  }
+
+  .reset:hover {
+    background-color: #cfcf34;
+  }
+ 
+  .background:hover {
+    stroke-width: 0;
+  }
  
 }
 

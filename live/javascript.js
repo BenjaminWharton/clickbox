@@ -1305,6 +1305,9 @@ function InitializeBottomButtonColors() {
 	  function ResetClick () {
 	    for (let i = 0; i < GameButtons.length; i++) {
 			ClearButton(GameButtons[i]);
+			GameButtons[i].background.classList.remove("selected");
+			GameButtons[i].value.classList.remove("btn-group");
+			GameButtons[i].value.classList.remove("btn-negative");
 		}
 	    
 	  }
