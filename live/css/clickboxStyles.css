@@ -312,7 +312,7 @@ body {
   }
 
   .selected {
-    stroke-width: 3px;
+    stroke-width: 3px !important;
   }
 
   .btn {
