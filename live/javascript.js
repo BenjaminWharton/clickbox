@@ -197,46 +197,46 @@ class GameButton {
         if (Type == "south") {
 	        AddSVGPoint(svg, rect1, 0, 100);
 	        AddSVGPoint(svg, rect1, 30, 100);
-	        AddSVGPoint(svg, rect1, 30, 85);
-	        AddSVGPoint(svg, rect1, 0, 85);	
+	        AddSVGPoint(svg, rect1, 30, 87);
+	        AddSVGPoint(svg, rect1, 0, 87);	
 		} else if (Type == "west") {
 	        AddSVGPoint(svg, rect1, 0, 0);
-	        AddSVGPoint(svg, rect1, 15, 0);
-	        AddSVGPoint(svg, rect1, 15, 30);
+	        AddSVGPoint(svg, rect1, 13, 0);
+	        AddSVGPoint(svg, rect1, 13, 30);
 	        AddSVGPoint(svg, rect1, 0, 30);					
 		} else if (Type == "east") {
 	        AddSVGPoint(svg, rect1, 100, 0);
 	        AddSVGPoint(svg, rect1, 100, 30);
-	        AddSVGPoint(svg, rect1, 85, 30);
-	        AddSVGPoint(svg, rect1, 85, 0);					
+	        AddSVGPoint(svg, rect1, 87, 30);
+	        AddSVGPoint(svg, rect1, 87, 0);					
 		} else {
 	        AddSVGPoint(svg, rect1, 0, 0);
 	        AddSVGPoint(svg, rect1, 30, 0);
-	        AddSVGPoint(svg, rect1, 30, 15);
-	        AddSVGPoint(svg, rect1, 0, 15);			
+	        AddSVGPoint(svg, rect1, 30, 13);
+	        AddSVGPoint(svg, rect1, 0, 13);			
 		}
 		svg.appendChild(rect1);	
 		let rect2 = document.createElementNS("http://www.w3.org/2000/svg", 'polygon');		
         if (Type == "south") {
 	        AddSVGPoint(svg, rect2, 100, 100);
 	        AddSVGPoint(svg, rect2, 70, 100);
-	        AddSVGPoint(svg, rect2, 70, 85);
-	        AddSVGPoint(svg, rect2, 100, 85);	
+	        AddSVGPoint(svg, rect2, 70, 87);
+	        AddSVGPoint(svg, rect2, 100, 87);	
 		} else if (Type == "west") {
 	        AddSVGPoint(svg, rect2, 0, 100);
 	        AddSVGPoint(svg, rect2, 0, 70);
-	        AddSVGPoint(svg, rect2, 15, 70);
-	        AddSVGPoint(svg, rect2, 15, 100);				
+	        AddSVGPoint(svg, rect2, 13, 70);
+	        AddSVGPoint(svg, rect2, 13, 100);				
 		} else if (Type == "east") {
 	        AddSVGPoint(svg, rect2, 100, 100);
 	        AddSVGPoint(svg, rect2, 100, 70);
-	        AddSVGPoint(svg, rect2, 85, 70);
-	        AddSVGPoint(svg, rect2, 85, 100);
+	        AddSVGPoint(svg, rect2, 87, 70);
+	        AddSVGPoint(svg, rect2, 87, 100);
 		} else {
 	        AddSVGPoint(svg, rect2, 100, 0);
 	        AddSVGPoint(svg, rect2, 70, 0);
-	        AddSVGPoint(svg, rect2, 70, 15);
-	        AddSVGPoint(svg, rect2, 100, 15);			
+	        AddSVGPoint(svg, rect2, 70, 13);
+	        AddSVGPoint(svg, rect2, 100, 13);			
 		}
         svg.appendChild(rect2);	
         this.svgWall.appendChild(svg);	
@@ -309,7 +309,7 @@ class GameButton {
 			nCycle.counterpart = GameButtons[idNum + size*size - size];               // used to store which regular button a cycle button connects with      
 			GameButtons[idNum + size*size - size].counterparts.push(nCycle);          // used to store which cycle buttons a regular button connects with
 			nCycle.svgBase.setAttribute("viewBox", (nCycle.offsetx*(-1.5) - 25) + " " + (nCycle.offsety*(-1.5) - 25) + " 150 150");
-			nCycle.svgL.setAttribute("viewBox", "-11 -11 180 180");
+			nCycle.svgL.setAttribute("viewBox", "-13 -13 190 190");
 			nCycle.svgV.setAttribute("viewBox", "16 16 100 100");
 			nCycle.svgM.setAttribute("viewBox", "16 16 100 100");
 			CycleButtons.push(nCycle);
@@ -323,7 +323,7 @@ class GameButton {
             sCycle.counterpart = GameButtons[idNum - size*size + size];
 			GameButtons[idNum - size*size + size].counterparts.push(sCycle);
 			sCycle.svgBase.setAttribute("viewBox", (sCycle.offsetx*(-1.5) - 25) + " " + (sCycle.offsety*(-1.5) - 25) + " 150 150");
-			sCycle.svgL.setAttribute("viewBox", "-11 -11 180 180");
+			sCycle.svgL.setAttribute("viewBox", "-13 -13 190 190");
 			sCycle.svgV.setAttribute("viewBox", "16 16 100 100");
 			sCycle.svgM.setAttribute("viewBox", "16 16 100 100");
 			CycleButtons.push(sCycle);
@@ -337,7 +337,7 @@ class GameButton {
             wCycle.counterpart = GameButtons[idNum + size - 1];
 			GameButtons[idNum + size - 1].counterparts.push(wCycle);
 			wCycle.svgBase.setAttribute("viewBox", (wCycle.offsetx*(-1.5) - 25) + " " + (wCycle.offsety*(-1.5) - 25) + " 150 150");
-			wCycle.svgL.setAttribute("viewBox", "-11 -11 180 180");
+			wCycle.svgL.setAttribute("viewBox", "-13 -13 190 190");
 			wCycle.svgV.setAttribute("viewBox", "16 16 100 100");
 			wCycle.svgM.setAttribute("viewBox", "16 16 100 100");
 			CycleButtons.push(wCycle);
@@ -351,7 +351,7 @@ class GameButton {
             eCycle.counterpart = GameButtons[idNum - size + 1];
 			GameButtons[idNum - size + 1].counterparts.push(eCycle);
 			eCycle.svgBase.setAttribute("viewBox", (eCycle.offsetx*(-1.5) - 25) + " " + (eCycle.offsety*(-1.5) - 25) + " 150 150");
-			eCycle.svgL.setAttribute("viewBox", "-11 -11 180 180");
+			eCycle.svgL.setAttribute("viewBox", "-13 -13 190 190");
 			eCycle.svgV.setAttribute("viewBox", "16 16 100 100");
 			eCycle.svgM.setAttribute("viewBox", "16 16 100 100");
 			CycleButtons.push(eCycle);
@@ -367,7 +367,7 @@ class GameButton {
                 nwCycle.counterpart = GameButtons[size*size - 1];
 			    GameButtons[size*size - 1].counterparts.push(nwCycle);
 			    nwCycle.svgBase.setAttribute("viewBox", (nwCycle.offsetx*(-1.5) - 25) + " " + (nwCycle.offsety*(-1.5) - 25) + " 150 150");
-			    nwCycle.svgL.setAttribute("viewBox", "-11 -11 180 180");
+			    nwCycle.svgL.setAttribute("viewBox", "-13 -13 190 190");
 			    nwCycle.svgV.setAttribute("viewBox", "16 16 100 100");
 			    nwCycle.svgM.setAttribute("viewBox", "16 16 100 100");
 			    CycleButtons.push(nwCycle);	
@@ -383,7 +383,7 @@ class GameButton {
                 neCycle.counterpart = GameButtons[size*size - size];
 			    GameButtons[size*size - size].counterparts.push(neCycle);
 			    neCycle.svgBase.setAttribute("viewBox", (neCycle.offsetx*(-1.5) - 25) + " " + (neCycle.offsety*(-1.5) - 25) + " 150 150");
-			    neCycle.svgL.setAttribute("viewBox", "-11 -11 180 180");
+			    neCycle.svgL.setAttribute("viewBox", "-13 -13 190 190");
 			    neCycle.svgV.setAttribute("viewBox", "16 16 100 100");
 			    neCycle.svgM.setAttribute("viewBox", "16 16 100 100");
 			    CycleButtons.push(neCycle);	
@@ -399,7 +399,7 @@ class GameButton {
             swCycle.counterpart = GameButtons[size - 1];
 			GameButtons[size - 1].counterparts.push(swCycle);
 			swCycle.svgBase.setAttribute("viewBox", (swCycle.offsetx*(-1.5) - 25) + " " + (swCycle.offsety*(-1.5) - 25) + " 150 150");
-			swCycle.svgL.setAttribute("viewBox", "-11 -11 180 180");
+			swCycle.svgL.setAttribute("viewBox", "-13 -13 190 190");
 			swCycle.svgV.setAttribute("viewBox", "16 16 100 100");
 			swCycle.svgM.setAttribute("viewBox", "16 16 100 100");
 			CycleButtons.push(swCycle);	
@@ -415,7 +415,7 @@ class GameButton {
             seCycle.counterpart = GameButtons[0];
             GameButtons[0].counterparts.push(seCycle);
             seCycle.svgBase.setAttribute("viewBox", (seCycle.offsetx*(-1.5) - 25) + " " + (seCycle.offsety*(-1.5) - 25) + " 150 150");
-            seCycle.svgL.setAttribute("viewBox", "-11 -11 180 180");
+            seCycle.svgL.setAttribute("viewBox", "-13 -13 190 190");
             seCycle.svgV.setAttribute("viewBox", "16 16 100 100");
             seCycle.svgM.setAttribute("viewBox", "16 16 100 100");
             CycleButtons.push(seCycle);	
