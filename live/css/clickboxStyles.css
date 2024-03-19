@@ -185,10 +185,6 @@ body {
   stroke-width: 3px;	
 }
 
-.selected {
-  stroke-width: 3px;
-}
-
 .modifier {
   fill: #0000;
 }
@@ -313,6 +309,10 @@ body {
  
   .background:hover {
     stroke-width: 0px;
+  }
+
+  .selected {
+    stroke-width: 3px;
   }
 
   .btn {
