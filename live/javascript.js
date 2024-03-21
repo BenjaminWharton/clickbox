@@ -460,6 +460,31 @@ function MouseExit(){
   LMDown = false;
   RMDown= false;
 }
+
+function MouseWheel() {
+	if (event.deltaY < 0) {
+		ScaleGrid(0.1);
+	} else if (event.deltaY > 0) {
+		ScaleGrid(-0.1);	
+	}
+}
+
+function KeyDown() {
+	switch(event.keyCode) {
+		case 37:
+		    TranslateGrid(-15, 0);  //left
+		    break
+		case 38:
+		    TranslateGrid(0, -15); //up
+		    break
+		case 39:
+		    TranslateGrid(15, 0);  //right
+		    break
+		case 40:
+		    TranslateGrid(0, 15);  //down
+		    break
+	}
+}
 	
 function DestroyGrid (){
   if (document.body.contains(document.getElementById("grid-container")) == true){
@@ -1242,13 +1267,13 @@ function InitializeGrid() {
 		document.getElementById("level-number").value = parseInt(document.getElementById("level-number").max);
 	}
 	size = parseInt(document.getElementById("level-size").value); 
-	let grid = document.createElementNS("http://www.w3.org/2000/svg", 'svg');		
+	let grid = document.createElementNS("http://www.w3.org/2000/svg", 'svg');
+    GridScale = 1;
+    GridMaxScale = ((size+2))/4;	
 	grid.setAttribute("viewBox", "0 0 " + (size + 2)*100 + " " + (size + 2)*100);
     grid.style.width = 100*GridScale + "%";
 	grid.style.height = 84*GridScale + "%";
 	grid.id = "grid-container";
-    GridScale = 1;
-    GridMaxScale = ((size+2))/4;
 	document.getElementById("demo").appendChild(grid);
 	TranslateGrid(0, 0);
 }
