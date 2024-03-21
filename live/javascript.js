@@ -1076,14 +1076,6 @@ function GenerateRandomClicks(Clicks) {
 		  GenerateLevel(size*size*(Clicks/2));       //////////////////////////////////////////////////////////////////// Level 6
 		} else if (Level == 7) {                 /////////////////////////////////////////////////////////////////// Level 7
 		  let type = RandomFactor();
-		  for (let x = 0; x < size; x = x + 2) {
-            for (let y = size*x; y < size*(x+1); y++) {
-		      GameButtons[y].changeFactor(type);
-		    }
-	  	  }	
-          GenerateLevel (size*size*(Clicks/2));		/////////////////////////////////////////////////////////////////// Level 7
-		} else if (Level == 8) {                /////////////////////////////////////////////////////////////////// Level 8
-		  let type = RandomFactor();
 		  let bool = 1;
 		  for (let x = 0; x < size; x++) {
 		    for (let y = 0; y < size; y++) {
@@ -1105,12 +1097,16 @@ function GenerateRandomClicks(Clicks) {
 			}
 			y = 0;
 		  }          
+          GenerateLevel (size*size*(Clicks/2));		/////////////////////////////////////////////////////////////////// Level 7
+		} else if (Level == 8) {                /////////////////////////////////////////////////////////////////// Level 8
+		  for (let i = 0; i < GameButtons.length; i++) {
+		    GameButtons[i].changeFactor(RandomFactor(1));		  
+		  }    
 		  GenerateLevel(size*size*(Clicks/2));	 ///////////////////////////////////////////////////////////////////// Level 8	  
 		} else if (Level == 9) {             ///////////////////////////////////////////////////////////////////// Level 9
 		  for (let i = 0; i < GameButtons.length; i++) {
-		    let type = RandomFactor(1);
-		    GameButtons[i].changeFactor(type);		  
-		  }          		
+		    GameButtons[i].addWall(GameButtons[i].randomWall(4));		  
+		  }         		
 		  GenerateLevel(size*size*(Clicks/2));	 ///////////////////////////////////////////////////////////////////// Level 9
 		} else if (Level == 10) {             ///////////////////////////////////////////////////////////////////// Level 10   		
 		  for (let x = 1; x < parseInt(size/2); x = x + 3) {
