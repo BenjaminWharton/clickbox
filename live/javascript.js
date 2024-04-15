@@ -506,6 +506,11 @@ function VictoryCheck() {
   }
   if (victory == true) {
     document.getElementById("new-level").innerHTML = "Victory!";
+	for (i = 0; i < GameButtons.length; i++) {
+	  if (GameButtons[i].background.classList.contains("selected")) {
+        BtnMouseLeave(GameButtons[i]);		
+	  }	
+	}
   }
 }
 	  
@@ -580,19 +585,18 @@ function BtnTouch(btn) {
     }
     BtnMouseEnter(btn);
     if (PressSelected == true) {
-        BtnLeftClick(btn);
-        btn.background.classList.add("selected");			  
+        btn.background.classList.add("selected");	
+        BtnLeftClick(btn);		  
     } else if (LockSelected == true) {
-        BtnRightClick(btn);
         btn.background.classList.add("selected");
+        BtnRightClick(btn);
     }  else if (ClearSelected == true) {
-        ClearButton(btn);	  
         btn.background.classList.remove("selected");
+        ClearButton(btn);	  
         BtnMouseLeave(btn);
     } else if (wasSelected == false) {
          btn.background.classList.add("selected");
     } else {
-        btn.background.classList.remove("selected");
         BtnMouseLeave(btn);
     }
     LastTouchedButton = btn;			  
@@ -802,8 +806,8 @@ function BtnLeftClick(btn)  {
 	        	btn.affectedButtons[i].value.classList.remove("btn-negative");
 	        }
 	    }
+		VictoryCheck();
 	}  
-	VictoryCheck();
 }
 
 function BtnRightClick(btn) {
@@ -873,7 +877,7 @@ function BtnMouseEnter(btn)  {
 }
 
 function BtnMouseLeave(btn)  {
-	btn.background.classList.remove("background-selected");
+	btn.background.classList.remove("selected");
 	for (let i = 0; i < btn.affectedButtons.length; i++) {
 		btn.affectedButtons[i].value.classList.remove("btn-group");
 	    btn.affectedButtons[i].value.classList.remove("btn-negative");		
